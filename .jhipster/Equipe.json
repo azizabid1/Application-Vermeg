@@ -1,0 +1,42 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183507",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "equipe",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "nom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nombrePersonne",
+      "fieldType": "Long"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Equipe",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "equipe",
+      "relationshipName": "userId",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "vote",
+      "otherEntityRelationshipName": "equipe",
+      "ownerSide": true,
+      "relationshipName": "vote",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

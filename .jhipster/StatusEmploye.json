@@ -1,0 +1,43 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183510",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "status_employe",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "disponibilite",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "mission",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "debutConge",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "finConge",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "StatusEmploye",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "statusEmploye",
+      "relationshipName": "userId",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,116 @@
+<div>
+  <h2 id="page-heading" data-cy="StatusEmployeHeading">
+    <span jhiTranslate="vermegApp.statusEmploye.home.title">Status Employes</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="vermegApp.statusEmploye.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-status-employe"
+        [routerLink]="['/status-employe/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="vermegApp.statusEmploye.home.createLabel"> Create a new Status Employe </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="statusEmployes?.length === 0">
+    <span jhiTranslate="vermegApp.statusEmploye.home.notFound">No statusEmployes found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="statusEmployes && statusEmployes.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.statusEmploye.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="disponibilite">
+            <span jhiTranslate="vermegApp.statusEmploye.disponibilite">Disponibilite</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="mission">
+            <span jhiTranslate="vermegApp.statusEmploye.mission">Mission</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="debutConge">
+            <span jhiTranslate="vermegApp.statusEmploye.debutConge">Debut Conge</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="finConge">
+            <span jhiTranslate="vermegApp.statusEmploye.finConge">Fin Conge</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="userId.id">
+            <span jhiTranslate="vermegApp.statusEmploye.userId">User Id</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let statusEmploye of statusEmployes; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/status-employe', statusEmploye.id, 'view']">{{ statusEmploye.id }}</a>
+          </td>
+          <td>{{ statusEmploye.disponibilite }}</td>
+          <td>{{ statusEmploye.mission }}</td>
+          <td>{{ statusEmploye.debutConge | formatMediumDate }}</td>
+          <td>{{ statusEmploye.finConge | formatMediumDate }}</td>
+          <td>
+            {{ statusEmploye.userId?.id }}
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/status-employe', statusEmploye.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/status-employe', statusEmploye.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(statusEmploye)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="statusEmployes && statusEmployes.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

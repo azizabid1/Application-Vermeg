@@ -1,0 +1,32 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183505",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "departement",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "nom",
+      "fieldType": "TypeDepartement",
+      "fieldValues": "RH,INFORMATIQUE,MOA,FINANCE"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Departement",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "departement",
+      "relationshipName": "userId",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

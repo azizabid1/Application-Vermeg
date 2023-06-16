@@ -1,0 +1,28 @@
+{
+  "vermegApp": {
+    "statusEmploye": {
+      "home": {
+        "title": "StatusEmployes",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Status Employe",
+        "createOrEditLabel": "Créer ou éditer un Status Employe",
+        "notFound": "Aucun Status Employe trouvé"
+      },
+      "created": "Un nouveau Status Employe a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Status Employe avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Status Employe avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Status Employe {{ id }} ?"
+      },
+      "detail": {
+        "title": "Status Employe"
+      },
+      "id": "Id",
+      "disponibilite": "Disponibilite",
+      "mission": "Mission",
+      "debutConge": "Debut Conge",
+      "finConge": "Fin Conge",
+      "userId": "User Id"
+    }
+  }
+}

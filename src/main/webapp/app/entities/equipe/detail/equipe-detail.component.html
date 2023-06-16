@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="equipe">
+      <h2 data-cy="equipeDetailsHeading"><span jhiTranslate="vermegApp.equipe.detail.title">Equipe</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="vermegApp.equipe.id">Id</span></dt>
+        <dd>
+          <span>{{ equipe.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.equipe.nom">Nom</span></dt>
+        <dd>
+          <span>{{ equipe.nom }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.equipe.nombrePersonne">Nombre Personne</span></dt>
+        <dd>
+          <span>{{ equipe.nombrePersonne }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.equipe.userId">User Id</span></dt>
+        <dd>
+          <span>{{ equipe.userId?.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.equipe.vote">Vote</span></dt>
+        <dd>
+          <span *ngFor="let vote of equipe.votes; let last = last">
+            <a [routerLink]="['/vote', vote?.id, 'view']">{{ vote.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/equipe', equipe.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

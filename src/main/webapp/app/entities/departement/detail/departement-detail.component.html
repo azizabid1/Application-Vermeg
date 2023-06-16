@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="departement">
+      <h2 data-cy="departementDetailsHeading"><span jhiTranslate="vermegApp.departement.detail.title">Departement</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="vermegApp.departement.id">Id</span></dt>
+        <dd>
+          <span>{{ departement.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.departement.nom">Nom</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'vermegApp.TypeDepartement.' + departement.nom }}">{{ departement.nom }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.departement.userId">User Id</span></dt>
+        <dd>
+          <span>{{ departement.userId?.id }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/departement', departement.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

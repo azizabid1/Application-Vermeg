@@ -1,0 +1,64 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183509",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "projet",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "nomProjet",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateDebut",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateFin",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "technologies",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "statusProjet",
+      "fieldType": "Status",
+      "fieldValues": "ATTENTE,COURS,EXECUTION,TERMINER"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Projet",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "devis",
+      "otherEntityRelationshipName": "projet",
+      "ownerSide": true,
+      "relationshipName": "devis",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "equipe",
+      "otherEntityRelationshipName": "projet",
+      "ownerSide": true,
+      "relationshipName": "equipe",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "tache",
+      "otherEntityRelationshipName": "projets",
+      "relationshipName": "tache",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

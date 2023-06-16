@@ -1,0 +1,37 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183506",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "devis",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "prixTotal",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "prixHT",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "prixService",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "dureeProjet",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "fluentMethods": true,
+  "javadoc": "not an ignored comment",
+  "jpaMetamodelFiltering": false,
+  "name": "Devis",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

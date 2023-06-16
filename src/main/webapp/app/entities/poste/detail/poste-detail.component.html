@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="poste">
+      <h2 data-cy="posteDetailsHeading"><span jhiTranslate="vermegApp.poste.detail.title">Poste</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="vermegApp.poste.id">Id</span></dt>
+        <dd>
+          <span>{{ poste.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.poste.title">Title</span></dt>
+        <dd>
+          <span>{{ poste.title }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.poste.description">Description</span></dt>
+        <dd>
+          <span>{{ poste.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.poste.userId">User Id</span></dt>
+        <dd>
+          <span>{{ poste.userId?.id }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/poste', poste.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-status-employe-heading"
+        data-cy="StatusEmployeCreateUpdateHeading"
+        jhiTranslate="vermegApp.statusEmploye.home.createOrEditLabel"
+      >
+        Create or edit a Status Employe
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="vermegApp.statusEmploye.id" for="field_id">Id</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.statusEmploye.disponibilite" for="field_disponibilite">Disponibilite</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="disponibilite"
+            id="field_disponibilite"
+            data-cy="disponibilite"
+            formControlName="disponibilite"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.statusEmploye.mission" for="field_mission">Mission</label>
+          <input type="checkbox" class="form-check" name="mission" id="field_mission" data-cy="mission" formControlName="mission" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.statusEmploye.debutConge" for="field_debutConge">Debut Conge</label>
+          <div class="input-group">
+            <input
+              id="field_debutConge"
+              data-cy="debutConge"
+              type="text"
+              class="form-control"
+              name="debutConge"
+              ngbDatepicker
+              #debutCongeDp="ngbDatepicker"
+              formControlName="debutConge"
+            />
+            <button type="button" class="btn btn-secondary" (click)="debutCongeDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.statusEmploye.finConge" for="field_finConge">Fin Conge</label>
+          <div class="input-group">
+            <input
+              id="field_finConge"
+              data-cy="finConge"
+              type="text"
+              class="form-control"
+              name="finConge"
+              ngbDatepicker
+              #finCongeDp="ngbDatepicker"
+              formControlName="finConge"
+            />
+            <button type="button" class="btn btn-secondary" (click)="finCongeDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.statusEmploye.userId" for="field_userId">User Id</label>
+          <select class="form-control" id="field_userId" data-cy="userId" name="userId" formControlName="userId">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="userOption.id === editForm.get('userId')!.value?.id ? editForm.get('userId')!.value : userOption"
+              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
+            >
+              {{ userOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

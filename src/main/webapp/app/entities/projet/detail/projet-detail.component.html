@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="projet">
+      <h2 data-cy="projetDetailsHeading"><span jhiTranslate="vermegApp.projet.detail.title">Projet</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="vermegApp.projet.id">Id</span></dt>
+        <dd>
+          <span>{{ projet.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.nomProjet">Nom Projet</span></dt>
+        <dd>
+          <span>{{ projet.nomProjet }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.dateDebut">Date Debut</span></dt>
+        <dd>
+          <span>{{ projet.dateDebut | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.dateFin">Date Fin</span></dt>
+        <dd>
+          <span>{{ projet.dateFin | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.technologies">Technologies</span></dt>
+        <dd>
+          <span>{{ projet.technologies }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.statusProjet">Status Projet</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'vermegApp.Status.' + projet.statusProjet }}">{{ projet.statusProjet }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.devis">Devis</span></dt>
+        <dd>
+          <div *ngIf="projet.devis">
+            <a [routerLink]="['/devis', projet.devis?.id, 'view']">{{ projet.devis?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.equipe">Equipe</span></dt>
+        <dd>
+          <div *ngIf="projet.equipe">
+            <a [routerLink]="['/equipe', projet.equipe?.id, 'view']">{{ projet.equipe?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.tache">Tache</span></dt>
+        <dd>
+          <div *ngIf="projet.tache">
+            <a [routerLink]="['/tache', projet.tache?.id, 'view']">{{ projet.tache?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/projet', projet.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

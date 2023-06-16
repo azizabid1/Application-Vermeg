@@ -1,0 +1,11 @@
+{
+  "vermegApp": {
+    "Status": {
+      "null": "",
+      "ATTENTE": "ATTENTE",
+      "COURS": "COURS",
+      "EXECUTION": "EXECUTION",
+      "TERMINER": "TERMINER"
+    }
+  }
+}

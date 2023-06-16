@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="devis">
+      <h2 data-cy="devisDetailsHeading"><span jhiTranslate="vermegApp.devis.detail.title">Devis</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="vermegApp.devis.id">Id</span></dt>
+        <dd>
+          <span>{{ devis.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.devis.prixTotal">Prix Total</span></dt>
+        <dd>
+          <span>{{ devis.prixTotal }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.devis.prixHT">Prix HT</span></dt>
+        <dd>
+          <span>{{ devis.prixHT }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.devis.prixService">Prix Service</span></dt>
+        <dd>
+          <span>{{ devis.prixService }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.devis.dureeProjet">Duree Projet</span></dt>
+        <dd>
+          <span>{{ devis.dureeProjet | formatMediumDate }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/devis', devis.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="statusEmploye">
+      <h2 data-cy="statusEmployeDetailsHeading"><span jhiTranslate="vermegApp.statusEmploye.detail.title">Status Employe</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="vermegApp.statusEmploye.id">Id</span></dt>
+        <dd>
+          <span>{{ statusEmploye.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.statusEmploye.disponibilite">Disponibilite</span></dt>
+        <dd>
+          <span>{{ statusEmploye.disponibilite }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.statusEmploye.mission">Mission</span></dt>
+        <dd>
+          <span>{{ statusEmploye.mission }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.statusEmploye.debutConge">Debut Conge</span></dt>
+        <dd>
+          <span>{{ statusEmploye.debutConge | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.statusEmploye.finConge">Fin Conge</span></dt>
+        <dd>
+          <span>{{ statusEmploye.finConge | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.statusEmploye.userId">User Id</span></dt>
+        <dd>
+          <span>{{ statusEmploye.userId?.id }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/status-employe', statusEmploye.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

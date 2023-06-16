@@ -1,0 +1,136 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName VermegApp
+    blueprints []
+    buildTool maven
+    cacheProvider no
+    clientFramework angularX
+    clientPackageManager npm
+    clientTheme none
+    creationTimestamp 1686711334348
+    databaseType sql
+    devDatabaseType mysql
+    dtoSuffix DTO
+    enableGradleEnterprise false
+    enableHibernateCache false
+    enableSwaggerCodegen false
+    enableTranslation true
+    gradleEnterpriseHost ""
+    jhiPrefix jhi
+    jhipsterVersion "7.8.1"
+    jwtSecretKey "ZDZmNWEyOWY2MjgwODMyNWMwNzM2MmIxODRhM2JkNzYwODkzMWM5ZGI1YWE2OGI4NWUwZjcyNWQ3YmZlZWMyODhlMjliNjRjY2MwZWY1NGRkYWU2M2M2Mjc3MjA1ZjFjZWExMjUyMTc4ZDk2NWI3ZDZjMDllYTVjMjQ5NTFkMGI="
+    languages [fr]
+    messageBroker false
+    nativeLanguage fr
+    otherModules []
+    packageName com.mycompany.myapp
+    prodDatabaseType mysql
+    reactive true
+    searchEngine false
+    serverPort 8050
+    serviceDiscoveryType eureka
+    skipUserManagement false
+    testFrameworks []
+    websocket false
+    withAdminUi true
+  }
+
+  entities Departement, Devis, Equipe, Poste, Projet, StatusEmploye, Tache, Vote
+}
+
+entity Departement {
+  id Long
+  nom TypeDepartement
+}
+/**
+ * not an ignored comment
+ */
+entity Devis {
+  id Long
+  prixTotal Double
+  prixHT Double
+  prixService Double
+  dureeProjet LocalDate
+}
+entity Equipe {
+  id Long
+  nom String
+  nombrePersonne Long
+}
+/**
+ * Task entity.\n@author The JHipster team.
+ */
+entity Poste {
+  id Long
+  title String
+  description String
+}
+entity Projet {
+  id Long
+  nomProjet String
+  dateDebut LocalDate
+  dateFin LocalDate
+  technologies String
+  statusProjet Status
+}
+entity StatusEmploye {
+  id Long
+  disponibilite Boolean
+  mission Boolean
+  debutConge LocalDate
+  finConge LocalDate
+}
+entity Tache {
+  id Long
+  titre String
+  description String
+  statusTache Status
+}
+/**
+ * The Employee entity.
+ */
+entity Vote {
+  id Long
+  typeVote Rendement
+}
+enum TypeDepartement {
+  RH,
+  INFORMATIQUE,
+  MOA,
+  FINANCE
+}
+enum Status {
+   ATTENTE,
+   COURS,
+  EXECUTION,
+  TERMINER
+}
+enum Rendement {
+  FAIBLE,
+  MOYEN,
+  EXCELLENT
+}
+
+relationship OneToOne {
+  Projet{devis(id)} to Devis 
+  Projet{equipe(id)} to Equipe 
+}
+relationship OneToMany {
+  Tache{projets} to Projet{tache}
+}
+relationship ManyToOne {
+  Departement{userId} to User
+  Equipe{userId} to User
+  Poste{userId} to User
+  StatusEmploye{userId} to User
+}
+relationship ManyToMany {
+  Equipe{vote} to Vote{equipe}
+}
+
+dto Departement, Devis, Equipe, Poste, Projet, StatusEmploye, Tache, Vote with mapstruct
+paginate Departement, Devis, Equipe, Poste, Projet, StatusEmploye, Tache, Vote with pagination
+service Departement, Devis, Equipe, Poste, Projet, StatusEmploye, Tache, Vote with serviceImpl
+filter Departement, Devis, Equipe, Poste, Projet, StatusEmploye, Tache, Vote

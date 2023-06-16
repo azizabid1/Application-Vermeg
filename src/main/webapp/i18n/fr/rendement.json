@@ -1,0 +1,10 @@
+{
+  "vermegApp": {
+    "Rendement": {
+      "null": "",
+      "FAIBLE": "FAIBLE",
+      "MOYEN": "MOYEN",
+      "EXCELLENT": "EXCELLENT"
+    }
+  }
+}

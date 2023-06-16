@@ -1,0 +1,36 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183508",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "poste",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "javadoc": "Task entity.\\n@author The JHipster team.",
+  "jpaMetamodelFiltering": false,
+  "name": "Poste",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "poste",
+      "relationshipName": "userId",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

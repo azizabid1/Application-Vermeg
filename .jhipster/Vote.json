@@ -1,0 +1,34 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183512",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "vote",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "typeVote",
+      "fieldType": "Rendement",
+      "fieldValues": "FAIBLE,MOYEN,EXCELLENT"
+    }
+  ],
+  "fluentMethods": true,
+  "javadoc": "The Employee entity.",
+  "jpaMetamodelFiltering": false,
+  "name": "Vote",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "equipe",
+      "otherEntityRelationshipName": "vote",
+      "ownerSide": false,
+      "relationshipName": "equipe",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

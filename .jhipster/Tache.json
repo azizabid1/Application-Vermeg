@@ -1,0 +1,40 @@
+{
+  "applications": ["VermegApp"],
+  "changelogDate": "20230615183511",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "tache",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "titre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "statusTache",
+      "fieldType": "Status",
+      "fieldValues": "ATTENTE,COURS,EXECUTION,TERMINER"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Tache",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "projet",
+      "otherEntityRelationshipName": "tache",
+      "relationshipName": "projets",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

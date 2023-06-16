@@ -1,0 +1,132 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-projet-heading" data-cy="ProjetCreateUpdateHeading" jhiTranslate="vermegApp.projet.home.createOrEditLabel">
+        Create or edit a Projet
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="vermegApp.projet.id" for="field_id">Id</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.nomProjet" for="field_nomProjet">Nom Projet</label>
+          <input type="text" class="form-control" name="nomProjet" id="field_nomProjet" data-cy="nomProjet" formControlName="nomProjet" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.dateDebut" for="field_dateDebut">Date Debut</label>
+          <div class="input-group">
+            <input
+              id="field_dateDebut"
+              data-cy="dateDebut"
+              type="text"
+              class="form-control"
+              name="dateDebut"
+              ngbDatepicker
+              #dateDebutDp="ngbDatepicker"
+              formControlName="dateDebut"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateDebutDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.dateFin" for="field_dateFin">Date Fin</label>
+          <div class="input-group">
+            <input
+              id="field_dateFin"
+              data-cy="dateFin"
+              type="text"
+              class="form-control"
+              name="dateFin"
+              ngbDatepicker
+              #dateFinDp="ngbDatepicker"
+              formControlName="dateFin"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateFinDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.technologies" for="field_technologies">Technologies</label>
+          <input
+            type="text"
+            class="form-control"
+            name="technologies"
+            id="field_technologies"
+            data-cy="technologies"
+            formControlName="technologies"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.statusProjet" for="field_statusProjet">Status Projet</label>
+          <select class="form-control" name="statusProjet" formControlName="statusProjet" id="field_statusProjet" data-cy="statusProjet">
+            <option [ngValue]="null">{{ 'vermegApp.Status.null' | translate }}</option>
+            <option *ngFor="let status of statusValues" [value]="status">{{ 'vermegApp.Status.' + status | translate }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.devis" for="field_devis">Devis</label>
+          <select class="form-control" id="field_devis" data-cy="devis" name="devis" formControlName="devis">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="devisOption.id === editForm.get('devis')!.value?.id ? editForm.get('devis')!.value : devisOption"
+              *ngFor="let devisOption of devisCollection; trackBy: trackDevisById"
+            >
+              {{ devisOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.equipe" for="field_equipe">Equipe</label>
+          <select class="form-control" id="field_equipe" data-cy="equipe" name="equipe" formControlName="equipe">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="equipeOption.id === editForm.get('equipe')!.value?.id ? editForm.get('equipe')!.value : equipeOption"
+              *ngFor="let equipeOption of equipesCollection; trackBy: trackEquipeById"
+            >
+              {{ equipeOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.tache" for="field_tache">Tache</label>
+          <select class="form-control" id="field_tache" data-cy="tache" name="tache" formControlName="tache">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="tacheOption.id === editForm.get('tache')!.value?.id ? editForm.get('tache')!.value : tacheOption"
+              *ngFor="let tacheOption of tachesSharedCollection; trackBy: trackTacheById"
+            >
+              {{ tacheOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
