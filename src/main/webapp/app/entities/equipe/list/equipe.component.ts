@@ -9,6 +9,7 @@ import { IEquipe } from '../equipe.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { EquipeService } from '../service/equipe.service';
 import { EquipeDeleteDialogComponent } from '../delete/equipe-delete-dialog.component';
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 
 @Component({
   selector: 'jhi-equipe',
@@ -28,29 +29,35 @@ export class EquipeComponent implements OnInit {
     protected equipeService: EquipeService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected authServerProvider: AuthServerProvider
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
-
-    this.equipeService
-      .query({
-        page: pageToLoad - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe({
-        next: (res: HttpResponse<IEquipe[]>) => {
-          this.isLoading = false;
-          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-        },
-        error: () => {
-          this.isLoading = false;
-          this.onError();
-        },
-      });
+    const criterias = [];
+    if (this.authServerProvider.getUserUuid()) {
+      criterias.push({ key: 'userUuid.equals', value: this.authServerProvider.getUserUuid() });
+      this.equipeService
+        .query({
+          page: pageToLoad - 1,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+          criteria: criterias,
+        })
+        .subscribe({
+          next: (res: HttpResponse<IEquipe[]>) => {
+            console.log(this.authServerProvider.getUserUuid());
+            this.isLoading = false;
+            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+          },
+          error: () => {
+            this.isLoading = false;
+            this.onError();
+          },
+        });
+    }
   }
 
   ngOnInit(): void {

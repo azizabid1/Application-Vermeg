@@ -18,6 +18,7 @@
         "title": "Tache"
       },
       "id": "Id",
+      "userUuid": "User Uuid",
       "titre": "Titre",
       "description": "Description",
       "statusTache": "Status Tache",

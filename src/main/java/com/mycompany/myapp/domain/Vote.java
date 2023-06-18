@@ -5,27 +5,36 @@ import com.mycompany.myapp.domain.enumeration.Rendement;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Type;
 
 /**
  * The Employee entity.
  */
-@Table("vote")
+@Entity
+@Table(name = "vote")
 public class Vote implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column("type_vote")
+    @NotNull
+    @Type(type = "uuid-char")
+    @Column(name = "user_uuid", length = 36, nullable = false)
+    private UUID userUuid;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_vote", nullable = false, unique = true)
     private Rendement typeVote;
 
-    @Transient
+    @ManyToMany(mappedBy = "votes")
     @JsonIgnoreProperties(value = { "userId", "votes" }, allowSetters = true)
     private Set<Equipe> equipes = new HashSet<>();
 
@@ -42,6 +51,19 @@ public class Vote implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return this.userUuid;
+    }
+
+    public Vote userUuid(UUID userUuid) {
+        this.setUserUuid(userUuid);
+        return this;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public Rendement getTypeVote() {
@@ -112,6 +134,7 @@ public class Vote implements Serializable {
     public String toString() {
         return "Vote{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", typeVote='" + getTypeVote() + "'" +
             "}";
     }

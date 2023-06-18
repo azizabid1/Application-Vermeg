@@ -3,6 +3,7 @@ import { IUser } from 'app/entities/user/user.model';
 
 export interface IStatusEmploye {
   id?: number;
+  userUuid?: string;
   disponibilite?: boolean | null;
   mission?: boolean | null;
   debutConge?: dayjs.Dayjs | null;
@@ -13,6 +14,7 @@ export interface IStatusEmploye {
 export class StatusEmploye implements IStatusEmploye {
   constructor(
     public id?: number,
+    public userUuid?: string,
     public disponibilite?: boolean | null,
     public mission?: boolean | null,
     public debutConge?: dayjs.Dayjs | null,

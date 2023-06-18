@@ -33,6 +33,9 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.projet.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="userUuid">
+            <span jhiTranslate="vermegApp.projet.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="nomProjet">
             <span jhiTranslate="vermegApp.projet.nomProjet">Nom Projet</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -48,6 +51,12 @@
           <th scope="col" jhiSortBy="statusProjet">
             <span jhiTranslate="vermegApp.projet.statusProjet">Status Projet</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="nombreTotal">
+            <span jhiTranslate="vermegApp.projet.nombreTotal">Nombre Total</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="nombreRestant">
+            <span jhiTranslate="vermegApp.projet.nombreRestant">Nombre Restant</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="devis.id"><span jhiTranslate="vermegApp.projet.devis">Devis</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="equipe.id">
             <span jhiTranslate="vermegApp.projet.equipe">Equipe</span> <fa-icon icon="sort"></fa-icon>
@@ -61,11 +70,14 @@
           <td>
             <a [routerLink]="['/projet', projet.id, 'view']">{{ projet.id }}</a>
           </td>
+          <td>{{ projet.userUuid }}</td>
           <td>{{ projet.nomProjet }}</td>
           <td>{{ projet.dateDebut | formatMediumDate }}</td>
           <td>{{ projet.dateFin | formatMediumDate }}</td>
           <td>{{ projet.technologies }}</td>
           <td jhiTranslate="{{ 'vermegApp.Status.' + projet.statusProjet }}">{{ projet.statusProjet }}</td>
+          <td>{{ projet.nombreTotal }}</td>
+          <td>{{ projet.nombreRestant }}</td>
           <td>
             <div *ngIf="projet.devis">
               <a [routerLink]="['/devis', projet.devis?.id, 'view']">{{ projet.devis?.id }}</a>

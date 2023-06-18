@@ -3,6 +3,8 @@ package com.mycompany.myapp.service.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.StatusEmploye} entity.
@@ -10,6 +12,9 @@ import java.util.Objects;
 public class StatusEmployeDTO implements Serializable {
 
     private Long id;
+
+    @NotNull
+    private UUID userUuid;
 
     private Boolean disponibilite;
 
@@ -27,6 +32,14 @@ public class StatusEmployeDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public Boolean getDisponibilite() {
@@ -95,6 +108,7 @@ public class StatusEmployeDTO implements Serializable {
     public String toString() {
         return "StatusEmployeDTO{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", disponibilite='" + getDisponibilite() + "'" +
             ", mission='" + getMission() + "'" +
             ", debutConge='" + getDebutConge() + "'" +

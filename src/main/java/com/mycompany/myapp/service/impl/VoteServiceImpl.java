@@ -5,13 +5,13 @@ import com.mycompany.myapp.repository.VoteRepository;
 import com.mycompany.myapp.service.VoteService;
 import com.mycompany.myapp.service.dto.VoteDTO;
 import com.mycompany.myapp.service.mapper.VoteMapper;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Implementation for managing {@link Vote}.
@@ -32,19 +32,23 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public Mono<VoteDTO> save(VoteDTO voteDTO) {
+    public VoteDTO save(VoteDTO voteDTO) {
         log.debug("Request to save Vote : {}", voteDTO);
-        return voteRepository.save(voteMapper.toEntity(voteDTO)).map(voteMapper::toDto);
+        Vote vote = voteMapper.toEntity(voteDTO);
+        vote = voteRepository.save(vote);
+        return voteMapper.toDto(vote);
     }
 
     @Override
-    public Mono<VoteDTO> update(VoteDTO voteDTO) {
+    public VoteDTO update(VoteDTO voteDTO) {
         log.debug("Request to save Vote : {}", voteDTO);
-        return voteRepository.save(voteMapper.toEntity(voteDTO)).map(voteMapper::toDto);
+        Vote vote = voteMapper.toEntity(voteDTO);
+        vote = voteRepository.save(vote);
+        return voteMapper.toDto(vote);
     }
 
     @Override
-    public Mono<VoteDTO> partialUpdate(VoteDTO voteDTO) {
+    public Optional<VoteDTO> partialUpdate(VoteDTO voteDTO) {
         log.debug("Request to partially update Vote : {}", voteDTO);
 
         return voteRepository
@@ -54,31 +58,27 @@ public class VoteServiceImpl implements VoteService {
 
                 return existingVote;
             })
-            .flatMap(voteRepository::save)
+            .map(voteRepository::save)
             .map(voteMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<VoteDTO> findAll(Pageable pageable) {
+    public Page<VoteDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Votes");
-        return voteRepository.findAllBy(pageable).map(voteMapper::toDto);
-    }
-
-    public Mono<Long> countAll() {
-        return voteRepository.count();
+        return voteRepository.findAll(pageable).map(voteMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<VoteDTO> findOne(Long id) {
+    public Optional<VoteDTO> findOne(Long id) {
         log.debug("Request to get Vote : {}", id);
         return voteRepository.findById(id).map(voteMapper::toDto);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete Vote : {}", id);
-        return voteRepository.deleteById(id);
+        voteRepository.deleteById(id);
     }
 }

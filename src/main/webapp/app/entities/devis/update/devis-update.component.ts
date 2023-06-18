@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -20,7 +20,8 @@ export class DevisUpdateComponent implements OnInit {
     prixTotal: [],
     prixHT: [],
     prixService: [],
-    dureeProjet: [],
+    dureeProjet: [null, [Validators.min(0)]],
+    userUuid: [null, [Validators.required]],
   });
 
   constructor(protected devisService: DevisService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -71,6 +72,7 @@ export class DevisUpdateComponent implements OnInit {
       prixHT: devis.prixHT,
       prixService: devis.prixService,
       dureeProjet: devis.dureeProjet,
+      userUuid: devis.userUuid,
     });
   }
 
@@ -82,6 +84,7 @@ export class DevisUpdateComponent implements OnInit {
       prixHT: this.editForm.get(['prixHT'])!.value,
       prixService: this.editForm.get(['prixService'])!.value,
       dureeProjet: this.editForm.get(['dureeProjet'])!.value,
+      userUuid: this.editForm.get(['userUuid'])!.value,
     };
   }
 }

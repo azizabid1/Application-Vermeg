@@ -1,35 +1,42 @@
 package com.mycompany.myapp.domain;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Type;
 
 /**
  * not an ignored comment
  */
-@Table("devis")
+@Entity
+@Table(name = "devis")
 public class Devis implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column("prix_total")
+    @Column(name = "prix_total")
     private Double prixTotal;
 
-    @Column("prix_ht")
+    @Column(name = "prix_ht")
     private Double prixHT;
 
-    @Column("prix_service")
+    @Column(name = "prix_service")
     private Double prixService;
 
-    @Column("duree_projet")
-    private LocalDate dureeProjet;
+    @DecimalMin(value = "0")
+    @Column(name = "duree_projet")
+    private Float dureeProjet;
+
+    @NotNull
+    @Type(type = "uuid-char")
+    @Column(name = "user_uuid", length = 36, nullable = false)
+    private UUID userUuid;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -85,17 +92,30 @@ public class Devis implements Serializable {
         this.prixService = prixService;
     }
 
-    public LocalDate getDureeProjet() {
+    public Float getDureeProjet() {
         return this.dureeProjet;
     }
 
-    public Devis dureeProjet(LocalDate dureeProjet) {
+    public Devis dureeProjet(Float dureeProjet) {
         this.setDureeProjet(dureeProjet);
         return this;
     }
 
-    public void setDureeProjet(LocalDate dureeProjet) {
+    public void setDureeProjet(Float dureeProjet) {
         this.dureeProjet = dureeProjet;
+    }
+
+    public UUID getUserUuid() {
+        return this.userUuid;
+    }
+
+    public Devis userUuid(UUID userUuid) {
+        this.setUserUuid(userUuid);
+        return this;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -125,7 +145,8 @@ public class Devis implements Serializable {
             ", prixTotal=" + getPrixTotal() +
             ", prixHT=" + getPrixHT() +
             ", prixService=" + getPrixService() +
-            ", dureeProjet='" + getDureeProjet() + "'" +
+            ", dureeProjet=" + getDureeProjet() +
+            ", userUuid='" + getUserUuid() + "'" +
             "}";
     }
 }

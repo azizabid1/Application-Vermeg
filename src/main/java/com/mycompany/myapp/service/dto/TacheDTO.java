@@ -3,6 +3,8 @@ package com.mycompany.myapp.service.dto;
 import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Tache} entity.
@@ -10,6 +12,9 @@ import java.util.Objects;
 public class TacheDTO implements Serializable {
 
     private Long id;
+
+    @NotNull
+    private UUID userUuid;
 
     private String titre;
 
@@ -23,6 +28,14 @@ public class TacheDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public String getTitre() {
@@ -75,6 +88,7 @@ public class TacheDTO implements Serializable {
     public String toString() {
         return "TacheDTO{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", titre='" + getTitre() + "'" +
             ", description='" + getDescription() + "'" +
             ", statusTache='" + getStatusTache() + "'" +

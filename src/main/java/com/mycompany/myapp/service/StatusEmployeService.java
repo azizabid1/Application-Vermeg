@@ -1,9 +1,9 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.StatusEmployeDTO;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.StatusEmploye}.
@@ -15,7 +15,7 @@ public interface StatusEmployeService {
      * @param statusEmployeDTO the entity to save.
      * @return the persisted entity.
      */
-    Mono<StatusEmployeDTO> save(StatusEmployeDTO statusEmployeDTO);
+    StatusEmployeDTO save(StatusEmployeDTO statusEmployeDTO);
 
     /**
      * Updates a statusEmploye.
@@ -23,7 +23,7 @@ public interface StatusEmployeService {
      * @param statusEmployeDTO the entity to update.
      * @return the persisted entity.
      */
-    Mono<StatusEmployeDTO> update(StatusEmployeDTO statusEmployeDTO);
+    StatusEmployeDTO update(StatusEmployeDTO statusEmployeDTO);
 
     /**
      * Partially updates a statusEmploye.
@@ -31,7 +31,7 @@ public interface StatusEmployeService {
      * @param statusEmployeDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Mono<StatusEmployeDTO> partialUpdate(StatusEmployeDTO statusEmployeDTO);
+    Optional<StatusEmployeDTO> partialUpdate(StatusEmployeDTO statusEmployeDTO);
 
     /**
      * Get all the statusEmployes.
@@ -39,14 +39,7 @@ public interface StatusEmployeService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Flux<StatusEmployeDTO> findAll(Pageable pageable);
-
-    /**
-     * Returns the number of statusEmployes available.
-     * @return the number of entities in the database.
-     *
-     */
-    Mono<Long> countAll();
+    Page<StatusEmployeDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" statusEmploye.
@@ -54,13 +47,12 @@ public interface StatusEmployeService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Mono<StatusEmployeDTO> findOne(Long id);
+    Optional<StatusEmployeDTO> findOne(Long id);
 
     /**
      * Delete the "id" statusEmploye.
      *
      * @param id the id of the entity.
-     * @return a Mono to signal the deletion
      */
-    Mono<Void> delete(Long id);
+    void delete(Long id);
 }

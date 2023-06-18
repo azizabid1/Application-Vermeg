@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Equipe} entity.
@@ -14,7 +16,12 @@ public class EquipeDTO implements Serializable {
 
     private String nom;
 
+    @Min(value = 4L)
+    @Max(value = 6L)
     private Long nombrePersonne;
+
+    @NotNull
+    private UUID userUuid;
 
     private UserDTO userId;
 
@@ -42,6 +49,14 @@ public class EquipeDTO implements Serializable {
 
     public void setNombrePersonne(Long nombrePersonne) {
         this.nombrePersonne = nombrePersonne;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public UserDTO getUserId() {
@@ -88,6 +103,7 @@ public class EquipeDTO implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", nombrePersonne=" + getNombrePersonne() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", userId=" + getUserId() +
             ", votes=" + getVotes() +
             "}";

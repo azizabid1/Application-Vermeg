@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230615183508",
+  "changelogDate": "20230618143059",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "poste",
@@ -16,11 +16,16 @@
     {
       "fieldName": "description",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "userUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,
   "javadoc": "Task entity.\\n@author The JHipster team.",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "name": "Poste",
   "pagination": "pagination",
   "readOnly": false,

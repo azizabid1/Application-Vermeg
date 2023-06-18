@@ -1,34 +1,30 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.PosteRepository;
+import com.mycompany.myapp.service.PosteQueryService;
 import com.mycompany.myapp.service.PosteService;
+import com.mycompany.myapp.service.criteria.PosteCriteria;
 import com.mycompany.myapp.service.dto.PosteDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
-import tech.jhipster.web.util.reactive.ResponseUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Poste}.
@@ -48,9 +44,12 @@ public class PosteResource {
 
     private final PosteRepository posteRepository;
 
-    public PosteResource(PosteService posteService, PosteRepository posteRepository) {
+    private final PosteQueryService posteQueryService;
+
+    public PosteResource(PosteService posteService, PosteRepository posteRepository, PosteQueryService posteQueryService) {
         this.posteService = posteService;
         this.posteRepository = posteRepository;
+        this.posteQueryService = posteQueryService;
     }
 
     /**
@@ -61,23 +60,16 @@ public class PosteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/postes")
-    public Mono<ResponseEntity<PosteDTO>> createPoste(@RequestBody PosteDTO posteDTO) throws URISyntaxException {
+    public ResponseEntity<PosteDTO> createPoste(@Valid @RequestBody PosteDTO posteDTO) throws URISyntaxException {
         log.debug("REST request to save Poste : {}", posteDTO);
         if (posteDTO.getId() != null) {
             throw new BadRequestAlertException("A new poste cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        return posteService
-            .save(posteDTO)
-            .map(result -> {
-                try {
-                    return ResponseEntity
-                        .created(new URI("/api/postes/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                        .body(result);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        PosteDTO result = posteService.save(posteDTO);
+        return ResponseEntity
+            .created(new URI("/api/postes/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -91,9 +83,9 @@ public class PosteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/postes/{id}")
-    public Mono<ResponseEntity<PosteDTO>> updatePoste(
+    public ResponseEntity<PosteDTO> updatePoste(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PosteDTO posteDTO
+        @Valid @RequestBody PosteDTO posteDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Poste : {}, {}", id, posteDTO);
         if (posteDTO.getId() == null) {
@@ -103,23 +95,15 @@ public class PosteResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return posteRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                }
+        if (!posteRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
-                return posteService
-                    .update(posteDTO)
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(result ->
-                        ResponseEntity
-                            .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                            .body(result)
-                    );
-            });
+        PosteDTO result = posteService.update(posteDTO);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, posteDTO.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -134,9 +118,9 @@ public class PosteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/postes/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public Mono<ResponseEntity<PosteDTO>> partialUpdatePoste(
+    public ResponseEntity<PosteDTO> partialUpdatePoste(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PosteDTO posteDTO
+        @NotNull @RequestBody PosteDTO posteDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Poste partially : {}, {}", id, posteDTO);
         if (posteDTO.getId() == null) {
@@ -146,53 +130,46 @@ public class PosteResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return posteRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                }
+        if (!posteRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
-                Mono<PosteDTO> result = posteService.partialUpdate(posteDTO);
+        Optional<PosteDTO> result = posteService.partialUpdate(posteDTO);
 
-                return result
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(res ->
-                        ResponseEntity
-                            .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
-                            .body(res)
-                    );
-            });
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, posteDTO.getId().toString())
+        );
     }
 
     /**
      * {@code GET  /postes} : get all the postes.
      *
      * @param pageable the pagination information.
-     * @param request a {@link ServerHttpRequest} request.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of postes in body.
      */
     @GetMapping("/postes")
-    public Mono<ResponseEntity<List<PosteDTO>>> getAllPostes(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable,
-        ServerHttpRequest request
+    public ResponseEntity<List<PosteDTO>> getAllPostes(
+        PosteCriteria criteria,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get a page of Postes");
-        return posteService
-            .countAll()
-            .zipWith(posteService.findAll(pageable).collectList())
-            .map(countWithEntities ->
-                ResponseEntity
-                    .ok()
-                    .headers(
-                        PaginationUtil.generatePaginationHttpHeaders(
-                            UriComponentsBuilder.fromHttpRequest(request),
-                            new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
-                        )
-                    )
-                    .body(countWithEntities.getT2())
-            );
+        log.debug("REST request to get Postes by criteria: {}", criteria);
+        Page<PosteDTO> page = posteQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /postes/count} : count all the postes.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/postes/count")
+    public ResponseEntity<Long> countPostes(PosteCriteria criteria) {
+        log.debug("REST request to count Postes by criteria: {}", criteria);
+        return ResponseEntity.ok().body(posteQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -202,9 +179,9 @@ public class PosteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the posteDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/postes/{id}")
-    public Mono<ResponseEntity<PosteDTO>> getPoste(@PathVariable Long id) {
+    public ResponseEntity<PosteDTO> getPoste(@PathVariable Long id) {
         log.debug("REST request to get Poste : {}", id);
-        Mono<PosteDTO> posteDTO = posteService.findOne(id);
+        Optional<PosteDTO> posteDTO = posteService.findOne(id);
         return ResponseUtil.wrapOrNotFound(posteDTO);
     }
 
@@ -215,16 +192,12 @@ public class PosteResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/postes/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deletePoste(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePoste(@PathVariable Long id) {
         log.debug("REST request to delete Poste : {}", id);
-        return posteService
-            .delete(id)
-            .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
-            );
+        posteService.delete(id);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

@@ -4,6 +4,8 @@ import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Projet} entity.
@@ -11,6 +13,9 @@ import java.util.Objects;
 public class ProjetDTO implements Serializable {
 
     private Long id;
+
+    @NotNull
+    private UUID userUuid;
 
     private String nomProjet;
 
@@ -21,6 +26,10 @@ public class ProjetDTO implements Serializable {
     private String technologies;
 
     private Status statusProjet;
+
+    private Long nombreTotal;
+
+    private Long nombreRestant;
 
     private DevisDTO devis;
 
@@ -34,6 +43,14 @@ public class ProjetDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public String getNomProjet() {
@@ -74,6 +91,22 @@ public class ProjetDTO implements Serializable {
 
     public void setStatusProjet(Status statusProjet) {
         this.statusProjet = statusProjet;
+    }
+
+    public Long getNombreTotal() {
+        return nombreTotal;
+    }
+
+    public void setNombreTotal(Long nombreTotal) {
+        this.nombreTotal = nombreTotal;
+    }
+
+    public Long getNombreRestant() {
+        return nombreRestant;
+    }
+
+    public void setNombreRestant(Long nombreRestant) {
+        this.nombreRestant = nombreRestant;
     }
 
     public DevisDTO getDevis() {
@@ -126,11 +159,14 @@ public class ProjetDTO implements Serializable {
     public String toString() {
         return "ProjetDTO{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", nomProjet='" + getNomProjet() + "'" +
             ", dateDebut='" + getDateDebut() + "'" +
             ", dateFin='" + getDateFin() + "'" +
             ", technologies='" + getTechnologies() + "'" +
             ", statusProjet='" + getStatusProjet() + "'" +
+            ", nombreTotal=" + getNombreTotal() +
+            ", nombreRestant=" + getNombreRestant() +
             ", devis=" + getDevis() +
             ", equipe=" + getEquipe() +
             ", tache=" + getTache() +

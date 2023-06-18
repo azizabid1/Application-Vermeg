@@ -14,6 +14,20 @@
         </div>
 
         <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.userUuid" for="field_userUuid">User Uuid</label>
+          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
+          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('userUuid')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.projet.nomProjet" for="field_nomProjet">Nom Projet</label>
           <input type="text" class="form-control" name="nomProjet" id="field_nomProjet" data-cy="nomProjet" formControlName="nomProjet" />
         </div>
@@ -70,6 +84,30 @@
             <option [ngValue]="null">{{ 'vermegApp.Status.null' | translate }}</option>
             <option *ngFor="let status of statusValues" [value]="status">{{ 'vermegApp.Status.' + status | translate }}</option>
           </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.nombreTotal" for="field_nombreTotal">Nombre Total</label>
+          <input
+            type="number"
+            class="form-control"
+            name="nombreTotal"
+            id="field_nombreTotal"
+            data-cy="nombreTotal"
+            formControlName="nombreTotal"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.projet.nombreRestant" for="field_nombreRestant">Nombre Restant</label>
+          <input
+            type="number"
+            class="form-control"
+            name="nombreRestant"
+            id="field_nombreRestant"
+            data-cy="nombreRestant"
+            formControlName="nombreRestant"
+          />
         </div>
 
         <div class="row mb-3">

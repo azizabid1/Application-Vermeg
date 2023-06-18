@@ -37,6 +37,9 @@
           <th scope="col" jhiSortBy="description">
             <span jhiTranslate="vermegApp.poste.description">Description</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="userUuid">
+            <span jhiTranslate="vermegApp.poste.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="userId.id">
             <span jhiTranslate="vermegApp.poste.userId">User Id</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -50,6 +53,7 @@
           </td>
           <td>{{ poste.title }}</td>
           <td>{{ poste.description }}</td>
+          <td>{{ poste.userUuid }}</td>
           <td>
             {{ poste.userId?.id }}
           </td>

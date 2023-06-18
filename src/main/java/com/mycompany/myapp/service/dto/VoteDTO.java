@@ -4,6 +4,8 @@ import com.mycompany.myapp.domain.enumeration.Rendement;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Vote} entity.
@@ -13,6 +15,10 @@ public class VoteDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
+    private UUID userUuid;
+
+    @NotNull
     private Rendement typeVote;
 
     public Long getId() {
@@ -21,6 +27,14 @@ public class VoteDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public Rendement getTypeVote() {
@@ -57,6 +71,7 @@ public class VoteDTO implements Serializable {
     public String toString() {
         return "VoteDTO{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", typeVote='" + getTypeVote() + "'" +
             "}";
     }

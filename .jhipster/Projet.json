@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230615183509",
+  "changelogDate": "20230618143100",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "projet",
@@ -8,6 +8,11 @@
     {
       "fieldName": "id",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "userUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "nomProjet",
@@ -29,10 +34,18 @@
       "fieldName": "statusProjet",
       "fieldType": "Status",
       "fieldValues": "ATTENTE,COURS,EXECUTION,TERMINER"
+    },
+    {
+      "fieldName": "nombreTotal",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "nombreRestant",
+      "fieldType": "Long"
     }
   ],
   "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "name": "Projet",
   "pagination": "pagination",
   "readOnly": false,

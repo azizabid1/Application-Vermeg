@@ -2,8 +2,9 @@ package com.mycompany.myapp.service.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Devis} entity.
@@ -19,7 +20,11 @@ public class DevisDTO implements Serializable {
 
     private Double prixService;
 
-    private LocalDate dureeProjet;
+    @DecimalMin(value = "0")
+    private Float dureeProjet;
+
+    @NotNull
+    private UUID userUuid;
 
     public Long getId() {
         return id;
@@ -53,12 +58,20 @@ public class DevisDTO implements Serializable {
         this.prixService = prixService;
     }
 
-    public LocalDate getDureeProjet() {
+    public Float getDureeProjet() {
         return dureeProjet;
     }
 
-    public void setDureeProjet(LocalDate dureeProjet) {
+    public void setDureeProjet(Float dureeProjet) {
         this.dureeProjet = dureeProjet;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     @Override
@@ -90,7 +103,8 @@ public class DevisDTO implements Serializable {
             ", prixTotal=" + getPrixTotal() +
             ", prixHT=" + getPrixHT() +
             ", prixService=" + getPrixService() +
-            ", dureeProjet='" + getDureeProjet() + "'" +
+            ", dureeProjet=" + getDureeProjet() +
+            ", userUuid='" + getUserUuid() + "'" +
             "}";
     }
 }

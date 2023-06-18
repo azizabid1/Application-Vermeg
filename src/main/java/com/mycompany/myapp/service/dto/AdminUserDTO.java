@@ -5,6 +5,7 @@ import com.mycompany.myapp.domain.Authority;
 import com.mycompany.myapp.domain.User;
 import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.validation.constraints.*;
 
@@ -14,6 +15,8 @@ import javax.validation.constraints.*;
 public class AdminUserDTO {
 
     private Long id;
+
+    private UUID userUuid;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -54,6 +57,7 @@ public class AdminUserDTO {
 
     public AdminUserDTO(User user) {
         this.id = user.getId();
+        this.userUuid = user.getUserUuid();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
@@ -74,6 +78,14 @@ public class AdminUserDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public String getLogin() {
@@ -177,6 +189,7 @@ public class AdminUserDTO {
     public String toString() {
         return "AdminUserDTO{" +
             "login='" + login + '\'' +
+             ", userUuid='" + userUuid + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
@@ -189,5 +202,6 @@ public class AdminUserDTO {
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
             "}";
-    }
+    
+}
 }

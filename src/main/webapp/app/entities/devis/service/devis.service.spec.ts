@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import dayjs from 'dayjs/esm';
 
-import { DATE_FORMAT } from 'app/config/input.constants';
 import { IDevis, Devis } from '../devis.model';
 
 import { DevisService } from './devis.service';
@@ -12,7 +10,6 @@ describe('Devis Service', () => {
   let httpMock: HttpTestingController;
   let elemDefault: IDevis;
   let expectedResult: IDevis | IDevis[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,25 +18,20 @@ describe('Devis Service', () => {
     expectedResult = null;
     service = TestBed.inject(DevisService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
 
     elemDefault = {
       id: 0,
       prixTotal: 0,
       prixHT: 0,
       prixService: 0,
-      dureeProjet: currentDate,
+      dureeProjet: 0,
+      userUuid: 'AAAAAAA',
     };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          dureeProjet: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = Object.assign({}, elemDefault);
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -52,17 +44,11 @@ describe('Devis Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 0,
-          dureeProjet: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
 
-      const expected = Object.assign(
-        {
-          dureeProjet: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.create(new Devis()).subscribe(resp => (expectedResult = resp.body));
 
@@ -78,17 +64,13 @@ describe('Devis Service', () => {
           prixTotal: 1,
           prixHT: 1,
           prixService: 1,
-          dureeProjet: currentDate.format(DATE_FORMAT),
+          dureeProjet: 1,
+          userUuid: 'BBBBBB',
         },
         elemDefault
       );
 
-      const expected = Object.assign(
-        {
-          dureeProjet: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -102,18 +84,14 @@ describe('Devis Service', () => {
         {
           prixHT: 1,
           prixService: 1,
+          userUuid: 'BBBBBB',
         },
         new Devis()
       );
 
       const returnedFromService = Object.assign(patchObject, elemDefault);
 
-      const expected = Object.assign(
-        {
-          dureeProjet: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -129,17 +107,13 @@ describe('Devis Service', () => {
           prixTotal: 1,
           prixHT: 1,
           prixService: 1,
-          dureeProjet: currentDate.format(DATE_FORMAT),
+          dureeProjet: 1,
+          userUuid: 'BBBBBB',
         },
         elemDefault
       );
 
-      const expected = Object.assign(
-        {
-          dureeProjet: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
@@ -186,7 +160,7 @@ describe('Devis Service', () => {
       });
 
       it('should add only unique Devis to an array', () => {
-        const devisArray: IDevis[] = [{ id: 123 }, { id: 456 }, { id: 67561 }];
+        const devisArray: IDevis[] = [{ id: 123 }, { id: 456 }, { id: 45738 }];
         const devisCollection: IDevis[] = [{ id: 123 }];
         expectedResult = service.addDevisToCollectionIfMissing(devisCollection, ...devisArray);
         expect(expectedResult).toHaveLength(3);

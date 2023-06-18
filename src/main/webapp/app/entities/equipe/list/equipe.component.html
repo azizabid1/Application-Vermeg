@@ -37,6 +37,9 @@
           <th scope="col" jhiSortBy="nombrePersonne">
             <span jhiTranslate="vermegApp.equipe.nombrePersonne">Nombre Personne</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="userUuid">
+            <span jhiTranslate="vermegApp.equipe.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="userId.id">
             <span jhiTranslate="vermegApp.equipe.userId">User Id</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -50,6 +53,7 @@
           </td>
           <td>{{ equipe.nom }}</td>
           <td>{{ equipe.nombrePersonne }}</td>
+          <td>{{ equipe.userUuid }}</td>
           <td>
             {{ equipe.userId?.id }}
           </td>

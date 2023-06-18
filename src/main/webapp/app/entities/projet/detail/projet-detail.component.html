@@ -14,6 +14,10 @@
         <dd>
           <span>{{ projet.id }}</span>
         </dd>
+        <dt><span jhiTranslate="vermegApp.projet.userUuid">User Uuid</span></dt>
+        <dd>
+          <span>{{ projet.userUuid }}</span>
+        </dd>
         <dt><span jhiTranslate="vermegApp.projet.nomProjet">Nom Projet</span></dt>
         <dd>
           <span>{{ projet.nomProjet }}</span>
@@ -33,6 +37,14 @@
         <dt><span jhiTranslate="vermegApp.projet.statusProjet">Status Projet</span></dt>
         <dd>
           <span jhiTranslate="{{ 'vermegApp.Status.' + projet.statusProjet }}">{{ projet.statusProjet }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.nombreTotal">Nombre Total</span></dt>
+        <dd>
+          <span>{{ projet.nombreTotal }}</span>
+        </dd>
+        <dt><span jhiTranslate="vermegApp.projet.nombreRestant">Nombre Restant</span></dt>
+        <dd>
+          <span>{{ projet.nombreRestant }}</span>
         </dd>
         <dt><span jhiTranslate="vermegApp.projet.devis">Devis</span></dt>
         <dd>

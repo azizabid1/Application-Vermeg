@@ -5,13 +5,13 @@ import com.mycompany.myapp.repository.EquipeRepository;
 import com.mycompany.myapp.service.EquipeService;
 import com.mycompany.myapp.service.dto.EquipeDTO;
 import com.mycompany.myapp.service.mapper.EquipeMapper;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Implementation for managing {@link Equipe}.
@@ -32,19 +32,23 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public Mono<EquipeDTO> save(EquipeDTO equipeDTO) {
+    public EquipeDTO save(EquipeDTO equipeDTO) {
         log.debug("Request to save Equipe : {}", equipeDTO);
-        return equipeRepository.save(equipeMapper.toEntity(equipeDTO)).map(equipeMapper::toDto);
+        Equipe equipe = equipeMapper.toEntity(equipeDTO);
+        equipe = equipeRepository.save(equipe);
+        return equipeMapper.toDto(equipe);
     }
 
     @Override
-    public Mono<EquipeDTO> update(EquipeDTO equipeDTO) {
+    public EquipeDTO update(EquipeDTO equipeDTO) {
         log.debug("Request to save Equipe : {}", equipeDTO);
-        return equipeRepository.save(equipeMapper.toEntity(equipeDTO)).map(equipeMapper::toDto);
+        Equipe equipe = equipeMapper.toEntity(equipeDTO);
+        equipe = equipeRepository.save(equipe);
+        return equipeMapper.toDto(equipe);
     }
 
     @Override
-    public Mono<EquipeDTO> partialUpdate(EquipeDTO equipeDTO) {
+    public Optional<EquipeDTO> partialUpdate(EquipeDTO equipeDTO) {
         log.debug("Request to partially update Equipe : {}", equipeDTO);
 
         return equipeRepository
@@ -54,35 +58,31 @@ public class EquipeServiceImpl implements EquipeService {
 
                 return existingEquipe;
             })
-            .flatMap(equipeRepository::save)
+            .map(equipeRepository::save)
             .map(equipeMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<EquipeDTO> findAll(Pageable pageable) {
+    public Page<EquipeDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Equipes");
-        return equipeRepository.findAllBy(pageable).map(equipeMapper::toDto);
+        return equipeRepository.findAll(pageable).map(equipeMapper::toDto);
     }
 
-    public Flux<EquipeDTO> findAllWithEagerRelationships(Pageable pageable) {
+    public Page<EquipeDTO> findAllWithEagerRelationships(Pageable pageable) {
         return equipeRepository.findAllWithEagerRelationships(pageable).map(equipeMapper::toDto);
-    }
-
-    public Mono<Long> countAll() {
-        return equipeRepository.count();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<EquipeDTO> findOne(Long id) {
+    public Optional<EquipeDTO> findOne(Long id) {
         log.debug("Request to get Equipe : {}", id);
         return equipeRepository.findOneWithEagerRelationships(id).map(equipeMapper::toDto);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete Equipe : {}", id);
-        return equipeRepository.deleteById(id);
+        equipeRepository.deleteById(id);
     }
 }

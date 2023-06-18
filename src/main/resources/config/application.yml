@@ -24,30 +24,6 @@ springdoc:
   api-docs:
     enabled: false
 ---
-eureka:
-  client:
-    enabled: true
-    healthcheck:
-      enabled: true
-    fetch-registry: true
-    register-with-eureka: true
-    instance-info-replication-interval-seconds: 10
-    registry-fetch-interval-seconds: 10
-  instance:
-    appname: vermegapp
-    instanceId: vermegapp:${spring.application.instance-id:${random.value}}
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 10
-    status-page-url-path: ${management.endpoints.web.base-path}/info
-    health-check-url-path: ${management.endpoints.web.base-path}/health
-    metadata-map:
-      zone: primary # This is needed for the load balancer
-      profile: ${spring.profiles.active}
-      version: #project.version#
-      git-version: ${git.commit.id.describe:}
-      git-commit: ${git.commit.id.abbrev:}
-      git-branch: ${git.branch:}
-      context-path: ${server.servlet.context-path:}
 management:
   endpoints:
     web:
@@ -65,6 +41,7 @@ management:
             'loggers',
             'prometheus',
             'threaddump',
+            'caches',
             'liquibase',
           ]
   endpoint:
@@ -129,10 +106,37 @@ spring:
         #- tls
   jmx:
     enabled: false
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      # modify batch size as necessary
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
   messages:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   task:
     execution:
       thread-name-prefix: vermeg-app-task-
@@ -182,7 +186,7 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: khouloudabd512@gmail.com
+    from: VermegApp@localhost
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/**
     management-include-pattern: ${server.servlet.context-path:}/management/**

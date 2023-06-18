@@ -33,6 +33,9 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.tache.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="userUuid">
+            <span jhiTranslate="vermegApp.tache.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="titre"><span jhiTranslate="vermegApp.tache.titre">Titre</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description">
             <span jhiTranslate="vermegApp.tache.description">Description</span> <fa-icon icon="sort"></fa-icon>
@@ -48,6 +51,7 @@
           <td>
             <a [routerLink]="['/tache', tache.id, 'view']">{{ tache.id }}</a>
           </td>
+          <td>{{ tache.userUuid }}</td>
           <td>{{ tache.titre }}</td>
           <td>{{ tache.description }}</td>
           <td jhiTranslate="{{ 'vermegApp.Status.' + tache.statusTache }}">{{ tache.statusTache }}</td>

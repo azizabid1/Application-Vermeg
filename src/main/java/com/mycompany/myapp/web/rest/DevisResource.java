@@ -1,34 +1,30 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.DevisRepository;
+import com.mycompany.myapp.service.DevisQueryService;
 import com.mycompany.myapp.service.DevisService;
+import com.mycompany.myapp.service.criteria.DevisCriteria;
 import com.mycompany.myapp.service.dto.DevisDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
-import tech.jhipster.web.util.reactive.ResponseUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Devis}.
@@ -48,9 +44,12 @@ public class DevisResource {
 
     private final DevisRepository devisRepository;
 
-    public DevisResource(DevisService devisService, DevisRepository devisRepository) {
+    private final DevisQueryService devisQueryService;
+
+    public DevisResource(DevisService devisService, DevisRepository devisRepository, DevisQueryService devisQueryService) {
         this.devisService = devisService;
         this.devisRepository = devisRepository;
+        this.devisQueryService = devisQueryService;
     }
 
     /**
@@ -61,23 +60,16 @@ public class DevisResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/devis")
-    public Mono<ResponseEntity<DevisDTO>> createDevis(@RequestBody DevisDTO devisDTO) throws URISyntaxException {
+    public ResponseEntity<DevisDTO> createDevis(@Valid @RequestBody DevisDTO devisDTO) throws URISyntaxException {
         log.debug("REST request to save Devis : {}", devisDTO);
         if (devisDTO.getId() != null) {
             throw new BadRequestAlertException("A new devis cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        return devisService
-            .save(devisDTO)
-            .map(result -> {
-                try {
-                    return ResponseEntity
-                        .created(new URI("/api/devis/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                        .body(result);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        DevisDTO result = devisService.save(devisDTO);
+        return ResponseEntity
+            .created(new URI("/api/devis/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -91,9 +83,9 @@ public class DevisResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/devis/{id}")
-    public Mono<ResponseEntity<DevisDTO>> updateDevis(
+    public ResponseEntity<DevisDTO> updateDevis(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DevisDTO devisDTO
+        @Valid @RequestBody DevisDTO devisDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Devis : {}, {}", id, devisDTO);
         if (devisDTO.getId() == null) {
@@ -103,23 +95,15 @@ public class DevisResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return devisRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                }
+        if (!devisRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
-                return devisService
-                    .update(devisDTO)
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(result ->
-                        ResponseEntity
-                            .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                            .body(result)
-                    );
-            });
+        DevisDTO result = devisService.update(devisDTO);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, devisDTO.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -134,9 +118,9 @@ public class DevisResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/devis/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public Mono<ResponseEntity<DevisDTO>> partialUpdateDevis(
+    public ResponseEntity<DevisDTO> partialUpdateDevis(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DevisDTO devisDTO
+        @NotNull @RequestBody DevisDTO devisDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Devis partially : {}, {}", id, devisDTO);
         if (devisDTO.getId() == null) {
@@ -146,53 +130,46 @@ public class DevisResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return devisRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                }
+        if (!devisRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
-                Mono<DevisDTO> result = devisService.partialUpdate(devisDTO);
+        Optional<DevisDTO> result = devisService.partialUpdate(devisDTO);
 
-                return result
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(res ->
-                        ResponseEntity
-                            .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
-                            .body(res)
-                    );
-            });
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, devisDTO.getId().toString())
+        );
     }
 
     /**
      * {@code GET  /devis} : get all the devis.
      *
      * @param pageable the pagination information.
-     * @param request a {@link ServerHttpRequest} request.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of devis in body.
      */
     @GetMapping("/devis")
-    public Mono<ResponseEntity<List<DevisDTO>>> getAllDevis(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable,
-        ServerHttpRequest request
+    public ResponseEntity<List<DevisDTO>> getAllDevis(
+        DevisCriteria criteria,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get a page of Devis");
-        return devisService
-            .countAll()
-            .zipWith(devisService.findAll(pageable).collectList())
-            .map(countWithEntities ->
-                ResponseEntity
-                    .ok()
-                    .headers(
-                        PaginationUtil.generatePaginationHttpHeaders(
-                            UriComponentsBuilder.fromHttpRequest(request),
-                            new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
-                        )
-                    )
-                    .body(countWithEntities.getT2())
-            );
+        log.debug("REST request to get Devis by criteria: {}", criteria);
+        Page<DevisDTO> page = devisQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /devis/count} : count all the devis.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/devis/count")
+    public ResponseEntity<Long> countDevis(DevisCriteria criteria) {
+        log.debug("REST request to count Devis by criteria: {}", criteria);
+        return ResponseEntity.ok().body(devisQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -202,9 +179,9 @@ public class DevisResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the devisDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/devis/{id}")
-    public Mono<ResponseEntity<DevisDTO>> getDevis(@PathVariable Long id) {
+    public ResponseEntity<DevisDTO> getDevis(@PathVariable Long id) {
         log.debug("REST request to get Devis : {}", id);
-        Mono<DevisDTO> devisDTO = devisService.findOne(id);
+        Optional<DevisDTO> devisDTO = devisService.findOne(id);
         return ResponseUtil.wrapOrNotFound(devisDTO);
     }
 
@@ -215,16 +192,12 @@ public class DevisResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/devis/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deleteDevis(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDevis(@PathVariable Long id) {
         log.debug("REST request to delete Devis : {}", id);
-        return devisService
-            .delete(id)
-            .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
-            );
+        devisService.delete(id);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

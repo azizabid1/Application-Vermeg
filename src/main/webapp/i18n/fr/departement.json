@@ -19,6 +19,7 @@
       },
       "id": "Id",
       "nom": "Nom",
+      "userUuid": "User Uuid",
       "userId": "User Id"
     }
   }

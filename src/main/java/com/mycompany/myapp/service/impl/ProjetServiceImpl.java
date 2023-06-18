@@ -5,13 +5,13 @@ import com.mycompany.myapp.repository.ProjetRepository;
 import com.mycompany.myapp.service.ProjetService;
 import com.mycompany.myapp.service.dto.ProjetDTO;
 import com.mycompany.myapp.service.mapper.ProjetMapper;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Implementation for managing {@link Projet}.
@@ -32,19 +32,23 @@ public class ProjetServiceImpl implements ProjetService {
     }
 
     @Override
-    public Mono<ProjetDTO> save(ProjetDTO projetDTO) {
+    public ProjetDTO save(ProjetDTO projetDTO) {
         log.debug("Request to save Projet : {}", projetDTO);
-        return projetRepository.save(projetMapper.toEntity(projetDTO)).map(projetMapper::toDto);
+        Projet projet = projetMapper.toEntity(projetDTO);
+        projet = projetRepository.save(projet);
+        return projetMapper.toDto(projet);
     }
 
     @Override
-    public Mono<ProjetDTO> update(ProjetDTO projetDTO) {
+    public ProjetDTO update(ProjetDTO projetDTO) {
         log.debug("Request to save Projet : {}", projetDTO);
-        return projetRepository.save(projetMapper.toEntity(projetDTO)).map(projetMapper::toDto);
+        Projet projet = projetMapper.toEntity(projetDTO);
+        projet = projetRepository.save(projet);
+        return projetMapper.toDto(projet);
     }
 
     @Override
-    public Mono<ProjetDTO> partialUpdate(ProjetDTO projetDTO) {
+    public Optional<ProjetDTO> partialUpdate(ProjetDTO projetDTO) {
         log.debug("Request to partially update Projet : {}", projetDTO);
 
         return projetRepository
@@ -54,31 +58,27 @@ public class ProjetServiceImpl implements ProjetService {
 
                 return existingProjet;
             })
-            .flatMap(projetRepository::save)
+            .map(projetRepository::save)
             .map(projetMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<ProjetDTO> findAll(Pageable pageable) {
+    public Page<ProjetDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Projets");
-        return projetRepository.findAllBy(pageable).map(projetMapper::toDto);
-    }
-
-    public Mono<Long> countAll() {
-        return projetRepository.count();
+        return projetRepository.findAll(pageable).map(projetMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<ProjetDTO> findOne(Long id) {
+    public Optional<ProjetDTO> findOne(Long id) {
         log.debug("Request to get Projet : {}", id);
         return projetRepository.findById(id).map(projetMapper::toDto);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete Projet : {}", id);
-        return projetRepository.deleteById(id);
+        projetRepository.deleteById(id);
     }
 }

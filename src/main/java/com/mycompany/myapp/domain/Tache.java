@@ -5,33 +5,41 @@ import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Type;
 
 /**
  * A Tache.
  */
-@Table("tache")
+@Entity
+@Table(name = "tache")
 public class Tache implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column("titre")
+    @NotNull
+    @Type(type = "uuid-char")
+    @Column(name = "user_uuid", length = 36, nullable = false)
+    private UUID userUuid;
+
+    @Column(name = "titre")
     private String titre;
 
-    @Column("description")
+    @Column(name = "description")
     private String description;
 
-    @Column("status_tache")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_tache")
     private Status statusTache;
 
-    @Transient
+    @OneToMany(mappedBy = "tache")
     @JsonIgnoreProperties(value = { "devis", "equipe", "tache" }, allowSetters = true)
     private Set<Projet> projets = new HashSet<>();
 
@@ -48,6 +56,19 @@ public class Tache implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return this.userUuid;
+    }
+
+    public Tache userUuid(UUID userUuid) {
+        this.setUserUuid(userUuid);
+        return this;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public String getTitre() {
@@ -144,6 +165,7 @@ public class Tache implements Serializable {
     public String toString() {
         return "Tache{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", titre='" + getTitre() + "'" +
             ", description='" + getDescription() + "'" +
             ", statusTache='" + getStatusTache() + "'" +

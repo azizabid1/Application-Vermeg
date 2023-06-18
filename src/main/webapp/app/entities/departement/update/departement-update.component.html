@@ -11,6 +11,27 @@
         <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
           <label class="form-label" jhiTranslate="vermegApp.departement.id" for="field_id">Id</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          <div *ngIf="editForm.get('id')!.invalid && (editForm.get('id')!.dirty || editForm.get('id')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('id')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 4 }"
+            >
+              This field should be at least 4.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('id')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 6 }"
+            >
+              This field cannot be more than 6.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('id')?.errors?.number" jhiTranslate="entity.validation.number">
+              This field should be a number.
+            </small>
+          </div>
         </div>
 
         <div class="row mb-3">
@@ -21,6 +42,25 @@
               {{ 'vermegApp.TypeDepartement.' + typeDepartement | translate }}
             </option>
           </select>
+          <div *ngIf="editForm.get('nom')!.invalid && (editForm.get('nom')!.dirty || editForm.get('nom')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('nom')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.departement.userUuid" for="field_userUuid">User Uuid</label>
+          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
+          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('userUuid')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
         </div>
 
         <div class="row mb-3">

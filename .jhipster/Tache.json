@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230615183511",
+  "changelogDate": "20230618143102",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "tache",
@@ -8,6 +8,11 @@
     {
       "fieldName": "id",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "userUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "titre",
@@ -24,7 +29,7 @@
     }
   ],
   "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "name": "Tache",
   "pagination": "pagination",
   "readOnly": false,

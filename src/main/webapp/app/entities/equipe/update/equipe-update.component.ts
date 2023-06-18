@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
@@ -25,7 +25,8 @@ export class EquipeUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     nom: [],
-    nombrePersonne: [],
+    nombrePersonne: [null, [Validators.min(4), Validators.max(6)]],
+    userUuid: [null, [Validators.required]],
     userId: [],
     votes: [],
   });
@@ -103,6 +104,7 @@ export class EquipeUpdateComponent implements OnInit {
       id: equipe.id,
       nom: equipe.nom,
       nombrePersonne: equipe.nombrePersonne,
+      userUuid: equipe.userUuid,
       userId: equipe.userId,
       votes: equipe.votes,
     });
@@ -131,6 +133,7 @@ export class EquipeUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       nom: this.editForm.get(['nom'])!.value,
       nombrePersonne: this.editForm.get(['nombrePersonne'])!.value,
+      userUuid: this.editForm.get(['userUuid'])!.value,
       userId: this.editForm.get(['userId'])!.value,
       votes: this.editForm.get(['votes'])!.value,
     };

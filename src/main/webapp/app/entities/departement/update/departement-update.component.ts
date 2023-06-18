@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
@@ -22,8 +22,9 @@ export class DepartementUpdateComponent implements OnInit {
   usersSharedCollection: IUser[] = [];
 
   editForm = this.fb.group({
-    id: [],
-    nom: [],
+    id: [null, [Validators.min(4), Validators.max(6)]],
+    nom: [null, [Validators.required]],
+    userUuid: [null, [Validators.required]],
     userId: [],
   });
 
@@ -83,6 +84,7 @@ export class DepartementUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: departement.id,
       nom: departement.nom,
+      userUuid: departement.userUuid,
       userId: departement.userId,
     });
 
@@ -102,6 +104,7 @@ export class DepartementUpdateComponent implements OnInit {
       ...new Departement(),
       id: this.editForm.get(['id'])!.value,
       nom: this.editForm.get(['nom'])!.value,
+      userUuid: this.editForm.get(['userUuid'])!.value,
       userId: this.editForm.get(['userId'])!.value,
     };
   }

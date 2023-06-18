@@ -18,11 +18,14 @@
         "title": "Projet"
       },
       "id": "Id",
+      "userUuid": "User Uuid",
       "nomProjet": "Nom Projet",
       "dateDebut": "Date Debut",
       "dateFin": "Date Fin",
       "technologies": "Technologies",
       "statusProjet": "Status Projet",
+      "nombreTotal": "Nombre Total",
+      "nombreRestant": "Nombre Restant",
       "devis": "Devis",
       "equipe": "Equipe",
       "tache": "Tache"

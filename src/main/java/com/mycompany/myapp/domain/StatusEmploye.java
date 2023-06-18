@@ -2,40 +2,44 @@ package com.mycompany.myapp.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Type;
 
 /**
  * A StatusEmploye.
  */
-@Table("status_employe")
+@Entity
+@Table(name = "status_employe")
 public class StatusEmploye implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column("disponibilite")
+    @NotNull
+    @Type(type = "uuid-char")
+    @Column(name = "user_uuid", length = 36, nullable = false)
+    private UUID userUuid;
+
+    @Column(name = "disponibilite")
     private Boolean disponibilite;
 
-    @Column("mission")
+    @Column(name = "mission")
     private Boolean mission;
 
-    @Column("debut_conge")
+    @Column(name = "debut_conge")
     private LocalDate debutConge;
 
-    @Column("fin_conge")
+    @Column(name = "fin_conge")
     private LocalDate finConge;
 
-    @Transient
+    @ManyToOne
     private User userId;
-
-    @Column("user_id_id")
-    private Long userIdId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -50,6 +54,19 @@ public class StatusEmploye implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return this.userUuid;
+    }
+
+    public StatusEmploye userUuid(UUID userUuid) {
+        this.setUserUuid(userUuid);
+        return this;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public Boolean getDisponibilite() {
@@ -110,20 +127,11 @@ public class StatusEmploye implements Serializable {
 
     public void setUserId(User user) {
         this.userId = user;
-        this.userIdId = user != null ? user.getId() : null;
     }
 
     public StatusEmploye userId(User user) {
         this.setUserId(user);
         return this;
-    }
-
-    public Long getUserIdId() {
-        return this.userIdId;
-    }
-
-    public void setUserIdId(Long user) {
-        this.userIdId = user;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -150,6 +158,7 @@ public class StatusEmploye implements Serializable {
     public String toString() {
         return "StatusEmploye{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", disponibilite='" + getDisponibilite() + "'" +
             ", mission='" + getMission() + "'" +
             ", debutConge='" + getDebutConge() + "'" +

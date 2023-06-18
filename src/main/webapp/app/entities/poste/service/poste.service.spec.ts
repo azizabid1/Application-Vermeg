@@ -23,6 +23,7 @@ describe('Poste Service', () => {
       id: 0,
       title: 'AAAAAAA',
       description: 'AAAAAAA',
+      userUuid: 'AAAAAAA',
     };
   });
 
@@ -60,6 +61,7 @@ describe('Poste Service', () => {
           id: 1,
           title: 'BBBBBB',
           description: 'BBBBBB',
+          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -77,6 +79,7 @@ describe('Poste Service', () => {
       const patchObject = Object.assign(
         {
           title: 'BBBBBB',
+          userUuid: 'BBBBBB',
         },
         new Poste()
       );
@@ -98,6 +101,7 @@ describe('Poste Service', () => {
           id: 1,
           title: 'BBBBBB',
           description: 'BBBBBB',
+          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -149,7 +153,7 @@ describe('Poste Service', () => {
       });
 
       it('should add only unique Poste to an array', () => {
-        const posteArray: IPoste[] = [{ id: 123 }, { id: 456 }, { id: 89298 }];
+        const posteArray: IPoste[] = [{ id: 123 }, { id: 456 }, { id: 83478 }];
         const posteCollection: IPoste[] = [{ id: 123 }];
         expectedResult = service.addPosteToCollectionIfMissing(posteCollection, ...posteArray);
         expect(expectedResult).toHaveLength(3);

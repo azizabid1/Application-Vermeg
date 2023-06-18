@@ -14,6 +14,20 @@
         </div>
 
         <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.vote.userUuid" for="field_userUuid">User Uuid</label>
+          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
+          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('userUuid')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.vote.typeVote" for="field_typeVote">Type Vote</label>
           <select class="form-control" name="typeVote" formControlName="typeVote" id="field_typeVote" data-cy="typeVote">
             <option [ngValue]="null">{{ 'vermegApp.Rendement.null' | translate }}</option>
@@ -21,6 +35,15 @@
               {{ 'vermegApp.Rendement.' + rendement | translate }}
             </option>
           </select>
+          <div *ngIf="editForm.get('typeVote')!.invalid && (editForm.get('typeVote')!.dirty || editForm.get('typeVote')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('typeVote')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
         </div>
       </div>
 

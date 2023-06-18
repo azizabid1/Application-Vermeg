@@ -31,6 +31,20 @@
         </div>
 
         <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.poste.userUuid" for="field_userUuid">User Uuid</label>
+          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
+          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('userUuid')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.poste.userId" for="field_userId">User Id</label>
           <select class="form-control" id="field_userId" data-cy="userId" name="userId" formControlName="userId">
             <option [ngValue]="null"></option>

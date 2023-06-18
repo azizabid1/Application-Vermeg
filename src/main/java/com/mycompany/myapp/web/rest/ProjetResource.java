@@ -1,34 +1,30 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.ProjetRepository;
+import com.mycompany.myapp.service.ProjetQueryService;
 import com.mycompany.myapp.service.ProjetService;
+import com.mycompany.myapp.service.criteria.ProjetCriteria;
 import com.mycompany.myapp.service.dto.ProjetDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
-import tech.jhipster.web.util.reactive.ResponseUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Projet}.
@@ -48,9 +44,12 @@ public class ProjetResource {
 
     private final ProjetRepository projetRepository;
 
-    public ProjetResource(ProjetService projetService, ProjetRepository projetRepository) {
+    private final ProjetQueryService projetQueryService;
+
+    public ProjetResource(ProjetService projetService, ProjetRepository projetRepository, ProjetQueryService projetQueryService) {
         this.projetService = projetService;
         this.projetRepository = projetRepository;
+        this.projetQueryService = projetQueryService;
     }
 
     /**
@@ -61,23 +60,16 @@ public class ProjetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/projets")
-    public Mono<ResponseEntity<ProjetDTO>> createProjet(@RequestBody ProjetDTO projetDTO) throws URISyntaxException {
+    public ResponseEntity<ProjetDTO> createProjet(@Valid @RequestBody ProjetDTO projetDTO) throws URISyntaxException {
         log.debug("REST request to save Projet : {}", projetDTO);
         if (projetDTO.getId() != null) {
             throw new BadRequestAlertException("A new projet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        return projetService
-            .save(projetDTO)
-            .map(result -> {
-                try {
-                    return ResponseEntity
-                        .created(new URI("/api/projets/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                        .body(result);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        ProjetDTO result = projetService.save(projetDTO);
+        return ResponseEntity
+            .created(new URI("/api/projets/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -91,9 +83,9 @@ public class ProjetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/projets/{id}")
-    public Mono<ResponseEntity<ProjetDTO>> updateProjet(
+    public ResponseEntity<ProjetDTO> updateProjet(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ProjetDTO projetDTO
+        @Valid @RequestBody ProjetDTO projetDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Projet : {}, {}", id, projetDTO);
         if (projetDTO.getId() == null) {
@@ -103,23 +95,15 @@ public class ProjetResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return projetRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                }
+        if (!projetRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
-                return projetService
-                    .update(projetDTO)
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(result ->
-                        ResponseEntity
-                            .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                            .body(result)
-                    );
-            });
+        ProjetDTO result = projetService.update(projetDTO);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, projetDTO.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -134,9 +118,9 @@ public class ProjetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/projets/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public Mono<ResponseEntity<ProjetDTO>> partialUpdateProjet(
+    public ResponseEntity<ProjetDTO> partialUpdateProjet(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ProjetDTO projetDTO
+        @NotNull @RequestBody ProjetDTO projetDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Projet partially : {}, {}", id, projetDTO);
         if (projetDTO.getId() == null) {
@@ -146,53 +130,46 @@ public class ProjetResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return projetRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                }
+        if (!projetRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
-                Mono<ProjetDTO> result = projetService.partialUpdate(projetDTO);
+        Optional<ProjetDTO> result = projetService.partialUpdate(projetDTO);
 
-                return result
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(res ->
-                        ResponseEntity
-                            .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
-                            .body(res)
-                    );
-            });
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, projetDTO.getId().toString())
+        );
     }
 
     /**
      * {@code GET  /projets} : get all the projets.
      *
      * @param pageable the pagination information.
-     * @param request a {@link ServerHttpRequest} request.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of projets in body.
      */
     @GetMapping("/projets")
-    public Mono<ResponseEntity<List<ProjetDTO>>> getAllProjets(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable,
-        ServerHttpRequest request
+    public ResponseEntity<List<ProjetDTO>> getAllProjets(
+        ProjetCriteria criteria,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get a page of Projets");
-        return projetService
-            .countAll()
-            .zipWith(projetService.findAll(pageable).collectList())
-            .map(countWithEntities ->
-                ResponseEntity
-                    .ok()
-                    .headers(
-                        PaginationUtil.generatePaginationHttpHeaders(
-                            UriComponentsBuilder.fromHttpRequest(request),
-                            new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
-                        )
-                    )
-                    .body(countWithEntities.getT2())
-            );
+        log.debug("REST request to get Projets by criteria: {}", criteria);
+        Page<ProjetDTO> page = projetQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /projets/count} : count all the projets.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/projets/count")
+    public ResponseEntity<Long> countProjets(ProjetCriteria criteria) {
+        log.debug("REST request to count Projets by criteria: {}", criteria);
+        return ResponseEntity.ok().body(projetQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -202,9 +179,9 @@ public class ProjetResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the projetDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/projets/{id}")
-    public Mono<ResponseEntity<ProjetDTO>> getProjet(@PathVariable Long id) {
+    public ResponseEntity<ProjetDTO> getProjet(@PathVariable Long id) {
         log.debug("REST request to get Projet : {}", id);
-        Mono<ProjetDTO> projetDTO = projetService.findOne(id);
+        Optional<ProjetDTO> projetDTO = projetService.findOne(id);
         return ResponseUtil.wrapOrNotFound(projetDTO);
     }
 
@@ -215,16 +192,12 @@ public class ProjetResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/projets/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deleteProjet(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProjet(@PathVariable Long id) {
         log.debug("REST request to delete Projet : {}", id);
-        return projetService
-            .delete(id)
-            .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
-            );
+        projetService.delete(id);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

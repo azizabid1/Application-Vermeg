@@ -4,56 +4,64 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.time.LocalDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Type;
 
 /**
  * A Projet.
  */
-@Table("projet")
+@Entity
+@Table(name = "projet")
 public class Projet implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column("nom_projet")
+    @NotNull
+    @Type(type = "uuid-char")
+    @Column(name = "user_uuid", length = 36, nullable = false)
+    private UUID userUuid;
+
+    @Column(name = "nom_projet")
     private String nomProjet;
 
-    @Column("date_debut")
+    @Column(name = "date_debut")
     private LocalDate dateDebut;
 
-    @Column("date_fin")
+    @Column(name = "date_fin")
     private LocalDate dateFin;
 
-    @Column("technologies")
+    @Column(name = "technologies")
     private String technologies;
 
-    @Column("status_projet")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_projet")
     private Status statusProjet;
 
-    @Transient
+    @Column(name = "nombre_total")
+    private Long nombreTotal;
+
+    @Column(name = "nombre_restant")
+    private Long nombreRestant;
+
+    @OneToOne
+    @JoinColumn(unique = true)
     private Devis devis;
 
-    @Transient
+    @JsonIgnoreProperties(value = { "userId", "votes" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
     private Equipe equipe;
 
-    @Transient
+    @ManyToOne
     @JsonIgnoreProperties(value = { "projets" }, allowSetters = true)
     private Tache tache;
-
-    @Column("devis_id")
-    private Long devisId;
-
-    @Column("equipe_id")
-    private Long equipeId;
-
-    @Column("tache_id")
-    private Long tacheId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -68,6 +76,19 @@ public class Projet implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUserUuid() {
+        return this.userUuid;
+    }
+
+    public Projet userUuid(UUID userUuid) {
+        this.setUserUuid(userUuid);
+        return this;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public String getNomProjet() {
@@ -135,13 +156,38 @@ public class Projet implements Serializable {
         this.statusProjet = statusProjet;
     }
 
+    public Long getNombreTotal() {
+        return this.nombreTotal;
+    }
+
+    public Projet nombreTotal(Long nombreTotal) {
+        this.setNombreTotal(nombreTotal);
+        return this;
+    }
+
+    public void setNombreTotal(Long nombreTotal) {
+        this.nombreTotal = nombreTotal;
+    }
+
+    public Long getNombreRestant() {
+        return this.nombreRestant;
+    }
+
+    public Projet nombreRestant(Long nombreRestant) {
+        this.setNombreRestant(nombreRestant);
+        return this;
+    }
+
+    public void setNombreRestant(Long nombreRestant) {
+        this.nombreRestant = nombreRestant;
+    }
+
     public Devis getDevis() {
         return this.devis;
     }
 
     public void setDevis(Devis devis) {
         this.devis = devis;
-        this.devisId = devis != null ? devis.getId() : null;
     }
 
     public Projet devis(Devis devis) {
@@ -155,7 +201,6 @@ public class Projet implements Serializable {
 
     public void setEquipe(Equipe equipe) {
         this.equipe = equipe;
-        this.equipeId = equipe != null ? equipe.getId() : null;
     }
 
     public Projet equipe(Equipe equipe) {
@@ -169,36 +214,11 @@ public class Projet implements Serializable {
 
     public void setTache(Tache tache) {
         this.tache = tache;
-        this.tacheId = tache != null ? tache.getId() : null;
     }
 
     public Projet tache(Tache tache) {
         this.setTache(tache);
         return this;
-    }
-
-    public Long getDevisId() {
-        return this.devisId;
-    }
-
-    public void setDevisId(Long devis) {
-        this.devisId = devis;
-    }
-
-    public Long getEquipeId() {
-        return this.equipeId;
-    }
-
-    public void setEquipeId(Long equipe) {
-        this.equipeId = equipe;
-    }
-
-    public Long getTacheId() {
-        return this.tacheId;
-    }
-
-    public void setTacheId(Long tache) {
-        this.tacheId = tache;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -225,11 +245,14 @@ public class Projet implements Serializable {
     public String toString() {
         return "Projet{" +
             "id=" + getId() +
+            ", userUuid='" + getUserUuid() + "'" +
             ", nomProjet='" + getNomProjet() + "'" +
             ", dateDebut='" + getDateDebut() + "'" +
             ", dateFin='" + getDateFin() + "'" +
             ", technologies='" + getTechnologies() + "'" +
             ", statusProjet='" + getStatusProjet() + "'" +
+            ", nombreTotal=" + getNombreTotal() +
+            ", nombreRestant=" + getNombreRestant() +
             "}";
     }
 }

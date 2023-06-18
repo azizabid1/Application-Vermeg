@@ -5,13 +5,13 @@ import com.mycompany.myapp.repository.DepartementRepository;
 import com.mycompany.myapp.service.DepartementService;
 import com.mycompany.myapp.service.dto.DepartementDTO;
 import com.mycompany.myapp.service.mapper.DepartementMapper;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Implementation for managing {@link Departement}.
@@ -32,19 +32,23 @@ public class DepartementServiceImpl implements DepartementService {
     }
 
     @Override
-    public Mono<DepartementDTO> save(DepartementDTO departementDTO) {
+    public DepartementDTO save(DepartementDTO departementDTO) {
         log.debug("Request to save Departement : {}", departementDTO);
-        return departementRepository.save(departementMapper.toEntity(departementDTO)).map(departementMapper::toDto);
+        Departement departement = departementMapper.toEntity(departementDTO);
+        departement = departementRepository.save(departement);
+        return departementMapper.toDto(departement);
     }
 
     @Override
-    public Mono<DepartementDTO> update(DepartementDTO departementDTO) {
+    public DepartementDTO update(DepartementDTO departementDTO) {
         log.debug("Request to save Departement : {}", departementDTO);
-        return departementRepository.save(departementMapper.toEntity(departementDTO)).map(departementMapper::toDto);
+        Departement departement = departementMapper.toEntity(departementDTO);
+        departement = departementRepository.save(departement);
+        return departementMapper.toDto(departement);
     }
 
     @Override
-    public Mono<DepartementDTO> partialUpdate(DepartementDTO departementDTO) {
+    public Optional<DepartementDTO> partialUpdate(DepartementDTO departementDTO) {
         log.debug("Request to partially update Departement : {}", departementDTO);
 
         return departementRepository
@@ -54,31 +58,27 @@ public class DepartementServiceImpl implements DepartementService {
 
                 return existingDepartement;
             })
-            .flatMap(departementRepository::save)
+            .map(departementRepository::save)
             .map(departementMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<DepartementDTO> findAll(Pageable pageable) {
+    public Page<DepartementDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Departements");
-        return departementRepository.findAllBy(pageable).map(departementMapper::toDto);
-    }
-
-    public Mono<Long> countAll() {
-        return departementRepository.count();
+        return departementRepository.findAll(pageable).map(departementMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<DepartementDTO> findOne(Long id) {
+    public Optional<DepartementDTO> findOne(Long id) {
         log.debug("Request to get Departement : {}", id);
         return departementRepository.findById(id).map(departementMapper::toDto);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete Departement : {}", id);
-        return departementRepository.deleteById(id);
+        departementRepository.deleteById(id);
     }
 }

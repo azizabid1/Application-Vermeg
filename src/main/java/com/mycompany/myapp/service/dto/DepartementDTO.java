@@ -3,15 +3,23 @@ package com.mycompany.myapp.service.dto;
 import com.mycompany.myapp.domain.enumeration.TypeDepartement;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Departement} entity.
  */
 public class DepartementDTO implements Serializable {
 
+    @Min(value = 4L)
+    @Max(value = 6L)
     private Long id;
 
+    @NotNull
     private TypeDepartement nom;
+
+    @NotNull
+    private UUID userUuid;
 
     private UserDTO userId;
 
@@ -29,6 +37,14 @@ public class DepartementDTO implements Serializable {
 
     public void setNom(TypeDepartement nom) {
         this.nom = nom;
+    }
+
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public UserDTO getUserId() {
@@ -66,6 +82,7 @@ public class DepartementDTO implements Serializable {
         return "DepartementDTO{" +
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
+            ", userUuid='" + getUserUuid() + "'" +
             ", userId=" + getUserId() +
             "}";
     }

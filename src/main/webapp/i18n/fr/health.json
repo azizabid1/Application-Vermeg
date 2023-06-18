@@ -11,16 +11,12 @@
       "error": "Erreur"
     },
     "indicator": {
-      "discoveryComposite": "Discovery Composite",
-      "refreshScope": "Microservice Refresh Scope",
-      "clientConfigServer": "Microservice Config Server",
-      "hystrix": "Hystrix",
       "diskSpace": "Espace disque",
       "mail": "Email",
       "livenessState": "Liveness state",
       "readinessState": "Readiness state",
       "ping": "Application",
-      "r2dbc": "Base de données"
+      "db": "Base de données"
     },
     "table": {
       "service": "Nom du service",

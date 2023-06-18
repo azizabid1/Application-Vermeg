@@ -5,13 +5,13 @@ import com.mycompany.myapp.repository.StatusEmployeRepository;
 import com.mycompany.myapp.service.StatusEmployeService;
 import com.mycompany.myapp.service.dto.StatusEmployeDTO;
 import com.mycompany.myapp.service.mapper.StatusEmployeMapper;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Implementation for managing {@link StatusEmploye}.
@@ -32,19 +32,23 @@ public class StatusEmployeServiceImpl implements StatusEmployeService {
     }
 
     @Override
-    public Mono<StatusEmployeDTO> save(StatusEmployeDTO statusEmployeDTO) {
+    public StatusEmployeDTO save(StatusEmployeDTO statusEmployeDTO) {
         log.debug("Request to save StatusEmploye : {}", statusEmployeDTO);
-        return statusEmployeRepository.save(statusEmployeMapper.toEntity(statusEmployeDTO)).map(statusEmployeMapper::toDto);
+        StatusEmploye statusEmploye = statusEmployeMapper.toEntity(statusEmployeDTO);
+        statusEmploye = statusEmployeRepository.save(statusEmploye);
+        return statusEmployeMapper.toDto(statusEmploye);
     }
 
     @Override
-    public Mono<StatusEmployeDTO> update(StatusEmployeDTO statusEmployeDTO) {
+    public StatusEmployeDTO update(StatusEmployeDTO statusEmployeDTO) {
         log.debug("Request to save StatusEmploye : {}", statusEmployeDTO);
-        return statusEmployeRepository.save(statusEmployeMapper.toEntity(statusEmployeDTO)).map(statusEmployeMapper::toDto);
+        StatusEmploye statusEmploye = statusEmployeMapper.toEntity(statusEmployeDTO);
+        statusEmploye = statusEmployeRepository.save(statusEmploye);
+        return statusEmployeMapper.toDto(statusEmploye);
     }
 
     @Override
-    public Mono<StatusEmployeDTO> partialUpdate(StatusEmployeDTO statusEmployeDTO) {
+    public Optional<StatusEmployeDTO> partialUpdate(StatusEmployeDTO statusEmployeDTO) {
         log.debug("Request to partially update StatusEmploye : {}", statusEmployeDTO);
 
         return statusEmployeRepository
@@ -54,31 +58,27 @@ public class StatusEmployeServiceImpl implements StatusEmployeService {
 
                 return existingStatusEmploye;
             })
-            .flatMap(statusEmployeRepository::save)
+            .map(statusEmployeRepository::save)
             .map(statusEmployeMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<StatusEmployeDTO> findAll(Pageable pageable) {
+    public Page<StatusEmployeDTO> findAll(Pageable pageable) {
         log.debug("Request to get all StatusEmployes");
-        return statusEmployeRepository.findAllBy(pageable).map(statusEmployeMapper::toDto);
-    }
-
-    public Mono<Long> countAll() {
-        return statusEmployeRepository.count();
+        return statusEmployeRepository.findAll(pageable).map(statusEmployeMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<StatusEmployeDTO> findOne(Long id) {
+    public Optional<StatusEmployeDTO> findOne(Long id) {
         log.debug("Request to get StatusEmploye : {}", id);
         return statusEmployeRepository.findById(id).map(statusEmployeMapper::toDto);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete StatusEmploye : {}", id);
-        return statusEmployeRepository.deleteById(id);
+        statusEmployeRepository.deleteById(id);
     }
 }

@@ -20,6 +20,7 @@
       "id": "Id",
       "title": "Title",
       "description": "Description",
+      "userUuid": "User Uuid",
       "userId": "User Id"
     }
   }

@@ -25,6 +25,7 @@ describe('StatusEmploye Service', () => {
 
     elemDefault = {
       id: 0,
+      userUuid: 'AAAAAAA',
       disponibilite: false,
       mission: false,
       debutConge: currentDate,
@@ -78,6 +79,7 @@ describe('StatusEmploye Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          userUuid: 'BBBBBB',
           disponibilite: true,
           mission: true,
           debutConge: currentDate.format(DATE_FORMAT),
@@ -104,7 +106,7 @@ describe('StatusEmploye Service', () => {
     it('should partial update a StatusEmploye', () => {
       const patchObject = Object.assign(
         {
-          disponibilite: true,
+          userUuid: 'BBBBBB',
         },
         new StatusEmploye()
       );
@@ -130,6 +132,7 @@ describe('StatusEmploye Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          userUuid: 'BBBBBB',
           disponibilite: true,
           mission: true,
           debutConge: currentDate.format(DATE_FORMAT),
@@ -191,7 +194,7 @@ describe('StatusEmploye Service', () => {
       });
 
       it('should add only unique StatusEmploye to an array', () => {
-        const statusEmployeArray: IStatusEmploye[] = [{ id: 123 }, { id: 456 }, { id: 12147 }];
+        const statusEmployeArray: IStatusEmploye[] = [{ id: 123 }, { id: 456 }, { id: 93229 }];
         const statusEmployeCollection: IStatusEmploye[] = [{ id: 123 }];
         expectedResult = service.addStatusEmployeToCollectionIfMissing(statusEmployeCollection, ...statusEmployeArray);
         expect(expectedResult).toHaveLength(3);

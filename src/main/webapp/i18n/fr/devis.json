@@ -21,7 +21,8 @@
       "prixTotal": "Prix Total",
       "prixHT": "Prix HT",
       "prixService": "Prix Service",
-      "dureeProjet": "Duree Projet"
+      "dureeProjet": "Duree Projet",
+      "userUuid": "User Uuid"
     }
   }
 }

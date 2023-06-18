@@ -3,12 +3,13 @@ import { Rendement } from 'app/entities/enumerations/rendement.model';
 
 export interface IVote {
   id?: number;
-  typeVote?: Rendement | null;
+  userUuid?: string;
+  typeVote?: Rendement;
   equipes?: IEquipe[] | null;
 }
 
 export class Vote implements IVote {
-  constructor(public id?: number, public typeVote?: Rendement | null, public equipes?: IEquipe[] | null) {}
+  constructor(public id?: number, public userUuid?: string, public typeVote?: Rendement, public equipes?: IEquipe[] | null) {}
 }
 
 export function getVoteIdentifier(vote: IVote): number | undefined {

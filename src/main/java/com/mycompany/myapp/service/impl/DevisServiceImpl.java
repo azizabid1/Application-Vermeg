@@ -5,13 +5,13 @@ import com.mycompany.myapp.repository.DevisRepository;
 import com.mycompany.myapp.service.DevisService;
 import com.mycompany.myapp.service.dto.DevisDTO;
 import com.mycompany.myapp.service.mapper.DevisMapper;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Implementation for managing {@link Devis}.
@@ -32,19 +32,23 @@ public class DevisServiceImpl implements DevisService {
     }
 
     @Override
-    public Mono<DevisDTO> save(DevisDTO devisDTO) {
+    public DevisDTO save(DevisDTO devisDTO) {
         log.debug("Request to save Devis : {}", devisDTO);
-        return devisRepository.save(devisMapper.toEntity(devisDTO)).map(devisMapper::toDto);
+        Devis devis = devisMapper.toEntity(devisDTO);
+        devis = devisRepository.save(devis);
+        return devisMapper.toDto(devis);
     }
 
     @Override
-    public Mono<DevisDTO> update(DevisDTO devisDTO) {
+    public DevisDTO update(DevisDTO devisDTO) {
         log.debug("Request to save Devis : {}", devisDTO);
-        return devisRepository.save(devisMapper.toEntity(devisDTO)).map(devisMapper::toDto);
+        Devis devis = devisMapper.toEntity(devisDTO);
+        devis = devisRepository.save(devis);
+        return devisMapper.toDto(devis);
     }
 
     @Override
-    public Mono<DevisDTO> partialUpdate(DevisDTO devisDTO) {
+    public Optional<DevisDTO> partialUpdate(DevisDTO devisDTO) {
         log.debug("Request to partially update Devis : {}", devisDTO);
 
         return devisRepository
@@ -54,31 +58,27 @@ public class DevisServiceImpl implements DevisService {
 
                 return existingDevis;
             })
-            .flatMap(devisRepository::save)
+            .map(devisRepository::save)
             .map(devisMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<DevisDTO> findAll(Pageable pageable) {
+    public Page<DevisDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Devis");
-        return devisRepository.findAllBy(pageable).map(devisMapper::toDto);
-    }
-
-    public Mono<Long> countAll() {
-        return devisRepository.count();
+        return devisRepository.findAll(pageable).map(devisMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<DevisDTO> findOne(Long id) {
+    public Optional<DevisDTO> findOne(Long id) {
         log.debug("Request to get Devis : {}", id);
         return devisRepository.findById(id).map(devisMapper::toDto);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete Devis : {}", id);
-        return devisRepository.deleteById(id);
+        devisRepository.deleteById(id);
     }
 }

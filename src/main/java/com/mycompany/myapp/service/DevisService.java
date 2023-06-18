@@ -1,9 +1,9 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.DevisDTO;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.Devis}.
@@ -15,7 +15,7 @@ public interface DevisService {
      * @param devisDTO the entity to save.
      * @return the persisted entity.
      */
-    Mono<DevisDTO> save(DevisDTO devisDTO);
+    DevisDTO save(DevisDTO devisDTO);
 
     /**
      * Updates a devis.
@@ -23,7 +23,7 @@ public interface DevisService {
      * @param devisDTO the entity to update.
      * @return the persisted entity.
      */
-    Mono<DevisDTO> update(DevisDTO devisDTO);
+    DevisDTO update(DevisDTO devisDTO);
 
     /**
      * Partially updates a devis.
@@ -31,7 +31,7 @@ public interface DevisService {
      * @param devisDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Mono<DevisDTO> partialUpdate(DevisDTO devisDTO);
+    Optional<DevisDTO> partialUpdate(DevisDTO devisDTO);
 
     /**
      * Get all the devis.
@@ -39,14 +39,7 @@ public interface DevisService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Flux<DevisDTO> findAll(Pageable pageable);
-
-    /**
-     * Returns the number of devis available.
-     * @return the number of entities in the database.
-     *
-     */
-    Mono<Long> countAll();
+    Page<DevisDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" devis.
@@ -54,13 +47,12 @@ public interface DevisService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Mono<DevisDTO> findOne(Long id);
+    Optional<DevisDTO> findOne(Long id);
 
     /**
      * Delete the "id" devis.
      *
      * @param id the id of the entity.
-     * @return a Mono to signal the deletion
      */
-    Mono<Void> delete(Long id);
+    void delete(Long id);
 }

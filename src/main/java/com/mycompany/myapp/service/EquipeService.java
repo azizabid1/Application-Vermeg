@@ -1,9 +1,9 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.EquipeDTO;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.Equipe}.
@@ -15,7 +15,7 @@ public interface EquipeService {
      * @param equipeDTO the entity to save.
      * @return the persisted entity.
      */
-    Mono<EquipeDTO> save(EquipeDTO equipeDTO);
+    EquipeDTO save(EquipeDTO equipeDTO);
 
     /**
      * Updates a equipe.
@@ -23,7 +23,7 @@ public interface EquipeService {
      * @param equipeDTO the entity to update.
      * @return the persisted entity.
      */
-    Mono<EquipeDTO> update(EquipeDTO equipeDTO);
+    EquipeDTO update(EquipeDTO equipeDTO);
 
     /**
      * Partially updates a equipe.
@@ -31,7 +31,7 @@ public interface EquipeService {
      * @param equipeDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Mono<EquipeDTO> partialUpdate(EquipeDTO equipeDTO);
+    Optional<EquipeDTO> partialUpdate(EquipeDTO equipeDTO);
 
     /**
      * Get all the equipes.
@@ -39,7 +39,7 @@ public interface EquipeService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Flux<EquipeDTO> findAll(Pageable pageable);
+    Page<EquipeDTO> findAll(Pageable pageable);
 
     /**
      * Get all the equipes with eager load of many-to-many relationships.
@@ -47,14 +47,7 @@ public interface EquipeService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Flux<EquipeDTO> findAllWithEagerRelationships(Pageable pageable);
-
-    /**
-     * Returns the number of equipes available.
-     * @return the number of entities in the database.
-     *
-     */
-    Mono<Long> countAll();
+    Page<EquipeDTO> findAllWithEagerRelationships(Pageable pageable);
 
     /**
      * Get the "id" equipe.
@@ -62,13 +55,12 @@ public interface EquipeService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Mono<EquipeDTO> findOne(Long id);
+    Optional<EquipeDTO> findOne(Long id);
 
     /**
      * Delete the "id" equipe.
      *
      * @param id the id of the entity.
-     * @return a Mono to signal the deletion
      */
-    Mono<Void> delete(Long id);
+    void delete(Long id);
 }

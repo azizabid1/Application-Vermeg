@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230615183510",
+  "changelogDate": "20230618143101",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "status_employe",
@@ -8,6 +8,11 @@
     {
       "fieldName": "id",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "userUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "disponibilite",
@@ -27,7 +32,7 @@
     }
   ],
   "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "name": "StatusEmploye",
   "pagination": "pagination",
   "readOnly": false,

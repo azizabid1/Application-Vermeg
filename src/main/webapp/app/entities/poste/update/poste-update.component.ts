@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class PosteUpdateComponent implements OnInit {
     id: [],
     title: [],
     description: [],
+    userUuid: [null, [Validators.required]],
     userId: [],
   });
 
@@ -83,6 +84,7 @@ export class PosteUpdateComponent implements OnInit {
       id: poste.id,
       title: poste.title,
       description: poste.description,
+      userUuid: poste.userUuid,
       userId: poste.userId,
     });
 
@@ -103,6 +105,7 @@ export class PosteUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       title: this.editForm.get(['title'])!.value,
       description: this.editForm.get(['description'])!.value,
+      userUuid: this.editForm.get(['userUuid'])!.value,
       userId: this.editForm.get(['userId'])!.value,
     };
   }

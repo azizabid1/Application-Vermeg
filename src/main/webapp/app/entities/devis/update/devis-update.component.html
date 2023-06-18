@@ -37,20 +37,44 @@
 
         <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.devis.dureeProjet" for="field_dureeProjet">Duree Projet</label>
-          <div class="input-group">
-            <input
-              id="field_dureeProjet"
-              data-cy="dureeProjet"
-              type="text"
-              class="form-control"
-              name="dureeProjet"
-              ngbDatepicker
-              #dureeProjetDp="ngbDatepicker"
-              formControlName="dureeProjet"
-            />
-            <button type="button" class="btn btn-secondary" (click)="dureeProjetDp.toggle()">
-              <fa-icon icon="calendar-alt"></fa-icon>
-            </button>
+          <input
+            type="number"
+            class="form-control"
+            name="dureeProjet"
+            id="field_dureeProjet"
+            data-cy="dureeProjet"
+            formControlName="dureeProjet"
+          />
+          <div *ngIf="editForm.get('dureeProjet')!.invalid && (editForm.get('dureeProjet')!.dirty || editForm.get('dureeProjet')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('dureeProjet')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('dureeProjet')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.devis.userUuid" for="field_userUuid">User Uuid</label>
+          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
+          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('userUuid')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
           </div>
         </div>
       </div>

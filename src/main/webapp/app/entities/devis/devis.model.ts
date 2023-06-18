@@ -1,11 +1,10 @@
-import dayjs from 'dayjs/esm';
-
 export interface IDevis {
   id?: number;
   prixTotal?: number | null;
   prixHT?: number | null;
   prixService?: number | null;
-  dureeProjet?: dayjs.Dayjs | null;
+  dureeProjet?: number | null;
+  userUuid?: string;
 }
 
 export class Devis implements IDevis {
@@ -14,7 +13,8 @@ export class Devis implements IDevis {
     public prixTotal?: number | null,
     public prixHT?: number | null,
     public prixService?: number | null,
-    public dureeProjet?: dayjs.Dayjs | null
+    public dureeProjet?: number | null,
+    public userUuid?: string
   ) {}
 }
 

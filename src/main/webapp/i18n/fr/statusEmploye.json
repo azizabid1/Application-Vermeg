@@ -18,6 +18,7 @@
         "title": "Status Employe"
       },
       "id": "Id",
+      "userUuid": "User Uuid",
       "disponibilite": "Disponibilite",
       "mission": "Mission",
       "debutConge": "Debut Conge",

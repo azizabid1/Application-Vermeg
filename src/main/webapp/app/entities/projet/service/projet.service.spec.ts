@@ -26,11 +26,14 @@ describe('Projet Service', () => {
 
     elemDefault = {
       id: 0,
+      userUuid: 'AAAAAAA',
       nomProjet: 'AAAAAAA',
       dateDebut: currentDate,
       dateFin: currentDate,
       technologies: 'AAAAAAA',
       statusProjet: Status.ATTENTE,
+      nombreTotal: 0,
+      nombreRestant: 0,
     };
   });
 
@@ -80,11 +83,14 @@ describe('Projet Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          userUuid: 'BBBBBB',
           nomProjet: 'BBBBBB',
           dateDebut: currentDate.format(DATE_FORMAT),
           dateFin: currentDate.format(DATE_FORMAT),
           technologies: 'BBBBBB',
           statusProjet: 'BBBBBB',
+          nombreTotal: 1,
+          nombreRestant: 1,
         },
         elemDefault
       );
@@ -107,10 +113,10 @@ describe('Projet Service', () => {
     it('should partial update a Projet', () => {
       const patchObject = Object.assign(
         {
+          userUuid: 'BBBBBB',
           nomProjet: 'BBBBBB',
           dateDebut: currentDate.format(DATE_FORMAT),
           dateFin: currentDate.format(DATE_FORMAT),
-          technologies: 'BBBBBB',
         },
         new Projet()
       );
@@ -136,11 +142,14 @@ describe('Projet Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          userUuid: 'BBBBBB',
           nomProjet: 'BBBBBB',
           dateDebut: currentDate.format(DATE_FORMAT),
           dateFin: currentDate.format(DATE_FORMAT),
           technologies: 'BBBBBB',
           statusProjet: 'BBBBBB',
+          nombreTotal: 1,
+          nombreRestant: 1,
         },
         elemDefault
       );
@@ -198,7 +207,7 @@ describe('Projet Service', () => {
       });
 
       it('should add only unique Projet to an array', () => {
-        const projetArray: IProjet[] = [{ id: 123 }, { id: 456 }, { id: 46923 }];
+        const projetArray: IProjet[] = [{ id: 123 }, { id: 456 }, { id: 6867 }];
         const projetCollection: IProjet[] = [{ id: 123 }];
         expectedResult = service.addProjetToCollectionIfMissing(projetCollection, ...projetArray);
         expect(expectedResult).toHaveLength(3);

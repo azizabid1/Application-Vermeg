@@ -13,8 +13,11 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
         <createTable tableName="jhi_user">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1050">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_uuid" type="${uuidType}">
+                <constraints nullable="false" />
             </column>
             <column name="login" type="varchar(50)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
@@ -80,6 +83,7 @@
                   separator=";"
                   tableName="jhi_user"
                   usePreparedStatements="true">
+            <column name="user_uuid" type="string"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>

@@ -34,6 +34,9 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.departement.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="nom"><span jhiTranslate="vermegApp.departement.nom">Nom</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="userUuid">
+            <span jhiTranslate="vermegApp.departement.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="userId.id">
             <span jhiTranslate="vermegApp.departement.userId">User Id</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -46,6 +49,7 @@
             <a [routerLink]="['/departement', departement.id, 'view']">{{ departement.id }}</a>
           </td>
           <td jhiTranslate="{{ 'vermegApp.TypeDepartement.' + departement.nom }}">{{ departement.nom }}</td>
+          <td>{{ departement.userUuid }}</td>
           <td>
             {{ departement.userId?.id }}
           </td>

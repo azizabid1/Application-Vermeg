@@ -30,12 +30,10 @@
     "docker:app:up": "docker-compose -f src/main/docker/app.yml up -d",
     "docker:db:down": "docker-compose -f src/main/docker/mysql.yml down -v",
     "docker:db:up": "docker-compose -f src/main/docker/mysql.yml up -d",
-    "docker:jhipster-registry:down": "docker-compose -f src/main/docker/jhipster-registry.yml down -v",
-    "docker:jhipster-registry:up": "docker-compose -f src/main/docker/jhipster-registry.yml up -d",
-    "docker:others:await": "echo \"Waiting for jhipster-registry to start\" && wait-on -t 180000 http-get://localhost:8761/management/health && echo \"jhipster-registry started\"",
-    "docker:others:down": "npm run docker:jhipster-registry:down",
+    "docker:others:await": "",
+    "docker:others:down": "",
     "predocker:others:up": "",
-    "docker:others:up": "npm run docker:jhipster-registry:up",
+    "docker:others:up": "",
     "java:docker": "./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild",
     "java:docker:arm64": "npm run java:docker -- -Djib-maven-plugin.architecture=arm64",
     "java:docker:dev": "npm run java:docker -- -Pdev,webapp",
@@ -69,7 +67,7 @@
     "webapp:test": "npm run test --"
   },
   "config": {
-    "backend_port": "8050",
+    "backend_port": "8070",
     "default_environment": "prod",
     "packaging": "jar"
   },

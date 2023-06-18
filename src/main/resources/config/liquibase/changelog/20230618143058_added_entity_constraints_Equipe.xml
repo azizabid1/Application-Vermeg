@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity Equipe.
+    -->
+    <changeSet id="20230618143058-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="user_id_id"
+                                 baseTableName="equipe"
+                                 constraintName="fk_equipe__user_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="equipe_id"
+                                 baseTableName="rel_equipe__vote"
+                                 constraintName="fk_rel_equipe__vote__equipe_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipe"/>
+
+        <addForeignKeyConstraint baseColumnNames="vote_id"
+                                 baseTableName="rel_equipe__vote"
+                                 constraintName="fk_rel_equipe__vote__vote_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="vote"/>
+    </changeSet>
+</databaseChangeLog>

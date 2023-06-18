@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
@@ -29,11 +29,14 @@ export class ProjetUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+    userUuid: [null, [Validators.required]],
     nomProjet: [],
     dateDebut: [],
     dateFin: [],
     technologies: [],
     statusProjet: [],
+    nombreTotal: [],
+    nombreRestant: [],
     devis: [],
     equipe: [],
     tache: [],
@@ -104,11 +107,14 @@ export class ProjetUpdateComponent implements OnInit {
   protected updateForm(projet: IProjet): void {
     this.editForm.patchValue({
       id: projet.id,
+      userUuid: projet.userUuid,
       nomProjet: projet.nomProjet,
       dateDebut: projet.dateDebut,
       dateFin: projet.dateFin,
       technologies: projet.technologies,
       statusProjet: projet.statusProjet,
+      nombreTotal: projet.nombreTotal,
+      nombreRestant: projet.nombreRestant,
       devis: projet.devis,
       equipe: projet.equipe,
       tache: projet.tache,
@@ -121,13 +127,13 @@ export class ProjetUpdateComponent implements OnInit {
 
   protected loadRelationshipsOptions(): void {
     this.devisService
-      .query({ filter: 'projet-is-null' })
+      .query({ 'projetId.specified': 'false' })
       .pipe(map((res: HttpResponse<IDevis[]>) => res.body ?? []))
       .pipe(map((devis: IDevis[]) => this.devisService.addDevisToCollectionIfMissing(devis, this.editForm.get('devis')!.value)))
       .subscribe((devis: IDevis[]) => (this.devisCollection = devis));
 
     this.equipeService
-      .query({ filter: 'projet-is-null' })
+      .query({ 'projetId.specified': 'false' })
       .pipe(map((res: HttpResponse<IEquipe[]>) => res.body ?? []))
       .pipe(map((equipes: IEquipe[]) => this.equipeService.addEquipeToCollectionIfMissing(equipes, this.editForm.get('equipe')!.value)))
       .subscribe((equipes: IEquipe[]) => (this.equipesCollection = equipes));
@@ -143,11 +149,14 @@ export class ProjetUpdateComponent implements OnInit {
     return {
       ...new Projet(),
       id: this.editForm.get(['id'])!.value,
+      userUuid: this.editForm.get(['userUuid'])!.value,
       nomProjet: this.editForm.get(['nomProjet'])!.value,
       dateDebut: this.editForm.get(['dateDebut'])!.value,
       dateFin: this.editForm.get(['dateFin'])!.value,
       technologies: this.editForm.get(['technologies'])!.value,
       statusProjet: this.editForm.get(['statusProjet'])!.value,
+      nombreTotal: this.editForm.get(['nombreTotal'])!.value,
+      nombreRestant: this.editForm.get(['nombreRestant'])!.value,
       devis: this.editForm.get(['devis'])!.value,
       equipe: this.editForm.get(['equipe'])!.value,
       tache: this.editForm.get(['tache'])!.value,

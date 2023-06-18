@@ -1,9 +1,10 @@
 package com.mycompany.myapp.security.jwt;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mycompany.myapp.management.SecurityMetersService;
+import com.mycompany.myapp.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +41,9 @@ public class TokenProvider {
     private final long tokenValidityInMillisecondsForRememberMe;
 
     private final SecurityMetersService securityMetersService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public TokenProvider(JHipsterProperties jHipsterProperties, SecurityMetersService securityMetersService) {
         byte[] keyBytes;
@@ -80,7 +85,6 @@ public class TokenProvider {
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
-            .serializeToJsonWith(new JacksonSerializer<>())
             .compact();
     }
 
@@ -124,5 +128,34 @@ public class TokenProvider {
         }
 
         return false;
+    }
+
+    public static class JWTToken {
+
+        private String idToken;
+        private UUID userUuid;
+
+        public JWTToken(String idToken, UUID userUuid) {
+            this.idToken = idToken;
+            this.userUuid = userUuid;
+        }
+
+        @JsonProperty("id_token")
+        public String getIdToken() {
+            return idToken;
+        }
+
+        public void setIdToken(String idToken) {
+            this.idToken = idToken;
+        }
+
+        @JsonProperty("user_uuid")
+        public UUID getUserUuid() {
+            return userUuid;
+        }
+
+        public void setUserUuid(UUID userUuid) {
+            this.userUuid = userUuid;
+        }
     }
 }

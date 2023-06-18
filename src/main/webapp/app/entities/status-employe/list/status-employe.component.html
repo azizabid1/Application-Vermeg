@@ -33,6 +33,9 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.statusEmploye.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="userUuid">
+            <span jhiTranslate="vermegApp.statusEmploye.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="disponibilite">
             <span jhiTranslate="vermegApp.statusEmploye.disponibilite">Disponibilite</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -56,6 +59,7 @@
           <td>
             <a [routerLink]="['/status-employe', statusEmploye.id, 'view']">{{ statusEmploye.id }}</a>
           </td>
+          <td>{{ statusEmploye.userUuid }}</td>
           <td>{{ statusEmploye.disponibilite }}</td>
           <td>{{ statusEmploye.mission }}</td>
           <td>{{ statusEmploye.debutConge | formatMediumDate }}</td>

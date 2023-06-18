@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230615183506",
+  "changelogDate": "20230618143057",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "devis",
@@ -23,12 +23,19 @@
     },
     {
       "fieldName": "dureeProjet",
-      "fieldType": "LocalDate"
+      "fieldType": "Float",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "userUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,
   "javadoc": "not an ignored comment",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "name": "Devis",
   "pagination": "pagination",
   "readOnly": false,

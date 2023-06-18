@@ -5,13 +5,13 @@ import com.mycompany.myapp.repository.PosteRepository;
 import com.mycompany.myapp.service.PosteService;
 import com.mycompany.myapp.service.dto.PosteDTO;
 import com.mycompany.myapp.service.mapper.PosteMapper;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Service Implementation for managing {@link Poste}.
@@ -32,19 +32,23 @@ public class PosteServiceImpl implements PosteService {
     }
 
     @Override
-    public Mono<PosteDTO> save(PosteDTO posteDTO) {
+    public PosteDTO save(PosteDTO posteDTO) {
         log.debug("Request to save Poste : {}", posteDTO);
-        return posteRepository.save(posteMapper.toEntity(posteDTO)).map(posteMapper::toDto);
+        Poste poste = posteMapper.toEntity(posteDTO);
+        poste = posteRepository.save(poste);
+        return posteMapper.toDto(poste);
     }
 
     @Override
-    public Mono<PosteDTO> update(PosteDTO posteDTO) {
+    public PosteDTO update(PosteDTO posteDTO) {
         log.debug("Request to save Poste : {}", posteDTO);
-        return posteRepository.save(posteMapper.toEntity(posteDTO)).map(posteMapper::toDto);
+        Poste poste = posteMapper.toEntity(posteDTO);
+        poste = posteRepository.save(poste);
+        return posteMapper.toDto(poste);
     }
 
     @Override
-    public Mono<PosteDTO> partialUpdate(PosteDTO posteDTO) {
+    public Optional<PosteDTO> partialUpdate(PosteDTO posteDTO) {
         log.debug("Request to partially update Poste : {}", posteDTO);
 
         return posteRepository
@@ -54,31 +58,27 @@ public class PosteServiceImpl implements PosteService {
 
                 return existingPoste;
             })
-            .flatMap(posteRepository::save)
+            .map(posteRepository::save)
             .map(posteMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<PosteDTO> findAll(Pageable pageable) {
+    public Page<PosteDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Postes");
-        return posteRepository.findAllBy(pageable).map(posteMapper::toDto);
-    }
-
-    public Mono<Long> countAll() {
-        return posteRepository.count();
+        return posteRepository.findAll(pageable).map(posteMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<PosteDTO> findOne(Long id) {
+    public Optional<PosteDTO> findOne(Long id) {
         log.debug("Request to get Poste : {}", id);
         return posteRepository.findById(id).map(posteMapper::toDto);
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete Poste : {}", id);
-        return posteRepository.deleteById(id);
+        posteRepository.deleteById(id);
     }
 }

@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230615183512",
+  "changelogDate": "20230618143103",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "vote",
@@ -10,14 +10,20 @@
       "fieldType": "Long"
     },
     {
+      "fieldName": "userUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "typeVote",
       "fieldType": "Rendement",
+      "fieldValidateRules": ["required", "unique"],
       "fieldValues": "FAIBLE,MOYEN,EXCELLENT"
     }
   ],
   "fluentMethods": true,
   "javadoc": "The Employee entity.",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "name": "Vote",
   "pagination": "pagination",
   "readOnly": false,

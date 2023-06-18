@@ -4,38 +4,45 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Type;
 
 /**
  * A Equipe.
  */
-@Table("equipe")
+@Entity
+@Table(name = "equipe")
 public class Equipe implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column("nom")
+    @Column(name = "nom")
     private String nom;
 
-    @Column("nombre_personne")
+    @Min(value = 4L)
+    @Max(value = 6L)
+    @Column(name = "nombre_personne")
     private Long nombrePersonne;
 
-    @Transient
+    @NotNull
+    @Type(type = "uuid-char")
+    @Column(name = "user_uuid", length = 36, nullable = false)
+    private UUID userUuid;
+
+    @ManyToOne
     private User userId;
 
-    @Transient
+    @ManyToMany
+    @JoinTable(name = "rel_equipe__vote", joinColumns = @JoinColumn(name = "equipe_id"), inverseJoinColumns = @JoinColumn(name = "vote_id"))
     @JsonIgnoreProperties(value = { "equipes" }, allowSetters = true)
     private Set<Vote> votes = new HashSet<>();
-
-    @Column("user_id_id")
-    private Long userIdId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -78,13 +85,25 @@ public class Equipe implements Serializable {
         this.nombrePersonne = nombrePersonne;
     }
 
+    public UUID getUserUuid() {
+        return this.userUuid;
+    }
+
+    public Equipe userUuid(UUID userUuid) {
+        this.setUserUuid(userUuid);
+        return this;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
+    }
+
     public User getUserId() {
         return this.userId;
     }
 
     public void setUserId(User user) {
         this.userId = user;
-        this.userIdId = user != null ? user.getId() : null;
     }
 
     public Equipe userId(User user) {
@@ -117,14 +136,6 @@ public class Equipe implements Serializable {
         return this;
     }
 
-    public Long getUserIdId() {
-        return this.userIdId;
-    }
-
-    public void setUserIdId(Long user) {
-        this.userIdId = user;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -151,6 +162,7 @@ public class Equipe implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", nombrePersonne=" + getNombrePersonne() +
+            ", userUuid='" + getUserUuid() + "'" +
             "}";
     }
 }
