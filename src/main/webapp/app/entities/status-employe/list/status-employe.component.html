@@ -33,9 +33,6 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.statusEmploye.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="userUuid">
-            <span jhiTranslate="vermegApp.statusEmploye.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="disponibilite">
             <span jhiTranslate="vermegApp.statusEmploye.disponibilite">Disponibilite</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -48,8 +45,8 @@
           <th scope="col" jhiSortBy="finConge">
             <span jhiTranslate="vermegApp.statusEmploye.finConge">Fin Conge</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="userId.id">
-            <span jhiTranslate="vermegApp.statusEmploye.userId">User Id</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="user.id">
+            <span jhiTranslate="vermegApp.statusEmploye.users">Users</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -59,13 +56,17 @@
           <td>
             <a [routerLink]="['/status-employe', statusEmploye.id, 'view']">{{ statusEmploye.id }}</a>
           </td>
-          <td>{{ statusEmploye.userUuid }}</td>
           <td>{{ statusEmploye.disponibilite }}</td>
           <td>{{ statusEmploye.mission }}</td>
           <td>{{ statusEmploye.debutConge | formatMediumDate }}</td>
           <td>{{ statusEmploye.finConge | formatMediumDate }}</td>
           <td>
-            {{ statusEmploye.userId?.id }}
+            <div *ngFor="let user of statusEmploye.users">
+              <span class="badge bg-info">
+                <label>First Name:</label> {{ user.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
+                {{ user.email }}</span
+              >
+            </div>
           </td>
           <td class="text-end">
             <div class="btn-group">

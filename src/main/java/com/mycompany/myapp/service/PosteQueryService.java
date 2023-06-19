@@ -99,10 +99,10 @@ public class PosteQueryService extends QueryService<Poste> {
             if (criteria.getUserUuid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUserUuid(), Poste_.userUuid));
             }
-            if (criteria.getUserIdId() != null) {
+            if (criteria.getUsersId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getUserIdId(), root -> root.join(Poste_.userId, JoinType.LEFT).get(User_.id))
+                        buildSpecification(criteria.getUsersId(), root -> root.join(Poste_.users, JoinType.LEFT).get(User_.id))
                     );
             }
         }

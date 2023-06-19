@@ -5,7 +5,7 @@ export interface IPoste {
   title?: string | null;
   description?: string | null;
   userUuid?: string;
-  userId?: IUser | null;
+  users?: IUser[] | null;
 }
 
 export class Poste implements IPoste {
@@ -14,7 +14,7 @@ export class Poste implements IPoste {
     public title?: string | null,
     public description?: string | null,
     public userUuid?: string,
-    public userId?: IUser | null
+    public users?: IUser[] | null
   ) {}
 }
 

@@ -475,28 +475,28 @@ class TacheResourceIT {
 
     @Test
     @Transactional
-    void getAllTachesByProjetsIsEqualToSomething() throws Exception {
+    void getAllTachesByProjetIsEqualToSomething() throws Exception {
         // Initialize the database
         tacheRepository.saveAndFlush(tache);
-        Projet projets;
+        Projet projet;
         if (TestUtil.findAll(em, Projet.class).isEmpty()) {
-            projets = ProjetResourceIT.createEntity(em);
-            em.persist(projets);
+            projet = ProjetResourceIT.createEntity(em);
+            em.persist(projet);
             em.flush();
         } else {
-            projets = TestUtil.findAll(em, Projet.class).get(0);
+            projet = TestUtil.findAll(em, Projet.class).get(0);
         }
-        em.persist(projets);
+        em.persist(projet);
         em.flush();
-        tache.addProjets(projets);
+        tache.addProjet(projet);
         tacheRepository.saveAndFlush(tache);
-        Long projetsId = projets.getId();
+        Long projetId = projet.getId();
 
-        // Get all the tacheList where projets equals to projetsId
-        defaultTacheShouldBeFound("projetsId.equals=" + projetsId);
+        // Get all the tacheList where projet equals to projetId
+        defaultTacheShouldBeFound("projetId.equals=" + projetId);
 
-        // Get all the tacheList where projets equals to (projetsId + 1)
-        defaultTacheShouldNotBeFound("projetsId.equals=" + (projetsId + 1));
+        // Get all the tacheList where projet equals to (projetId + 1)
+        defaultTacheShouldNotBeFound("projetId.equals=" + (projetId + 1));
     }
 
     /**

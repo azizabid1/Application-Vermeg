@@ -24,7 +24,7 @@ export class PosteUpdateComponent implements OnInit {
     title: [],
     description: [],
     userUuid: [null, [Validators.required]],
-    userId: [],
+    users: [],
   });
 
   constructor(
@@ -60,6 +60,17 @@ export class PosteUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  getSelectedUser(option: IUser, selectedVals?: IUser[]): IUser {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPoste>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),
@@ -85,17 +96,17 @@ export class PosteUpdateComponent implements OnInit {
       title: poste.title,
       description: poste.description,
       userUuid: poste.userUuid,
-      userId: poste.userId,
+      users: poste.users,
     });
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, poste.userId);
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, ...(poste.users ?? []));
   }
 
   protected loadRelationshipsOptions(): void {
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('userId')!.value)))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, ...(this.editForm.get('users')!.value ?? []))))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 
@@ -106,7 +117,7 @@ export class PosteUpdateComponent implements OnInit {
       title: this.editForm.get(['title'])!.value,
       description: this.editForm.get(['description'])!.value,
       userUuid: this.editForm.get(['userUuid'])!.value,
-      userId: this.editForm.get(['userId'])!.value,
+      users: this.editForm.get(['users'])!.value,
     };
   }
 }

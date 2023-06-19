@@ -96,10 +96,10 @@ public class VoteQueryService extends QueryService<Vote> {
             if (criteria.getTypeVote() != null) {
                 specification = specification.and(buildSpecification(criteria.getTypeVote(), Vote_.typeVote));
             }
-            if (criteria.getEquipeId() != null) {
+            if (criteria.getEquipesId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getEquipeId(), root -> root.join(Vote_.equipes, JoinType.LEFT).get(Equipe_.id))
+                        buildSpecification(criteria.getEquipesId(), root -> root.join(Vote_.equipes, JoinType.LEFT).get(Equipe_.id))
                     );
             }
         }

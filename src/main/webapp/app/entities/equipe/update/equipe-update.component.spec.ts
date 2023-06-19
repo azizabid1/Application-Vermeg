@@ -53,12 +53,12 @@ describe('Equipe Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call User query and add missing value', () => {
       const equipe: IEquipe = { id: 456 };
-      const userId: IUser = { id: 24897 };
-      equipe.userId = userId;
+      const users: IUser[] = [{ id: 24897 }];
+      equipe.users = users;
 
       const userCollection: IUser[] = [{ id: 29668 }];
       jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
-      const additionalUsers = [userId];
+      const additionalUsers = [...users];
       const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
       jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -72,12 +72,12 @@ describe('Equipe Management Update Component', () => {
 
     it('Should call Vote query and add missing value', () => {
       const equipe: IEquipe = { id: 456 };
-      const votes: IVote[] = [{ id: 43706 }];
-      equipe.votes = votes;
+      const vote: IVote = { id: 43706 };
+      equipe.vote = vote;
 
       const voteCollection: IVote[] = [{ id: 11580 }];
       jest.spyOn(voteService, 'query').mockReturnValue(of(new HttpResponse({ body: voteCollection })));
-      const additionalVotes = [...votes];
+      const additionalVotes = [vote];
       const expectedCollection: IVote[] = [...additionalVotes, ...voteCollection];
       jest.spyOn(voteService, 'addVoteToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -91,17 +91,17 @@ describe('Equipe Management Update Component', () => {
 
     it('Should update editForm', () => {
       const equipe: IEquipe = { id: 456 };
-      const userId: IUser = { id: 84858 };
-      equipe.userId = userId;
-      const votes: IVote = { id: 31075 };
-      equipe.votes = [votes];
+      const users: IUser = { id: 84858 };
+      equipe.users = [users];
+      const vote: IVote = { id: 31075 };
+      equipe.vote = vote;
 
       activatedRoute.data = of({ equipe });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(equipe));
-      expect(comp.usersSharedCollection).toContain(userId);
-      expect(comp.votesSharedCollection).toContain(votes);
+      expect(comp.usersSharedCollection).toContain(users);
+      expect(comp.votesSharedCollection).toContain(vote);
     });
   });
 
@@ -188,27 +188,27 @@ describe('Equipe Management Update Component', () => {
   });
 
   describe('Getting selected relationships', () => {
-    describe('getSelectedVote', () => {
-      it('Should return option if no Vote is selected', () => {
+    describe('getSelectedUser', () => {
+      it('Should return option if no User is selected', () => {
         const option = { id: 123 };
-        const result = comp.getSelectedVote(option);
+        const result = comp.getSelectedUser(option);
         expect(result === option).toEqual(true);
       });
 
-      it('Should return selected Vote for according option', () => {
+      it('Should return selected User for according option', () => {
         const option = { id: 123 };
         const selected = { id: 123 };
         const selected2 = { id: 456 };
-        const result = comp.getSelectedVote(option, [selected2, selected]);
+        const result = comp.getSelectedUser(option, [selected2, selected]);
         expect(result === selected).toEqual(true);
         expect(result === selected2).toEqual(false);
         expect(result === option).toEqual(false);
       });
 
-      it('Should return option if this Vote is not selected', () => {
+      it('Should return option if this User is not selected', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
-        const result = comp.getSelectedVote(option, [selected]);
+        const result = comp.getSelectedUser(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

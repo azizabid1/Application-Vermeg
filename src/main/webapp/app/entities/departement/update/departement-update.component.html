@@ -11,27 +11,6 @@
         <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
           <label class="form-label" jhiTranslate="vermegApp.departement.id" for="field_id">Id</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          <div *ngIf="editForm.get('id')!.invalid && (editForm.get('id')!.dirty || editForm.get('id')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('id')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 4 }"
-            >
-              This field should be at least 4.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('id')?.errors?.max"
-              jhiTranslate="entity.validation.max"
-              [translateValues]="{ max: 6 }"
-            >
-              This field cannot be more than 6.
-            </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('id')?.errors?.number" jhiTranslate="entity.validation.number">
-              This field should be a number.
-            </small>
-          </div>
         </div>
 
         <div class="row mb-3">
@@ -42,11 +21,7 @@
               {{ 'vermegApp.TypeDepartement.' + typeDepartement | translate }}
             </option>
           </select>
-          <div *ngIf="editForm.get('nom')!.invalid && (editForm.get('nom')!.dirty || editForm.get('nom')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('nom')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
-          </div>
+          <div *ngIf="editForm.get('nom')!.invalid && (editForm.get('nom')!.dirty || editForm.get('nom')!.touched)"></div>
         </div>
 
         <div class="row mb-3">
@@ -60,26 +35,17 @@
             formControlName="userUuid"
             [readonly]="true"
           />
-          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('userUuid')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.departement.email" for="field_userId">Email</label>
-          <select class="form-control" id="field_userId" data-cy="userId" name="userId" formControlName="userId">
-            <option [ngValue]="null"></option>
+          <label jhiTranslate="vermegApp.departement.users" for="field_users">Users</label>
+          <select class="form-control" id="field_users" data-cy="users" multiple name="users" formControlName="users">
             <option
-              [ngValue]="getSelectedEmail(userOption, editForm.get('userId')!.value)"
+              [ngValue]="getSelectedUser(userOption, editForm.get('users')!.value)"
               *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
             >
-              {{ userOption.id }}
+              <label>First Name:</label> {{ userOption.firstName }} <label>Last Name:</label> {{ userOption.lastName }}
+              <label>Email:</label> {{ userOption.email }}
             </option>
           </select>
         </div>

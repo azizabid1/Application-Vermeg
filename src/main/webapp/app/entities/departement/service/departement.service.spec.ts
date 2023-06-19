@@ -151,7 +151,7 @@ describe('Departement Service', () => {
       });
 
       it('should add only unique Departement to an array', () => {
-        const departementArray: IDepartement[] = [{ id: 123 }, { id: 456 }, { id: 6 }];
+        const departementArray: IDepartement[] = [{ id: 123 }, { id: 456 }, { id: 68055 }];
         const departementCollection: IDepartement[] = [{ id: 123 }];
         expectedResult = service.addDepartementToCollectionIfMissing(departementCollection, ...departementArray);
         expect(expectedResult).toHaveLength(3);

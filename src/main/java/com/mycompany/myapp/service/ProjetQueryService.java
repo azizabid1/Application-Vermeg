@@ -114,22 +114,22 @@ public class ProjetQueryService extends QueryService<Projet> {
             if (criteria.getNombreRestant() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getNombreRestant(), Projet_.nombreRestant));
             }
-            if (criteria.getDevisId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getDevisId(), root -> root.join(Projet_.devis, JoinType.LEFT).get(Devis_.id))
-                    );
-            }
             if (criteria.getEquipeId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getEquipeId(), root -> root.join(Projet_.equipe, JoinType.LEFT).get(Equipe_.id))
                     );
             }
-            if (criteria.getTacheId() != null) {
+            if (criteria.getTachesId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getTacheId(), root -> root.join(Projet_.tache, JoinType.LEFT).get(Tache_.id))
+                        buildSpecification(criteria.getTachesId(), root -> root.join(Projet_.taches, JoinType.LEFT).get(Tache_.id))
+                    );
+            }
+            if (criteria.getDevisId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDevisId(), root -> root.join(Projet_.devis, JoinType.LEFT).get(Devis_.id))
                     );
             }
         }

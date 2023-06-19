@@ -6,7 +6,6 @@ import { DepartementComponent } from '../list/departement.component';
 import { DepartementDetailComponent } from '../detail/departement-detail.component';
 import { DepartementUpdateComponent } from '../update/departement-update.component';
 import { DepartementRoutingResolveService } from './departement-routing-resolve.service';
-import { UserManagementResolve } from 'app/admin/user-management/user-management.route';
 
 const departementRoute: Routes = [
   {
@@ -14,12 +13,6 @@ const departementRoute: Routes = [
     component: DepartementComponent,
     data: {
       defaultSort: 'id,asc',
-      resolve: {
-        user: UserManagementResolve,
-      },
-    },
-    resolve: {
-      user: UserManagementResolve,
     },
     canActivate: [UserRouteAccessService],
   },

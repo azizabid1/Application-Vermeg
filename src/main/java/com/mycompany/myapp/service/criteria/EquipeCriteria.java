@@ -35,9 +35,11 @@ public class EquipeCriteria implements Serializable, Criteria {
 
     private UUIDFilter userUuid;
 
-    private LongFilter userIdId;
-
     private LongFilter voteId;
+
+    private LongFilter usersId;
+
+    private LongFilter projetId;
 
     private Boolean distinct;
 
@@ -48,8 +50,9 @@ public class EquipeCriteria implements Serializable, Criteria {
         this.nom = other.nom == null ? null : other.nom.copy();
         this.nombrePersonne = other.nombrePersonne == null ? null : other.nombrePersonne.copy();
         this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
-        this.userIdId = other.userIdId == null ? null : other.userIdId.copy();
         this.voteId = other.voteId == null ? null : other.voteId.copy();
+        this.usersId = other.usersId == null ? null : other.usersId.copy();
+        this.projetId = other.projetId == null ? null : other.projetId.copy();
         this.distinct = other.distinct;
     }
 
@@ -118,21 +121,6 @@ public class EquipeCriteria implements Serializable, Criteria {
         this.userUuid = userUuid;
     }
 
-    public LongFilter getUserIdId() {
-        return userIdId;
-    }
-
-    public LongFilter userIdId() {
-        if (userIdId == null) {
-            userIdId = new LongFilter();
-        }
-        return userIdId;
-    }
-
-    public void setUserIdId(LongFilter userIdId) {
-        this.userIdId = userIdId;
-    }
-
     public LongFilter getVoteId() {
         return voteId;
     }
@@ -146,6 +134,36 @@ public class EquipeCriteria implements Serializable, Criteria {
 
     public void setVoteId(LongFilter voteId) {
         this.voteId = voteId;
+    }
+
+    public LongFilter getUsersId() {
+        return usersId;
+    }
+
+    public LongFilter usersId() {
+        if (usersId == null) {
+            usersId = new LongFilter();
+        }
+        return usersId;
+    }
+
+    public void setUsersId(LongFilter usersId) {
+        this.usersId = usersId;
+    }
+
+    public LongFilter getProjetId() {
+        return projetId;
+    }
+
+    public LongFilter projetId() {
+        if (projetId == null) {
+            projetId = new LongFilter();
+        }
+        return projetId;
+    }
+
+    public void setProjetId(LongFilter projetId) {
+        this.projetId = projetId;
     }
 
     public Boolean getDistinct() {
@@ -170,15 +188,16 @@ public class EquipeCriteria implements Serializable, Criteria {
             Objects.equals(nom, that.nom) &&
             Objects.equals(nombrePersonne, that.nombrePersonne) &&
             Objects.equals(userUuid, that.userUuid) &&
-            Objects.equals(userIdId, that.userIdId) &&
             Objects.equals(voteId, that.voteId) &&
+            Objects.equals(usersId, that.usersId) &&
+            Objects.equals(projetId, that.projetId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nom, nombrePersonne, userUuid, userIdId, voteId, distinct);
+        return Objects.hash(id, nom, nombrePersonne, userUuid, voteId, usersId, projetId, distinct);
     }
 
     // prettier-ignore
@@ -189,8 +208,9 @@ public class EquipeCriteria implements Serializable, Criteria {
             (nom != null ? "nom=" + nom + ", " : "") +
             (nombrePersonne != null ? "nombrePersonne=" + nombrePersonne + ", " : "") +
             (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
-            (userIdId != null ? "userIdId=" + userIdId + ", " : "") +
             (voteId != null ? "voteId=" + voteId + ", " : "") +
+            (usersId != null ? "usersId=" + usersId + ", " : "") +
+            (projetId != null ? "projetId=" + projetId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

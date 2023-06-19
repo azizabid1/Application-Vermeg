@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230618143059",
+  "changelogDate": "20230619021809",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "poste",
@@ -33,8 +33,9 @@
     {
       "otherEntityName": "user",
       "otherEntityRelationshipName": "poste",
-      "relationshipName": "userId",
-      "relationshipType": "many-to-one"
+      "ownerSide": true,
+      "relationshipName": "users",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

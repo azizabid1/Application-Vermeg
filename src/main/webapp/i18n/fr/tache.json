@@ -22,7 +22,7 @@
       "titre": "Titre",
       "description": "Description",
       "statusTache": "Status Tache",
-      "projets": "Projets"
+      "projet": "Projet"
     }
   }
 }

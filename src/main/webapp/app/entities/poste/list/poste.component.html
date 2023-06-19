@@ -37,12 +37,6 @@
           <th scope="col" jhiSortBy="description">
             <span jhiTranslate="vermegApp.poste.description">Description</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="userUuid">
-            <span jhiTranslate="vermegApp.poste.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="userId.id">
-            <span jhiTranslate="vermegApp.poste.userId">User Id</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -53,10 +47,6 @@
           </td>
           <td>{{ poste.title }}</td>
           <td>{{ poste.description }}</td>
-          <td>{{ poste.userUuid }}</td>
-          <td>
-            {{ poste.userId?.id }}
-          </td>
           <td class="text-end">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/poste', poste.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

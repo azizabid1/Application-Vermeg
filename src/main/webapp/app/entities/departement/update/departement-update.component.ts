@@ -22,10 +22,10 @@ export class DepartementUpdateComponent implements OnInit {
   usersSharedCollection: IUser[] = [];
 
   editForm = this.fb.group({
-    id: [null, [Validators.min(4), Validators.max(6)]],
-    nom: [null, [Validators.required]],
+    id: [],
+    nom: [null, []],
     userUuid: [null, [Validators.required]],
-    userId: [],
+    users: [],
   });
 
   constructor(
@@ -47,17 +47,6 @@ export class DepartementUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  getSelectedEmail(option: IUser, selectedVals?: IUser[]): IUser {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   save(): void {
     this.isSaving = true;
     const departement = this.createFromForm();
@@ -70,6 +59,17 @@ export class DepartementUpdateComponent implements OnInit {
 
   trackUserById(_index: number, item: IUser): number {
     return item.id!;
+  }
+
+  getSelectedUser(option: IUser, selectedVals?: IUser[]): IUser {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDepartement>>): void {
@@ -96,17 +96,17 @@ export class DepartementUpdateComponent implements OnInit {
       id: departement.id,
       nom: departement.nom,
       userUuid: departement.userUuid,
-      userId: departement.userId,
+      users: departement.users,
     });
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, departement.userId);
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, ...(departement.users ?? []));
   }
 
   protected loadRelationshipsOptions(): void {
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, ...(this.editForm.get('userId')!.value ?? []))))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, ...(this.editForm.get('users')!.value ?? []))))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 
@@ -116,7 +116,7 @@ export class DepartementUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       nom: this.editForm.get(['nom'])!.value,
       userUuid: this.editForm.get(['userUuid'])!.value,
-      userId: this.editForm.get(['userId'])!.value,
+      users: this.editForm.get(['users'])!.value,
     };
   }
 }

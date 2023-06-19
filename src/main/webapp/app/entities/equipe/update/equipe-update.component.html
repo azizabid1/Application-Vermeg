@@ -61,39 +61,38 @@
 
         <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.equipe.userUuid" for="field_userUuid">User Uuid</label>
-          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
-          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('userUuid')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="userUuid"
+            id="field_userUuid"
+            data-cy="userUuid"
+            formControlName="userUuid"
+            [readonly]="true"
+          />
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.equipe.userId" for="field_userId">User Id</label>
-          <select class="form-control" id="field_userId" data-cy="userId" name="userId" formControlName="userId">
-            <option [ngValue]="null"></option>
+          <label jhiTranslate="vermegApp.equipe.vote" for="field_votes">Vote</label>
+          <select class="form-control" id="field_votes" data-cy="vote" name="vote" formControlName="vote">
             <option
-              [ngValue]="userOption.id === editForm.get('userId')!.value?.id ? editForm.get('userId')!.value : userOption"
-              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
+              [ngValue]="voteOption.id === editForm.get('vote')!.value?.id ? editForm.get('vote')!.value : voteOption"
+              *ngFor="let voteOption of votesSharedCollection; trackBy: trackVoteById"
             >
-              {{ userOption.id }}
+              {{ voteOption.typeVote }}
             </option>
           </select>
         </div>
 
         <div class="row mb-3">
-          <label jhiTranslate="vermegApp.equipe.vote" for="field_votes">Vote</label>
-          <select class="form-control" id="field_votes" data-cy="vote" multiple name="votes" formControlName="votes">
+          <label jhiTranslate="vermegApp.equipe.users" for="field_users">Users</label>
+          <select class="form-control" id="field_users" data-cy="users" multiple name="users" formControlName="users">
             <option
-              [ngValue]="getSelectedVote(voteOption, editForm.get('votes')!.value)"
-              *ngFor="let voteOption of votesSharedCollection; trackBy: trackVoteById"
+              [ngValue]="getSelectedUser(userOption, editForm.get('users')!.value)"
+              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
             >
-              {{ voteOption.id }}
+              <label>First Name:</label> {{ userOption.firstName }} <label>Last Name:</label> {{ userOption.lastName }}
+              <label>Email:</label> {{ userOption.email }}
             </option>
           </select>
         </div>

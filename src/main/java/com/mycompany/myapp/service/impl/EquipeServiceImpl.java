@@ -5,7 +5,11 @@ import com.mycompany.myapp.repository.EquipeRepository;
 import com.mycompany.myapp.service.EquipeService;
 import com.mycompany.myapp.service.dto.EquipeDTO;
 import com.mycompany.myapp.service.mapper.EquipeMapper;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -71,6 +75,20 @@ public class EquipeServiceImpl implements EquipeService {
 
     public Page<EquipeDTO> findAllWithEagerRelationships(Pageable pageable) {
         return equipeRepository.findAllWithEagerRelationships(pageable).map(equipeMapper::toDto);
+    }
+
+    /**
+     *  Get all the equipes where Projet is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<EquipeDTO> findAllWhereProjetIsNull() {
+        log.debug("Request to get all equipes where Projet is null");
+        return StreamSupport
+            .stream(equipeRepository.findAll().spliterator(), false)
+            .filter(equipe -> equipe.getProjet() == null)
+            .map(equipeMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

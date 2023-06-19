@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -12,11 +13,13 @@ import com.mycompany.myapp.domain.Projet;
 import com.mycompany.myapp.domain.Tache;
 import com.mycompany.myapp.domain.enumeration.Status;
 import com.mycompany.myapp.repository.ProjetRepository;
+import com.mycompany.myapp.service.ProjetService;
 import com.mycompany.myapp.service.criteria.ProjetCriteria;
 import com.mycompany.myapp.service.dto.ProjetDTO;
 import com.mycompany.myapp.service.mapper.ProjetMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -24,8 +27,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link ProjetResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class ProjetResourceIT {
@@ -76,8 +85,14 @@ class ProjetResourceIT {
     @Autowired
     private ProjetRepository projetRepository;
 
+    @Mock
+    private ProjetRepository projetRepositoryMock;
+
     @Autowired
     private ProjetMapper projetMapper;
+
+    @Mock
+    private ProjetService projetServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -211,6 +226,24 @@ class ProjetResourceIT {
             .andExpect(jsonPath("$.[*].statusProjet").value(hasItem(DEFAULT_STATUS_PROJET.toString())))
             .andExpect(jsonPath("$.[*].nombreTotal").value(hasItem(DEFAULT_NOMBRE_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].nombreRestant").value(hasItem(DEFAULT_NOMBRE_RESTANT.intValue())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllProjetsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(projetServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restProjetMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(projetServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllProjetsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(projetServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restProjetMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(projetServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -931,32 +964,6 @@ class ProjetResourceIT {
 
     @Test
     @Transactional
-    void getAllProjetsByDevisIsEqualToSomething() throws Exception {
-        // Initialize the database
-        projetRepository.saveAndFlush(projet);
-        Devis devis;
-        if (TestUtil.findAll(em, Devis.class).isEmpty()) {
-            devis = DevisResourceIT.createEntity(em);
-            em.persist(devis);
-            em.flush();
-        } else {
-            devis = TestUtil.findAll(em, Devis.class).get(0);
-        }
-        em.persist(devis);
-        em.flush();
-        projet.setDevis(devis);
-        projetRepository.saveAndFlush(projet);
-        Long devisId = devis.getId();
-
-        // Get all the projetList where devis equals to devisId
-        defaultProjetShouldBeFound("devisId.equals=" + devisId);
-
-        // Get all the projetList where devis equals to (devisId + 1)
-        defaultProjetShouldNotBeFound("devisId.equals=" + (devisId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllProjetsByEquipeIsEqualToSomething() throws Exception {
         // Initialize the database
         projetRepository.saveAndFlush(projet);
@@ -983,28 +990,55 @@ class ProjetResourceIT {
 
     @Test
     @Transactional
-    void getAllProjetsByTacheIsEqualToSomething() throws Exception {
+    void getAllProjetsByTachesIsEqualToSomething() throws Exception {
         // Initialize the database
         projetRepository.saveAndFlush(projet);
-        Tache tache;
+        Tache taches;
         if (TestUtil.findAll(em, Tache.class).isEmpty()) {
-            tache = TacheResourceIT.createEntity(em);
-            em.persist(tache);
+            taches = TacheResourceIT.createEntity(em);
+            em.persist(taches);
             em.flush();
         } else {
-            tache = TestUtil.findAll(em, Tache.class).get(0);
+            taches = TestUtil.findAll(em, Tache.class).get(0);
         }
-        em.persist(tache);
+        em.persist(taches);
         em.flush();
-        projet.setTache(tache);
+        projet.addTaches(taches);
         projetRepository.saveAndFlush(projet);
-        Long tacheId = tache.getId();
+        Long tachesId = taches.getId();
 
-        // Get all the projetList where tache equals to tacheId
-        defaultProjetShouldBeFound("tacheId.equals=" + tacheId);
+        // Get all the projetList where taches equals to tachesId
+        defaultProjetShouldBeFound("tachesId.equals=" + tachesId);
 
-        // Get all the projetList where tache equals to (tacheId + 1)
-        defaultProjetShouldNotBeFound("tacheId.equals=" + (tacheId + 1));
+        // Get all the projetList where taches equals to (tachesId + 1)
+        defaultProjetShouldNotBeFound("tachesId.equals=" + (tachesId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllProjetsByDevisIsEqualToSomething() throws Exception {
+        // Initialize the database
+        projetRepository.saveAndFlush(projet);
+        Devis devis;
+        if (TestUtil.findAll(em, Devis.class).isEmpty()) {
+            devis = DevisResourceIT.createEntity(em);
+            em.persist(devis);
+            em.flush();
+        } else {
+            devis = TestUtil.findAll(em, Devis.class).get(0);
+        }
+        em.persist(devis);
+        em.flush();
+        projet.setDevis(devis);
+        devis.setProjet(projet);
+        projetRepository.saveAndFlush(projet);
+        Long devisId = devis.getId();
+
+        // Get all the projetList where devis equals to devisId
+        defaultProjetShouldBeFound("devisId.equals=" + devisId);
+
+        // Get all the projetList where devis equals to (devisId + 1)
+        defaultProjetShouldNotBeFound("devisId.equals=" + (devisId + 1));
     }
 
     /**

@@ -46,23 +46,19 @@
         <dd>
           <span>{{ projet.nombreRestant }}</span>
         </dd>
-        <dt><span jhiTranslate="vermegApp.projet.devis">Devis</span></dt>
-        <dd>
-          <div *ngIf="projet.devis">
-            <a [routerLink]="['/devis', projet.devis?.id, 'view']">{{ projet.devis?.id }}</a>
-          </div>
-        </dd>
         <dt><span jhiTranslate="vermegApp.projet.equipe">Equipe</span></dt>
         <dd>
           <div *ngIf="projet.equipe">
-            <a [routerLink]="['/equipe', projet.equipe?.id, 'view']">{{ projet.equipe?.id }}</a>
+            <a [routerLink]="['/equipe', projet.equipe?.id, 'view']">{{ projet.equipe?.nom }}</a>
           </div>
         </dd>
-        <dt><span jhiTranslate="vermegApp.projet.tache">Tache</span></dt>
+        <dt><span jhiTranslate="vermegApp.projet.taches">Taches</span></dt>
         <dd>
-          <div *ngIf="projet.tache">
-            <a [routerLink]="['/tache', projet.tache?.id, 'view']">{{ projet.tache?.id }}</a>
-          </div>
+          <span *ngFor="let tache of projet.taches; let last = last">
+            <a [routerLink]="['/tache', tache?.id, 'view']">{{ tache.titre }}</a>
+            <p style="white-space: pre-wrap"></p>
+            {{ last ? '' : '  \n ' }}
+          </span>
         </dd>
       </dl>
 

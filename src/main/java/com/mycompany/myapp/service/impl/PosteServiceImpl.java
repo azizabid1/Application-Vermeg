@@ -69,11 +69,15 @@ public class PosteServiceImpl implements PosteService {
         return posteRepository.findAll(pageable).map(posteMapper::toDto);
     }
 
+    public Page<PosteDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return posteRepository.findAllWithEagerRelationships(pageable).map(posteMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<PosteDTO> findOne(Long id) {
         log.debug("Request to get Poste : {}", id);
-        return posteRepository.findById(id).map(posteMapper::toDto);
+        return posteRepository.findOneWithEagerRelationships(id).map(posteMapper::toDto);
     }
 
     @Override

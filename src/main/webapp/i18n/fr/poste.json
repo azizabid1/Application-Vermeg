@@ -21,7 +21,7 @@
       "title": "Title",
       "description": "Description",
       "userUuid": "User Uuid",
-      "userId": "User Id"
+      "users": "Users"
     }
   }
 }

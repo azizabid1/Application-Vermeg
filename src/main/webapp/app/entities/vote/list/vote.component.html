@@ -33,9 +33,6 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.vote.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="userUuid">
-            <span jhiTranslate="vermegApp.vote.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="typeVote">
             <span jhiTranslate="vermegApp.vote.typeVote">Type Vote</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -47,7 +44,6 @@
           <td>
             <a [routerLink]="['/vote', vote.id, 'view']">{{ vote.id }}</a>
           </td>
-          <td>{{ vote.userUuid }}</td>
           <td jhiTranslate="{{ 'vermegApp.Rendement.' + vote.typeVote }}">{{ vote.typeVote }}</td>
           <td class="text-end">
             <div class="btn-group">

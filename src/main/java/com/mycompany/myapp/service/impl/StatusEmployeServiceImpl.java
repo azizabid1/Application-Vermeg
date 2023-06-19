@@ -69,11 +69,15 @@ public class StatusEmployeServiceImpl implements StatusEmployeService {
         return statusEmployeRepository.findAll(pageable).map(statusEmployeMapper::toDto);
     }
 
+    public Page<StatusEmployeDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return statusEmployeRepository.findAllWithEagerRelationships(pageable).map(statusEmployeMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<StatusEmployeDTO> findOne(Long id) {
         log.debug("Request to get StatusEmploye : {}", id);
-        return statusEmployeRepository.findById(id).map(statusEmployeMapper::toDto);
+        return statusEmployeRepository.findOneWithEagerRelationships(id).map(statusEmployeMapper::toDto);
     }
 
     @Override

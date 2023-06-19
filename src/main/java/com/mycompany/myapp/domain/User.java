@@ -107,6 +107,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return login;
     }
 
+    public UUID getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
+    }
+
     // Lowercase the login before saving it in database
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
@@ -200,14 +208,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -230,7 +230,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public String toString() {
         return "User{" +
             "login='" + login + '\'' +
-            ", userUuid='"+ userUuid + '\'' +
+              ", userUuid='"+ userUuid + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +

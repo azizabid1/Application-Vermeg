@@ -1,4 +1,5 @@
 import { IUser } from 'app/entities/user/user.model';
+import { IProjet } from 'app/entities/projet/projet.model';
 import { IVote } from 'app/entities/vote/vote.model';
 
 export interface IEquipe {
@@ -6,8 +7,9 @@ export interface IEquipe {
   nom?: string | null;
   nombrePersonne?: number | null;
   userUuid?: string;
-  userId?: IUser | null;
-  votes?: IVote[] | null;
+  users?: IUser[] | null;
+  projet?: IProjet | null;
+  vote?: IVote | null;
 }
 
 export class Equipe implements IEquipe {
@@ -16,8 +18,9 @@ export class Equipe implements IEquipe {
     public nom?: string | null,
     public nombrePersonne?: number | null,
     public userUuid?: string,
-    public userId?: IUser | null,
-    public votes?: IVote[] | null
+    public users?: IUser[] | null,
+    public projet?: IProjet | null,
+    public vote?: IVote | null
   ) {}
 }
 

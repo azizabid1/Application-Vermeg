@@ -2,7 +2,9 @@ package com.mycompany.myapp.service.dto;
 
 import com.mycompany.myapp.domain.enumeration.TypeDepartement;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.*;
 
@@ -11,17 +13,14 @@ import javax.validation.constraints.*;
  */
 public class DepartementDTO implements Serializable {
 
-    @Min(value = 4L)
-    @Max(value = 6L)
     private Long id;
 
-    @NotNull
     private TypeDepartement nom;
 
     @NotNull
     private UUID userUuid;
 
-    private UserDTO userId;
+    private Set<UserDTO> users = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -47,12 +46,12 @@ public class DepartementDTO implements Serializable {
         this.userUuid = userUuid;
     }
 
-    public UserDTO getUserId() {
-        return userId;
+    public Set<UserDTO> getUsers() {
+        return users;
     }
 
-    public void setUserId(UserDTO userId) {
-        this.userId = userId;
+    public void setUsers(Set<UserDTO> users) {
+        this.users = users;
     }
 
     @Override
@@ -83,7 +82,7 @@ public class DepartementDTO implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", userUuid='" + getUserUuid() + "'" +
-            ", userId=" + getUserId() +
+            ", users=" + getUsers() +
             "}";
     }
 }

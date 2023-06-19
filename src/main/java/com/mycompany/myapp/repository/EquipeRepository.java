@@ -15,9 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EquipeRepository
     extends EquipeRepositoryWithBagRelationships, JpaRepository<Equipe, Long>, JpaSpecificationExecutor<Equipe> {
-    @Query("select equipe from Equipe equipe where equipe.userId.login = ?#{principal.username}")
-    List<Equipe> findByUserIdIsCurrentUser();
-
     default Optional<Equipe> findOneWithEagerRelationships(Long id) {
         return this.fetchBagRelationships(this.findById(id));
     }

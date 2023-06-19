@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.ProjetDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,20 @@ public interface ProjetService {
      * @return the list of entities.
      */
     Page<ProjetDTO> findAll(Pageable pageable);
+    /**
+     * Get all the ProjetDTO where Devis is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<ProjetDTO> findAllWhereDevisIsNull();
+
+    /**
+     * Get all the projets with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<ProjetDTO> findAllWithEagerRelationships(Pageable pageable);
 
     /**
      * Get the "id" projet.

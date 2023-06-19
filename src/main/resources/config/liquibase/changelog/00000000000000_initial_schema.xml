@@ -83,7 +83,7 @@
                   separator=";"
                   tableName="jhi_user"
                   usePreparedStatements="true">
-            <column name="user_uuid" type="string"/>
+                     <column name="user_uuid" type="string"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>

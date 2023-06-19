@@ -1,21 +1,18 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230618143056",
+  "changelogDate": "20230619021806",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "departement",
   "fields": [
     {
       "fieldName": "id",
-      "fieldType": "Long",
-      "fieldValidateRules": ["min", "max"],
-      "fieldValidateRulesMax": "6",
-      "fieldValidateRulesMin": "4"
+      "fieldType": "Long"
     },
     {
       "fieldName": "nom",
       "fieldType": "TypeDepartement",
-      "fieldValidateRules": ["required", "unique"],
+      "fieldValidateRules": ["unique"],
       "fieldValues": "RH,INFORMATIQUE,MOA,FINANCE"
     },
     {
@@ -33,8 +30,9 @@
     {
       "otherEntityName": "user",
       "otherEntityRelationshipName": "departement",
-      "relationshipName": "userId",
-      "relationshipType": "many-to-one"
+      "ownerSide": true,
+      "relationshipName": "users",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

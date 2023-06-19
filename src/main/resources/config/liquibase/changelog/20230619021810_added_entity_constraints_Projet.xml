@@ -6,13 +6,7 @@
     <!--
         Added the constraints for entity Projet.
     -->
-    <changeSet id="20230618143100-2" author="jhipster">
-
-        <addForeignKeyConstraint baseColumnNames="devis_id"
-                                 baseTableName="projet"
-                                 constraintName="fk_projet__devis_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="devis"/>
+    <changeSet id="20230619021810-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="equipe_id"
                                  baseTableName="projet"
@@ -20,9 +14,15 @@
                                  referencedColumnNames="id"
                                  referencedTableName="equipe"/>
 
-        <addForeignKeyConstraint baseColumnNames="tache_id"
-                                 baseTableName="projet"
-                                 constraintName="fk_projet__tache_id"
+        <addForeignKeyConstraint baseColumnNames="projet_id"
+                                 baseTableName="rel_projet__taches"
+                                 constraintName="fk_rel_projet__taches__projet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="projet"/>
+
+        <addForeignKeyConstraint baseColumnNames="taches_id"
+                                 baseTableName="rel_projet__taches"
+                                 constraintName="fk_rel_projet__taches__taches_id"
                                  referencedColumnNames="id"
                                  referencedTableName="tache"/>
     </changeSet>

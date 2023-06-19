@@ -1,13 +1,13 @@
 package com.mycompany.myapp.service.mapper;
 
-import com.mycompany.myapp.domain.Devis;
 import com.mycompany.myapp.domain.Equipe;
 import com.mycompany.myapp.domain.Projet;
 import com.mycompany.myapp.domain.Tache;
-import com.mycompany.myapp.service.dto.DevisDTO;
 import com.mycompany.myapp.service.dto.EquipeDTO;
 import com.mycompany.myapp.service.dto.ProjetDTO;
 import com.mycompany.myapp.service.dto.TacheDTO;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.*;
 
 /**
@@ -15,15 +15,12 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ProjetMapper extends EntityMapper<ProjetDTO, Projet> {
-    @Mapping(target = "devis", source = "devis", qualifiedByName = "devisId")
-    @Mapping(target = "equipe", source = "equipe", qualifiedByName = "equipeId")
-    @Mapping(target = "tache", source = "tache", qualifiedByName = "tacheId")
+    //@Mapping(target = "equipe", source = "equipe", qualifiedByName = "equipeId")
+    // @Mapping(target = "taches", source = "taches", qualifiedByName = "tacheIdSet")
     ProjetDTO toDto(Projet s);
 
-    @Named("devisId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    DevisDTO toDtoDevisId(Devis devis);
+    @Mapping(target = "removeTaches", ignore = true)
+    Projet toEntity(ProjetDTO projetDTO);
 
     @Named("equipeId")
     @BeanMapping(ignoreByDefault = true)
@@ -34,4 +31,9 @@ public interface ProjetMapper extends EntityMapper<ProjetDTO, Projet> {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     TacheDTO toDtoTacheId(Tache tache);
+
+    @Named("tacheIdSet")
+    default Set<TacheDTO> toDtoTacheIdSet(Set<Tache> tache) {
+        return tache.stream().map(this::toDtoTacheId).collect(Collectors.toSet());
+    }
 }

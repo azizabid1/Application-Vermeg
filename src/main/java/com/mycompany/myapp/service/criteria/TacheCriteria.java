@@ -55,7 +55,7 @@ public class TacheCriteria implements Serializable, Criteria {
 
     private StatusFilter statusTache;
 
-    private LongFilter projetsId;
+    private LongFilter projetId;
 
     private Boolean distinct;
 
@@ -67,7 +67,7 @@ public class TacheCriteria implements Serializable, Criteria {
         this.titre = other.titre == null ? null : other.titre.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.statusTache = other.statusTache == null ? null : other.statusTache.copy();
-        this.projetsId = other.projetsId == null ? null : other.projetsId.copy();
+        this.projetId = other.projetId == null ? null : other.projetId.copy();
         this.distinct = other.distinct;
     }
 
@@ -151,19 +151,19 @@ public class TacheCriteria implements Serializable, Criteria {
         this.statusTache = statusTache;
     }
 
-    public LongFilter getProjetsId() {
-        return projetsId;
+    public LongFilter getProjetId() {
+        return projetId;
     }
 
-    public LongFilter projetsId() {
-        if (projetsId == null) {
-            projetsId = new LongFilter();
+    public LongFilter projetId() {
+        if (projetId == null) {
+            projetId = new LongFilter();
         }
-        return projetsId;
+        return projetId;
     }
 
-    public void setProjetsId(LongFilter projetsId) {
-        this.projetsId = projetsId;
+    public void setProjetId(LongFilter projetId) {
+        this.projetId = projetId;
     }
 
     public Boolean getDistinct() {
@@ -189,14 +189,14 @@ public class TacheCriteria implements Serializable, Criteria {
             Objects.equals(titre, that.titre) &&
             Objects.equals(description, that.description) &&
             Objects.equals(statusTache, that.statusTache) &&
-            Objects.equals(projetsId, that.projetsId) &&
+            Objects.equals(projetId, that.projetId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userUuid, titre, description, statusTache, projetsId, distinct);
+        return Objects.hash(id, userUuid, titre, description, statusTache, projetId, distinct);
     }
 
     // prettier-ignore
@@ -208,7 +208,7 @@ public class TacheCriteria implements Serializable, Criteria {
             (titre != null ? "titre=" + titre + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (statusTache != null ? "statusTache=" + statusTache + ", " : "") +
-            (projetsId != null ? "projetsId=" + projetsId + ", " : "") +
+            (projetId != null ? "projetId=" + projetId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

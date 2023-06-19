@@ -15,11 +15,11 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface EquipeMapper extends EntityMapper<EquipeDTO, Equipe> {
-    // @Mapping(target = "userId", source = "userId", qualifiedByName = "userId")
-    //  @Mapping(target = "votes", source = "votes", qualifiedByName = "voteIdSet")
+    // @Mapping(target = "users", source = "users", qualifiedByName = "userIdSet")
+    // @Mapping(target = "vote", source = "vote", qualifiedByName = "voteId")
     EquipeDTO toDto(Equipe s);
 
-    @Mapping(target = "removeVote", ignore = true)
+    @Mapping(target = "removeUsers", ignore = true)
     Equipe toEntity(EquipeDTO equipeDTO);
 
     @Named("userId")
@@ -27,13 +27,13 @@ public interface EquipeMapper extends EntityMapper<EquipeDTO, Equipe> {
     @Mapping(target = "id", source = "id")
     UserDTO toDtoUserId(User user);
 
+    @Named("userIdSet")
+    default Set<UserDTO> toDtoUserIdSet(Set<User> user) {
+        return user.stream().map(this::toDtoUserId).collect(Collectors.toSet());
+    }
+
     @Named("voteId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     VoteDTO toDtoVoteId(Vote vote);
-
-    @Named("voteIdSet")
-    default Set<VoteDTO> toDtoVoteIdSet(Set<Vote> vote) {
-        return vote.stream().map(this::toDtoVoteId).collect(Collectors.toSet());
-    }
 }

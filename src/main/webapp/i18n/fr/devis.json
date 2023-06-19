@@ -22,7 +22,8 @@
       "prixHT": "Prix HT",
       "prixService": "Prix Service",
       "dureeProjet": "Duree Projet",
-      "userUuid": "User Uuid"
+      "userUuid": "User Uuid",
+      "projet": "Nom Projet"
     }
   }
 }

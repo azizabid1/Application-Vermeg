@@ -3,7 +3,10 @@ package com.mycompany.myapp.service.dto;
 import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.*;
 
@@ -31,11 +34,9 @@ public class ProjetDTO implements Serializable {
 
     private Long nombreRestant;
 
-    private DevisDTO devis;
-
     private EquipeDTO equipe;
 
-    private TacheDTO tache;
+    private Set<TacheDTO> taches = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -98,6 +99,7 @@ public class ProjetDTO implements Serializable {
     }
 
     public void setNombreTotal(Long nombreTotal) {
+        nombreTotal = (long) Period.between(dateDebut, dateFin).getDays();
         this.nombreTotal = nombreTotal;
     }
 
@@ -106,15 +108,9 @@ public class ProjetDTO implements Serializable {
     }
 
     public void setNombreRestant(Long nombreRestant) {
+        LocalDate date = LocalDate.now();
+        nombreRestant = (long) Period.between(date, dateFin).getDays();
         this.nombreRestant = nombreRestant;
-    }
-
-    public DevisDTO getDevis() {
-        return devis;
-    }
-
-    public void setDevis(DevisDTO devis) {
-        this.devis = devis;
     }
 
     public EquipeDTO getEquipe() {
@@ -125,12 +121,12 @@ public class ProjetDTO implements Serializable {
         this.equipe = equipe;
     }
 
-    public TacheDTO getTache() {
-        return tache;
+    public Set<TacheDTO> getTaches() {
+        return taches;
     }
 
-    public void setTache(TacheDTO tache) {
-        this.tache = tache;
+    public void setTaches(Set<TacheDTO> taches) {
+        this.taches = taches;
     }
 
     @Override
@@ -167,9 +163,8 @@ public class ProjetDTO implements Serializable {
             ", statusProjet='" + getStatusProjet() + "'" +
             ", nombreTotal=" + getNombreTotal() +
             ", nombreRestant=" + getNombreRestant() +
-            ", devis=" + getDevis() +
             ", equipe=" + getEquipe() +
-            ", tache=" + getTache() +
+            ", taches=" + getTaches() +
             "}";
     }
 }

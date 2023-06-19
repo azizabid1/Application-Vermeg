@@ -317,28 +317,28 @@ class VoteResourceIT {
 
     @Test
     @Transactional
-    void getAllVotesByEquipeIsEqualToSomething() throws Exception {
+    void getAllVotesByEquipesIsEqualToSomething() throws Exception {
         // Initialize the database
         voteRepository.saveAndFlush(vote);
-        Equipe equipe;
+        Equipe equipes;
         if (TestUtil.findAll(em, Equipe.class).isEmpty()) {
-            equipe = EquipeResourceIT.createEntity(em);
-            em.persist(equipe);
+            equipes = EquipeResourceIT.createEntity(em);
+            em.persist(equipes);
             em.flush();
         } else {
-            equipe = TestUtil.findAll(em, Equipe.class).get(0);
+            equipes = TestUtil.findAll(em, Equipe.class).get(0);
         }
-        em.persist(equipe);
+        em.persist(equipes);
         em.flush();
-        vote.addEquipe(equipe);
+        vote.addEquipes(equipes);
         voteRepository.saveAndFlush(vote);
-        Long equipeId = equipe.getId();
+        Long equipesId = equipes.getId();
 
-        // Get all the voteList where equipe equals to equipeId
-        defaultVoteShouldBeFound("equipeId.equals=" + equipeId);
+        // Get all the voteList where equipes equals to equipesId
+        defaultVoteShouldBeFound("equipesId.equals=" + equipesId);
 
-        // Get all the voteList where equipe equals to (equipeId + 1)
-        defaultVoteShouldNotBeFound("equipeId.equals=" + (equipeId + 1));
+        // Get all the voteList where equipes equals to (equipesId + 1)
+        defaultVoteShouldNotBeFound("equipesId.equals=" + (equipesId + 1));
     }
 
     /**

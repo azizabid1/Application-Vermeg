@@ -8,6 +8,8 @@ import { of, Subject, from } from 'rxjs';
 
 import { DevisService } from '../service/devis.service';
 import { IDevis, Devis } from '../devis.model';
+import { IProjet } from 'app/entities/projet/projet.model';
+import { ProjetService } from 'app/entities/projet/service/projet.service';
 
 import { DevisUpdateComponent } from './devis-update.component';
 
@@ -16,6 +18,7 @@ describe('Devis Management Update Component', () => {
   let fixture: ComponentFixture<DevisUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let devisService: DevisService;
+  let projetService: ProjetService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,18 +40,40 @@ describe('Devis Management Update Component', () => {
     fixture = TestBed.createComponent(DevisUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     devisService = TestBed.inject(DevisService);
+    projetService = TestBed.inject(ProjetService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call projet query and add missing value', () => {
+      const devis: IDevis = { id: 456 };
+      const projet: IProjet = { id: 41050 };
+      devis.projet = projet;
+
+      const projetCollection: IProjet[] = [{ id: 84471 }];
+      jest.spyOn(projetService, 'query').mockReturnValue(of(new HttpResponse({ body: projetCollection })));
+      const expectedCollection: IProjet[] = [projet, ...projetCollection];
+      jest.spyOn(projetService, 'addProjetToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ devis });
+      comp.ngOnInit();
+
+      expect(projetService.query).toHaveBeenCalled();
+      expect(projetService.addProjetToCollectionIfMissing).toHaveBeenCalledWith(projetCollection, projet);
+      expect(comp.projetsCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const devis: IDevis = { id: 456 };
+      const projet: IProjet = { id: 31999 };
+      devis.projet = projet;
 
       activatedRoute.data = of({ devis });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(devis));
+      expect(comp.projetsCollection).toContain(projet);
     });
   });
 
@@ -113,6 +138,16 @@ describe('Devis Management Update Component', () => {
       expect(devisService.update).toHaveBeenCalledWith(devis);
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Tracking relationships identifiers', () => {
+    describe('trackProjetById', () => {
+      it('Should return tracked Projet primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackProjetById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
     });
   });
 });

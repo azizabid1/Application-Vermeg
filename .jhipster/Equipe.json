@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230618143058",
+  "changelogDate": "20230619021808",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "equipe",
@@ -35,15 +35,23 @@
     {
       "otherEntityName": "user",
       "otherEntityRelationshipName": "equipe",
-      "relationshipName": "userId",
-      "relationshipType": "many-to-one"
+      "ownerSide": true,
+      "relationshipName": "users",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "projet",
+      "otherEntityRelationshipName": "equipe",
+      "ownerSide": false,
+      "relationshipName": "projet",
+      "relationshipType": "one-to-one"
     },
     {
       "otherEntityName": "vote",
-      "otherEntityRelationshipName": "equipe",
-      "ownerSide": true,
+      "otherEntityRelationshipName": "equipes",
       "relationshipName": "vote",
-      "relationshipType": "many-to-many"
+      "relationshipType": "many-to-one"
     }
   ],
   "service": "serviceImpl"

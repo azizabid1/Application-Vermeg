@@ -4,9 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
@@ -24,7 +28,8 @@ public class Projet implements Serializable {
     private Long id;
 
     @NotNull
-    @Type(type = "uuid-char")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false)
     private UUID userUuid;
 
@@ -50,18 +55,23 @@ public class Projet implements Serializable {
     @Column(name = "nombre_restant")
     private Long nombreRestant;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private Devis devis;
-
-    @JsonIgnoreProperties(value = { "userId", "votes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "users", "projet", "vote" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private Equipe equipe;
 
-    @ManyToOne
+    @ManyToMany
+    @JoinTable(
+        name = "rel_projet__taches",
+        joinColumns = @JoinColumn(name = "projet_id"),
+        inverseJoinColumns = @JoinColumn(name = "taches_id")
+    )
     @JsonIgnoreProperties(value = { "projets" }, allowSetters = true)
-    private Tache tache;
+    private Set<Tache> taches = new HashSet<>();
+
+    @JsonIgnoreProperties(value = { "projet" }, allowSetters = true)
+    @OneToOne(mappedBy = "projet")
+    private Devis devis;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -182,19 +192,6 @@ public class Projet implements Serializable {
         this.nombreRestant = nombreRestant;
     }
 
-    public Devis getDevis() {
-        return this.devis;
-    }
-
-    public void setDevis(Devis devis) {
-        this.devis = devis;
-    }
-
-    public Projet devis(Devis devis) {
-        this.setDevis(devis);
-        return this;
-    }
-
     public Equipe getEquipe() {
         return this.equipe;
     }
@@ -208,16 +205,47 @@ public class Projet implements Serializable {
         return this;
     }
 
-    public Tache getTache() {
-        return this.tache;
+    public Set<Tache> getTaches() {
+        return this.taches;
     }
 
-    public void setTache(Tache tache) {
-        this.tache = tache;
+    public void setTaches(Set<Tache> taches) {
+        this.taches = taches;
     }
 
-    public Projet tache(Tache tache) {
-        this.setTache(tache);
+    public Projet taches(Set<Tache> taches) {
+        this.setTaches(taches);
+        return this;
+    }
+
+    public Projet addTaches(Tache tache) {
+        this.taches.add(tache);
+        tache.getProjets().add(this);
+        return this;
+    }
+
+    public Projet removeTaches(Tache tache) {
+        this.taches.remove(tache);
+        tache.getProjets().remove(this);
+        return this;
+    }
+
+    public Devis getDevis() {
+        return this.devis;
+    }
+
+    public void setDevis(Devis devis) {
+        if (this.devis != null) {
+            this.devis.setProjet(null);
+        }
+        if (devis != null) {
+            devis.setProjet(this);
+        }
+        this.devis = devis;
+    }
+
+    public Projet devis(Devis devis) {
+        this.setDevis(devis);
         return this;
     }
 

@@ -2,7 +2,9 @@ package com.mycompany.myapp.service.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.*;
 
@@ -24,7 +26,7 @@ public class StatusEmployeDTO implements Serializable {
 
     private LocalDate finConge;
 
-    private UserDTO userId;
+    private Set<UserDTO> users = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -74,12 +76,12 @@ public class StatusEmployeDTO implements Serializable {
         this.finConge = finConge;
     }
 
-    public UserDTO getUserId() {
-        return userId;
+    public Set<UserDTO> getUsers() {
+        return users;
     }
 
-    public void setUserId(UserDTO userId) {
-        this.userId = userId;
+    public void setUsers(Set<UserDTO> users) {
+        this.users = users;
     }
 
     @Override
@@ -113,7 +115,7 @@ public class StatusEmployeDTO implements Serializable {
             ", mission='" + getMission() + "'" +
             ", debutConge='" + getDebutConge() + "'" +
             ", finConge='" + getFinConge() + "'" +
-            ", userId=" + getUserId() +
+            ", users=" + getUsers() +
             "}";
     }
 }

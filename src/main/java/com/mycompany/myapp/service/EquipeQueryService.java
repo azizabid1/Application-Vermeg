@@ -99,16 +99,22 @@ public class EquipeQueryService extends QueryService<Equipe> {
             if (criteria.getUserUuid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUserUuid(), Equipe_.userUuid));
             }
-            if (criteria.getUserIdId() != null) {
+            if (criteria.getUsersId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getUserIdId(), root -> root.join(Equipe_.userId, JoinType.LEFT).get(User_.id))
+                        buildSpecification(criteria.getUsersId(), root -> root.join(Equipe_.users, JoinType.LEFT).get(User_.id))
+                    );
+            }
+            if (criteria.getProjetId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getProjetId(), root -> root.join(Equipe_.projet, JoinType.LEFT).get(Projet_.id))
                     );
             }
             if (criteria.getVoteId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getVoteId(), root -> root.join(Equipe_.votes, JoinType.LEFT).get(Vote_.id))
+                        buildSpecification(criteria.getVoteId(), root -> root.join(Equipe_.vote, JoinType.LEFT).get(Vote_.id))
                     );
             }
         }

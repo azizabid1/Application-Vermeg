@@ -34,9 +34,14 @@
         <dd>
           <span>{{ statusEmploye.finConge | formatMediumDate }}</span>
         </dd>
-        <dt><span jhiTranslate="vermegApp.statusEmploye.userId">User Id</span></dt>
+        <dt><span jhiTranslate="vermegApp.statusEmploye.users">Users</span></dt>
         <dd>
-          <span>{{ statusEmploye.userId?.id }}</span>
+          <span *ngFor="let user of statusEmploye.users; let last = last">
+            <label>First Name:</label> {{ user.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
+            {{ user.email }}
+            <p style="white-space: pre-wrap"></p>
+            {{ last ? '' : '  \n ' }}
+          </span>
         </dd>
       </dl>
 

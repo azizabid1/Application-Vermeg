@@ -26,7 +26,7 @@ export class StatusEmployeUpdateComponent implements OnInit {
     mission: [],
     debutConge: [],
     finConge: [],
-    userId: [],
+    users: [],
   });
 
   constructor(
@@ -62,6 +62,17 @@ export class StatusEmployeUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  getSelectedUser(option: IUser, selectedVals?: IUser[]): IUser {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IStatusEmploye>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),
@@ -89,17 +100,17 @@ export class StatusEmployeUpdateComponent implements OnInit {
       mission: statusEmploye.mission,
       debutConge: statusEmploye.debutConge,
       finConge: statusEmploye.finConge,
-      userId: statusEmploye.userId,
+      users: statusEmploye.users,
     });
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, statusEmploye.userId);
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, ...(statusEmploye.users ?? []));
   }
 
   protected loadRelationshipsOptions(): void {
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('userId')!.value)))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, ...(this.editForm.get('users')!.value ?? []))))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 
@@ -112,7 +123,7 @@ export class StatusEmployeUpdateComponent implements OnInit {
       mission: this.editForm.get(['mission'])!.value,
       debutConge: this.editForm.get(['debutConge'])!.value,
       finConge: this.editForm.get(['finConge'])!.value,
-      userId: this.editForm.get(['userId'])!.value,
+      users: this.editForm.get(['users'])!.value,
     };
   }
 }

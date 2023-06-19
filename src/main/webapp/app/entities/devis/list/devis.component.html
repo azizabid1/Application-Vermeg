@@ -33,6 +33,9 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.devis.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="projet.id">
+            <span jhiTranslate="vermegApp.devis.projet">Nom Projet</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="prixTotal">
             <span jhiTranslate="vermegApp.devis.prixTotal">Prix Total</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -43,9 +46,6 @@
           <th scope="col" jhiSortBy="dureeProjet">
             <span jhiTranslate="vermegApp.devis.dureeProjet">Duree Projet</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="userUuid">
-            <span jhiTranslate="vermegApp.devis.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -54,11 +54,15 @@
           <td>
             <a [routerLink]="['/devis', devis.id, 'view']">{{ devis.id }}</a>
           </td>
+          <td>
+            <div *ngIf="devis.projet">
+              <a [routerLink]="['/projet', devis.projet?.id, 'view']">{{ devis.projet?.nomProjet }}</a>
+            </div>
+          </td>
           <td>{{ devis.prixTotal }}</td>
           <td>{{ devis.prixHT }}</td>
           <td>{{ devis.prixService }}</td>
-          <td>{{ devis.dureeProjet }}</td>
-          <td>{{ devis.userUuid }}</td>
+          <td>{{ devis.projet?.nombreTotal }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/devis', devis.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

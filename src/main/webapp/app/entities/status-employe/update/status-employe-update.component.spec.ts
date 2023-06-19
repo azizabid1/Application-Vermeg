@@ -49,12 +49,12 @@ describe('StatusEmploye Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call User query and add missing value', () => {
       const statusEmploye: IStatusEmploye = { id: 456 };
-      const userId: IUser = { id: 45941 };
-      statusEmploye.userId = userId;
+      const users: IUser[] = [{ id: 45941 }];
+      statusEmploye.users = users;
 
       const userCollection: IUser[] = [{ id: 14999 }];
       jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
-      const additionalUsers = [userId];
+      const additionalUsers = [...users];
       const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
       jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -68,14 +68,14 @@ describe('StatusEmploye Management Update Component', () => {
 
     it('Should update editForm', () => {
       const statusEmploye: IStatusEmploye = { id: 456 };
-      const userId: IUser = { id: 56497 };
-      statusEmploye.userId = userId;
+      const users: IUser = { id: 56497 };
+      statusEmploye.users = [users];
 
       activatedRoute.data = of({ statusEmploye });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(statusEmploye));
-      expect(comp.usersSharedCollection).toContain(userId);
+      expect(comp.usersSharedCollection).toContain(users);
     });
   });
 
@@ -149,6 +149,34 @@ describe('StatusEmploye Management Update Component', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackUserById(0, entity);
         expect(trackResult).toEqual(entity.id);
+      });
+    });
+  });
+
+  describe('Getting selected relationships', () => {
+    describe('getSelectedUser', () => {
+      it('Should return option if no User is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedUser(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected User for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedUser(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this User is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedUser(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
       });
     });
   });

@@ -8,8 +8,6 @@ import { of, Subject, from } from 'rxjs';
 
 import { ProjetService } from '../service/projet.service';
 import { IProjet, Projet } from '../projet.model';
-import { IDevis } from 'app/entities/devis/devis.model';
-import { DevisService } from 'app/entities/devis/service/devis.service';
 import { IEquipe } from 'app/entities/equipe/equipe.model';
 import { EquipeService } from 'app/entities/equipe/service/equipe.service';
 import { ITache } from 'app/entities/tache/tache.model';
@@ -22,7 +20,6 @@ describe('Projet Management Update Component', () => {
   let fixture: ComponentFixture<ProjetUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let projetService: ProjetService;
-  let devisService: DevisService;
   let equipeService: EquipeService;
   let tacheService: TacheService;
 
@@ -46,7 +43,6 @@ describe('Projet Management Update Component', () => {
     fixture = TestBed.createComponent(ProjetUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     projetService = TestBed.inject(ProjetService);
-    devisService = TestBed.inject(DevisService);
     equipeService = TestBed.inject(EquipeService);
     tacheService = TestBed.inject(TacheService);
 
@@ -54,24 +50,6 @@ describe('Projet Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should call devis query and add missing value', () => {
-      const projet: IProjet = { id: 456 };
-      const devis: IDevis = { id: 4730 };
-      projet.devis = devis;
-
-      const devisCollection: IDevis[] = [{ id: 70588 }];
-      jest.spyOn(devisService, 'query').mockReturnValue(of(new HttpResponse({ body: devisCollection })));
-      const expectedCollection: IDevis[] = [devis, ...devisCollection];
-      jest.spyOn(devisService, 'addDevisToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ projet });
-      comp.ngOnInit();
-
-      expect(devisService.query).toHaveBeenCalled();
-      expect(devisService.addDevisToCollectionIfMissing).toHaveBeenCalledWith(devisCollection, devis);
-      expect(comp.devisCollection).toEqual(expectedCollection);
-    });
-
     it('Should call equipe query and add missing value', () => {
       const projet: IProjet = { id: 456 };
       const equipe: IEquipe = { id: 30685 };
@@ -92,12 +70,12 @@ describe('Projet Management Update Component', () => {
 
     it('Should call Tache query and add missing value', () => {
       const projet: IProjet = { id: 456 };
-      const tache: ITache = { id: 48323 };
-      projet.tache = tache;
+      const taches: ITache[] = [{ id: 48323 }];
+      projet.taches = taches;
 
       const tacheCollection: ITache[] = [{ id: 21370 }];
       jest.spyOn(tacheService, 'query').mockReturnValue(of(new HttpResponse({ body: tacheCollection })));
-      const additionalTaches = [tache];
+      const additionalTaches = [...taches];
       const expectedCollection: ITache[] = [...additionalTaches, ...tacheCollection];
       jest.spyOn(tacheService, 'addTacheToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -111,20 +89,17 @@ describe('Projet Management Update Component', () => {
 
     it('Should update editForm', () => {
       const projet: IProjet = { id: 456 };
-      const devis: IDevis = { id: 11116 };
-      projet.devis = devis;
       const equipe: IEquipe = { id: 14209 };
       projet.equipe = equipe;
-      const tache: ITache = { id: 19396 };
-      projet.tache = tache;
+      const taches: ITache = { id: 19396 };
+      projet.taches = [taches];
 
       activatedRoute.data = of({ projet });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(projet));
-      expect(comp.devisCollection).toContain(devis);
       expect(comp.equipesCollection).toContain(equipe);
-      expect(comp.tachesSharedCollection).toContain(tache);
+      expect(comp.tachesSharedCollection).toContain(taches);
     });
   });
 
@@ -193,14 +168,6 @@ describe('Projet Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackDevisById', () => {
-      it('Should return tracked Devis primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackDevisById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-
     describe('trackEquipeById', () => {
       it('Should return tracked Equipe primary key', () => {
         const entity = { id: 123 };
@@ -214,6 +181,34 @@ describe('Projet Management Update Component', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackTacheById(0, entity);
         expect(trackResult).toEqual(entity.id);
+      });
+    });
+  });
+
+  describe('Getting selected relationships', () => {
+    describe('getSelectedTache', () => {
+      it('Should return option if no Tache is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedTache(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected Tache for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedTache(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this Tache is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedTache(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
       });
     });
   });

@@ -27,8 +27,8 @@ export class EquipeUpdateComponent implements OnInit {
     nom: [],
     nombrePersonne: [null, [Validators.min(4), Validators.max(6)]],
     userUuid: [null, [Validators.required]],
-    userId: [],
-    votes: [],
+    users: [],
+    vote: [],
   });
 
   constructor(
@@ -69,7 +69,7 @@ export class EquipeUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  getSelectedVote(option: IVote, selectedVals?: IVote[]): IVote {
+  getSelectedUser(option: IUser, selectedVals?: IUser[]): IUser {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -105,25 +105,25 @@ export class EquipeUpdateComponent implements OnInit {
       nom: equipe.nom,
       nombrePersonne: equipe.nombrePersonne,
       userUuid: equipe.userUuid,
-      userId: equipe.userId,
-      votes: equipe.votes,
+      users: equipe.users,
+      vote: equipe.vote,
     });
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, equipe.userId);
-    this.votesSharedCollection = this.voteService.addVoteToCollectionIfMissing(this.votesSharedCollection, ...(equipe.votes ?? []));
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, ...(equipe.users ?? []));
+    this.votesSharedCollection = this.voteService.addVoteToCollectionIfMissing(this.votesSharedCollection, equipe.vote);
   }
 
   protected loadRelationshipsOptions(): void {
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('userId')!.value)))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, ...(this.editForm.get('users')!.value ?? []))))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
 
     this.voteService
       .query()
       .pipe(map((res: HttpResponse<IVote[]>) => res.body ?? []))
-      .pipe(map((votes: IVote[]) => this.voteService.addVoteToCollectionIfMissing(votes, ...(this.editForm.get('votes')!.value ?? []))))
+      .pipe(map((votes: IVote[]) => this.voteService.addVoteToCollectionIfMissing(votes, this.editForm.get('vote')!.value)))
       .subscribe((votes: IVote[]) => (this.votesSharedCollection = votes));
   }
 
@@ -134,8 +134,8 @@ export class EquipeUpdateComponent implements OnInit {
       nom: this.editForm.get(['nom'])!.value,
       nombrePersonne: this.editForm.get(['nombrePersonne'])!.value,
       userUuid: this.editForm.get(['userUuid'])!.value,
-      userId: this.editForm.get(['userId'])!.value,
-      votes: this.editForm.get(['votes'])!.value,
+      users: this.editForm.get(['users'])!.value,
+      vote: this.editForm.get(['vote'])!.value,
     };
   }
 }

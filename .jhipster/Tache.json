@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230618143102",
+  "changelogDate": "20230619021812",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "tache",
@@ -36,9 +36,10 @@
   "relationships": [
     {
       "otherEntityName": "projet",
-      "otherEntityRelationshipName": "tache",
-      "relationshipName": "projets",
-      "relationshipType": "one-to-many"
+      "otherEntityRelationshipName": "taches",
+      "ownerSide": false,
+      "relationshipName": "projet",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

@@ -1,11 +1,8 @@
 package com.mycompany.myapp.service.dto;
 
-import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.User;
 import java.util.UUID;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -15,11 +12,6 @@ public class UserDTO {
 
     private Long id;
 
-    private UUID userUuid;
-
-    @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
     private String login;
 
     @Size(max = 50)
@@ -38,7 +30,6 @@ public class UserDTO {
 
     public UserDTO(User user) {
         this.id = user.getId();
-        this.userUuid = user.getUserUuid();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
@@ -59,14 +50,6 @@ public class UserDTO {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public String getFirstName() {
@@ -99,7 +82,6 @@ public class UserDTO {
         return "UserDTO{" +
             "id='" + id + '\'' +
             ", login='" + login + '\'' +
-            ", userUuid='" + userUuid + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +

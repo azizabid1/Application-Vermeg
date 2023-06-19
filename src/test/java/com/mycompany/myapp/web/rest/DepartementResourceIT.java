@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -10,9 +11,11 @@ import com.mycompany.myapp.domain.Departement;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.domain.enumeration.TypeDepartement;
 import com.mycompany.myapp.repository.DepartementRepository;
+import com.mycompany.myapp.service.DepartementService;
 import com.mycompany.myapp.service.criteria.DepartementCriteria;
 import com.mycompany.myapp.service.dto.DepartementDTO;
 import com.mycompany.myapp.service.mapper.DepartementMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -20,8 +23,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link DepartementResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class DepartementResourceIT {
@@ -50,8 +59,14 @@ class DepartementResourceIT {
     @Autowired
     private DepartementRepository departementRepository;
 
+    @Mock
+    private DepartementRepository departementRepositoryMock;
+
     @Autowired
     private DepartementMapper departementMapper;
+
+    @Mock
+    private DepartementService departementServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -131,26 +146,6 @@ class DepartementResourceIT {
 
     @Test
     @Transactional
-    void checkNomIsRequired() throws Exception {
-        int databaseSizeBeforeTest = departementRepository.findAll().size();
-        // set the field null
-        departement.setNom(null);
-
-        // Create the Departement, which fails.
-        DepartementDTO departementDTO = departementMapper.toDto(departement);
-
-        restDepartementMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(departementDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<Departement> departementList = departementRepository.findAll();
-        assertThat(departementList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void checkUserUuidIsRequired() throws Exception {
         int databaseSizeBeforeTest = departementRepository.findAll().size();
         // set the field null
@@ -183,6 +178,24 @@ class DepartementResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(departement.getId().intValue())))
             .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM.toString())))
             .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllDepartementsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(departementServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restDepartementMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(departementServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllDepartementsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(departementServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restDepartementMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(departementServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -325,28 +338,28 @@ class DepartementResourceIT {
 
     @Test
     @Transactional
-    void getAllDepartementsByUserIdIsEqualToSomething() throws Exception {
+    void getAllDepartementsByUsersIsEqualToSomething() throws Exception {
         // Initialize the database
         departementRepository.saveAndFlush(departement);
-        User userId;
+        User users;
         if (TestUtil.findAll(em, User.class).isEmpty()) {
-            userId = UserResourceIT.createEntity(em);
-            em.persist(userId);
+            users = UserResourceIT.createEntity(em);
+            em.persist(users);
             em.flush();
         } else {
-            userId = TestUtil.findAll(em, User.class).get(0);
+            users = TestUtil.findAll(em, User.class).get(0);
         }
-        em.persist(userId);
+        em.persist(users);
         em.flush();
-        departement.setUserId(userId);
+        departement.addUsers(users);
         departementRepository.saveAndFlush(departement);
-        Long userIdId = userId.getId();
+        Long usersId = users.getId();
 
-        // Get all the departementList where userId equals to userIdId
-        defaultDepartementShouldBeFound("userIdId.equals=" + userIdId);
+        // Get all the departementList where users equals to usersId
+        defaultDepartementShouldBeFound("usersId.equals=" + usersId);
 
-        // Get all the departementList where userId equals to (userIdId + 1)
-        defaultDepartementShouldNotBeFound("userIdId.equals=" + (userIdId + 1));
+        // Get all the departementList where users equals to (usersId + 1)
+        defaultDepartementShouldNotBeFound("usersId.equals=" + (usersId + 1));
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
@@ -32,17 +33,28 @@ public class Equipe implements Serializable {
     private Long nombrePersonne;
 
     @NotNull
-    @Type(type = "uuid-char")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false)
     private UUID userUuid;
 
-    @ManyToOne
-    private User userId;
-
+    @Min(value = 4L)
+    @Max(value = 6L)
     @ManyToMany
-    @JoinTable(name = "rel_equipe__vote", joinColumns = @JoinColumn(name = "equipe_id"), inverseJoinColumns = @JoinColumn(name = "vote_id"))
+    @JoinTable(
+        name = "rel_equipe__users",
+        joinColumns = @JoinColumn(name = "equipe_id"),
+        inverseJoinColumns = @JoinColumn(name = "users_id")
+    )
+    private Set<User> users = new HashSet<>();
+
+    @JsonIgnoreProperties(value = { "equipe", "taches", "devis" }, allowSetters = true)
+    @OneToOne(mappedBy = "equipe")
+    private Projet projet;
+
+    @ManyToOne
     @JsonIgnoreProperties(value = { "equipes" }, allowSetters = true)
-    private Set<Vote> votes = new HashSet<>();
+    private Vote vote;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -98,41 +110,58 @@ public class Equipe implements Serializable {
         this.userUuid = userUuid;
     }
 
-    public User getUserId() {
-        return this.userId;
+    public Set<User> getUsers() {
+        return this.users;
     }
 
-    public void setUserId(User user) {
-        this.userId = user;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
-    public Equipe userId(User user) {
-        this.setUserId(user);
+    public Equipe users(Set<User> users) {
+        this.setUsers(users);
         return this;
     }
 
-    public Set<Vote> getVotes() {
-        return this.votes;
-    }
-
-    public void setVotes(Set<Vote> votes) {
-        this.votes = votes;
-    }
-
-    public Equipe votes(Set<Vote> votes) {
-        this.setVotes(votes);
+    public Equipe addUsers(User user) {
+        this.users.add(user);
         return this;
     }
 
-    public Equipe addVote(Vote vote) {
-        this.votes.add(vote);
-        vote.getEquipes().add(this);
+    public Equipe removeUsers(User user) {
+        this.users.remove(user);
         return this;
     }
 
-    public Equipe removeVote(Vote vote) {
-        this.votes.remove(vote);
-        vote.getEquipes().remove(this);
+    public Projet getProjet() {
+        return this.projet;
+    }
+
+    public void setProjet(Projet projet) {
+        if (this.projet != null) {
+            this.projet.setEquipe(null);
+        }
+        if (projet != null) {
+            projet.setEquipe(this);
+        }
+        this.projet = projet;
+    }
+
+    public Equipe projet(Projet projet) {
+        this.setProjet(projet);
+        return this;
+    }
+
+    public Vote getVote() {
+        return this.vote;
+    }
+
+    public void setVote(Vote vote) {
+        this.vote = vote;
+    }
+
+    public Equipe vote(Vote vote) {
+        this.setVote(vote);
         return this;
     }
 

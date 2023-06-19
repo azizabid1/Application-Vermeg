@@ -26,9 +26,9 @@
       "statusProjet": "Status Projet",
       "nombreTotal": "Nombre Total",
       "nombreRestant": "Nombre Restant",
-      "devis": "Devis",
       "equipe": "Equipe",
-      "tache": "Tache"
+      "tache": "Taches",
+      "devis": "Devis"
     }
   }
 }

@@ -64,11 +64,11 @@ public class ProjetCriteria implements Serializable, Criteria {
 
     private LongFilter nombreRestant;
 
-    private LongFilter devisId;
-
     private LongFilter equipeId;
 
-    private LongFilter tacheId;
+    private LongFilter tachesId;
+
+    private LongFilter devisId;
 
     private Boolean distinct;
 
@@ -84,9 +84,9 @@ public class ProjetCriteria implements Serializable, Criteria {
         this.statusProjet = other.statusProjet == null ? null : other.statusProjet.copy();
         this.nombreTotal = other.nombreTotal == null ? null : other.nombreTotal.copy();
         this.nombreRestant = other.nombreRestant == null ? null : other.nombreRestant.copy();
-        this.devisId = other.devisId == null ? null : other.devisId.copy();
         this.equipeId = other.equipeId == null ? null : other.equipeId.copy();
-        this.tacheId = other.tacheId == null ? null : other.tacheId.copy();
+        this.tachesId = other.tachesId == null ? null : other.tachesId.copy();
+        this.devisId = other.devisId == null ? null : other.devisId.copy();
         this.distinct = other.distinct;
     }
 
@@ -230,21 +230,6 @@ public class ProjetCriteria implements Serializable, Criteria {
         this.nombreRestant = nombreRestant;
     }
 
-    public LongFilter getDevisId() {
-        return devisId;
-    }
-
-    public LongFilter devisId() {
-        if (devisId == null) {
-            devisId = new LongFilter();
-        }
-        return devisId;
-    }
-
-    public void setDevisId(LongFilter devisId) {
-        this.devisId = devisId;
-    }
-
     public LongFilter getEquipeId() {
         return equipeId;
     }
@@ -260,19 +245,34 @@ public class ProjetCriteria implements Serializable, Criteria {
         this.equipeId = equipeId;
     }
 
-    public LongFilter getTacheId() {
-        return tacheId;
+    public LongFilter getTachesId() {
+        return tachesId;
     }
 
-    public LongFilter tacheId() {
-        if (tacheId == null) {
-            tacheId = new LongFilter();
+    public LongFilter tachesId() {
+        if (tachesId == null) {
+            tachesId = new LongFilter();
         }
-        return tacheId;
+        return tachesId;
     }
 
-    public void setTacheId(LongFilter tacheId) {
-        this.tacheId = tacheId;
+    public void setTachesId(LongFilter tachesId) {
+        this.tachesId = tachesId;
+    }
+
+    public LongFilter getDevisId() {
+        return devisId;
+    }
+
+    public LongFilter devisId() {
+        if (devisId == null) {
+            devisId = new LongFilter();
+        }
+        return devisId;
+    }
+
+    public void setDevisId(LongFilter devisId) {
+        this.devisId = devisId;
     }
 
     public Boolean getDistinct() {
@@ -302,9 +302,9 @@ public class ProjetCriteria implements Serializable, Criteria {
             Objects.equals(statusProjet, that.statusProjet) &&
             Objects.equals(nombreTotal, that.nombreTotal) &&
             Objects.equals(nombreRestant, that.nombreRestant) &&
-            Objects.equals(devisId, that.devisId) &&
             Objects.equals(equipeId, that.equipeId) &&
-            Objects.equals(tacheId, that.tacheId) &&
+            Objects.equals(tachesId, that.tachesId) &&
+            Objects.equals(devisId, that.devisId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -321,9 +321,9 @@ public class ProjetCriteria implements Serializable, Criteria {
             statusProjet,
             nombreTotal,
             nombreRestant,
-            devisId,
             equipeId,
-            tacheId,
+            tachesId,
+            devisId,
             distinct
         );
     }
@@ -341,9 +341,9 @@ public class ProjetCriteria implements Serializable, Criteria {
             (statusProjet != null ? "statusProjet=" + statusProjet + ", " : "") +
             (nombreTotal != null ? "nombreTotal=" + nombreTotal + ", " : "") +
             (nombreRestant != null ? "nombreRestant=" + nombreRestant + ", " : "") +
-            (devisId != null ? "devisId=" + devisId + ", " : "") +
             (equipeId != null ? "equipeId=" + equipeId + ", " : "") +
-            (tacheId != null ? "tacheId=" + tacheId + ", " : "") +
+            (tachesId != null ? "tachesId=" + tachesId + ", " : "") +
+            (devisId != null ? "devisId=" + devisId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

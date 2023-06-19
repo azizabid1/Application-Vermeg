@@ -2,9 +2,12 @@ package com.mycompany.myapp.domain;
 
 import com.mycompany.myapp.domain.enumeration.TypeDepartement;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
@@ -16,8 +19,6 @@ public class Departement implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Min(value = 4L)
-    @Max(value = 6L)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,16 +26,22 @@ public class Departement implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "nom", nullable = false, unique = true)
+    @Column(name = "nom", unique = true)
     private TypeDepartement nom;
 
     @NotNull
-    @Type(type = "uuid-char")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false)
     private UUID userUuid;
 
-    @ManyToOne
-    private User userId;
+    @ManyToMany
+    @JoinTable(
+        name = "rel_departement__users",
+        joinColumns = @JoinColumn(name = "departement_id"),
+        inverseJoinColumns = @JoinColumn(name = "users_id")
+    )
+    private Set<User> users = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -77,16 +84,26 @@ public class Departement implements Serializable {
         this.userUuid = userUuid;
     }
 
-    public User getUserId() {
-        return this.userId;
+    public Set<User> getUsers() {
+        return this.users;
     }
 
-    public void setUserId(User user) {
-        this.userId = user;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
-    public Departement userId(User user) {
-        this.setUserId(user);
+    public Departement users(Set<User> users) {
+        this.setUsers(users);
+        return this;
+    }
+
+    public Departement addUsers(User user) {
+        this.users.add(user);
+        return this;
+    }
+
+    public Departement removeUsers(User user) {
+        this.users.remove(user);
         return this;
     }
 

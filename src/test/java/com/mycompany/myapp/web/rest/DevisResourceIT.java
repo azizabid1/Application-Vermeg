@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Devis;
+import com.mycompany.myapp.domain.Projet;
 import com.mycompany.myapp.repository.DevisRepository;
 import com.mycompany.myapp.service.criteria.DevisCriteria;
 import com.mycompany.myapp.service.dto.DevisDTO;
@@ -689,6 +690,32 @@ class DevisResourceIT {
 
         // Get all the devisList where userUuid is null
         defaultDevisShouldNotBeFound("userUuid.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDevisByProjetIsEqualToSomething() throws Exception {
+        // Initialize the database
+        devisRepository.saveAndFlush(devis);
+        Projet projet;
+        if (TestUtil.findAll(em, Projet.class).isEmpty()) {
+            projet = ProjetResourceIT.createEntity(em);
+            em.persist(projet);
+            em.flush();
+        } else {
+            projet = TestUtil.findAll(em, Projet.class).get(0);
+        }
+        em.persist(projet);
+        em.flush();
+        devis.setProjet(projet);
+        devisRepository.saveAndFlush(devis);
+        Long projetId = projet.getId();
+
+        // Get all the devisList where projet equals to projetId
+        defaultDevisShouldBeFound("projetId.equals=" + projetId);
+
+        // Get all the devisList where projet equals to (projetId + 1)
+        defaultDevisShouldNotBeFound("projetId.equals=" + (projetId + 1));
     }
 
     /**

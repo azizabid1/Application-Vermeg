@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.EquipeDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,12 @@ public interface EquipeService {
      * @return the list of entities.
      */
     Page<EquipeDTO> findAll(Pageable pageable);
+    /**
+     * Get all the EquipeDTO where Projet is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<EquipeDTO> findAllWhereProjetIsNull();
 
     /**
      * Get all the equipes with eager load of many-to-many relationships.

@@ -9,7 +9,6 @@ import { Login } from 'app/login/login.model';
 
 type JwtToken = {
   id_token: string;
-  user_uuid: string;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -33,12 +32,6 @@ export class AuthServerProvider {
       .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
   }
 
-  getUserUuid(): string {
-    const userUuidInLocalStorage: string | null = this.localStorageService.retrieve('userUuid');
-    const userUuidInSessionStorage: string | null = this.sessionStorageService.retrieve('userUuid');
-    return userUuidInLocalStorage ?? userUuidInSessionStorage ?? '';
-  }
-
   logout(): Observable<void> {
     return new Observable(observer => {
       this.localStorageService.clear('authenticationToken');
@@ -49,19 +42,12 @@ export class AuthServerProvider {
 
   private authenticateSuccess(response: JwtToken, rememberMe: boolean): void {
     const jwt = response.id_token;
-    const user_uuid = response.user_uuid;
     if (rememberMe) {
       this.localStorageService.store('authenticationToken', jwt);
       this.sessionStorageService.clear('authenticationToken');
-
-      this.localStorageService.store('userUuid', user_uuid);
-      this.sessionStorageService.clear('userUuid');
     } else {
       this.sessionStorageService.store('authenticationToken', jwt);
       this.localStorageService.clear('authenticationToken');
-
-      this.sessionStorageService.store('userUuid', user_uuid);
-      this.localStorageService.clear('userUuid');
     }
   }
 }

@@ -8,7 +8,7 @@ export interface IStatusEmploye {
   mission?: boolean | null;
   debutConge?: dayjs.Dayjs | null;
   finConge?: dayjs.Dayjs | null;
-  userId?: IUser | null;
+  users?: IUser[] | null;
 }
 
 export class StatusEmploye implements IStatusEmploye {
@@ -19,7 +19,7 @@ export class StatusEmploye implements IStatusEmploye {
     public mission?: boolean | null,
     public debutConge?: dayjs.Dayjs | null,
     public finConge?: dayjs.Dayjs | null,
-    public userId?: IUser | null
+    public users?: IUser[] | null
   ) {
     this.disponibilite = this.disponibilite ?? false;
     this.mission = this.mission ?? false;

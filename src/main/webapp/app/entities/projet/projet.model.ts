@@ -1,7 +1,7 @@
 import dayjs from 'dayjs/esm';
-import { IDevis } from 'app/entities/devis/devis.model';
 import { IEquipe } from 'app/entities/equipe/equipe.model';
 import { ITache } from 'app/entities/tache/tache.model';
+import { IDevis } from 'app/entities/devis/devis.model';
 import { Status } from 'app/entities/enumerations/status.model';
 
 export interface IProjet {
@@ -14,9 +14,9 @@ export interface IProjet {
   statusProjet?: Status | null;
   nombreTotal?: number | null;
   nombreRestant?: number | null;
-  devis?: IDevis | null;
   equipe?: IEquipe | null;
-  tache?: ITache | null;
+  taches?: ITache[] | null;
+  devis?: IDevis | null;
 }
 
 export class Projet implements IProjet {
@@ -30,9 +30,9 @@ export class Projet implements IProjet {
     public statusProjet?: Status | null,
     public nombreTotal?: number | null,
     public nombreRestant?: number | null,
-    public devis?: IDevis | null,
     public equipe?: IEquipe | null,
-    public tache?: ITache | null
+    public taches?: ITache[] | null,
+    public devis?: IDevis | null
   ) {}
 }
 

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
@@ -25,7 +26,8 @@ public class Vote implements Serializable {
     private Long id;
 
     @NotNull
-    @Type(type = "uuid-char")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false)
     private UUID userUuid;
 
@@ -34,8 +36,8 @@ public class Vote implements Serializable {
     @Column(name = "type_vote", nullable = false, unique = true)
     private Rendement typeVote;
 
-    @ManyToMany(mappedBy = "votes")
-    @JsonIgnoreProperties(value = { "userId", "votes" }, allowSetters = true)
+    @OneToMany(mappedBy = "vote")
+    @JsonIgnoreProperties(value = { "users", "projet", "vote" }, allowSetters = true)
     private Set<Equipe> equipes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -85,10 +87,10 @@ public class Vote implements Serializable {
 
     public void setEquipes(Set<Equipe> equipes) {
         if (this.equipes != null) {
-            this.equipes.forEach(i -> i.removeVote(this));
+            this.equipes.forEach(i -> i.setVote(null));
         }
         if (equipes != null) {
-            equipes.forEach(i -> i.addVote(this));
+            equipes.forEach(i -> i.setVote(this));
         }
         this.equipes = equipes;
     }
@@ -98,15 +100,15 @@ public class Vote implements Serializable {
         return this;
     }
 
-    public Vote addEquipe(Equipe equipe) {
+    public Vote addEquipes(Equipe equipe) {
         this.equipes.add(equipe);
-        equipe.getVotes().add(this);
+        equipe.setVote(this);
         return this;
     }
 
-    public Vote removeEquipe(Equipe equipe) {
+    public Vote removeEquipes(Equipe equipe) {
         this.equipes.remove(equipe);
-        equipe.getVotes().remove(this);
+        equipe.setVote(null);
         return this;
     }
 

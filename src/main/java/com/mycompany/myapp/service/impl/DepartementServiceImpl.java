@@ -69,11 +69,15 @@ public class DepartementServiceImpl implements DepartementService {
         return departementRepository.findAll(pageable).map(departementMapper::toDto);
     }
 
+    public Page<DepartementDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return departementRepository.findAllWithEagerRelationships(pageable).map(departementMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<DepartementDTO> findOne(Long id) {
         log.debug("Request to get Departement : {}", id);
-        return departementRepository.findById(id).map(departementMapper::toDto);
+        return departementRepository.findOneWithEagerRelationships(id).map(departementMapper::toDto);
     }
 
     @Override

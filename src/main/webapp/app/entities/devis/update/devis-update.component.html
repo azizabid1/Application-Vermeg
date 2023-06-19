@@ -44,6 +44,7 @@
             id="field_dureeProjet"
             data-cy="dureeProjet"
             formControlName="dureeProjet"
+            [readonly]="true"
           />
           <div *ngIf="editForm.get('dureeProjet')!.invalid && (editForm.get('dureeProjet')!.dirty || editForm.get('dureeProjet')!.touched)">
             <small
@@ -75,15 +76,19 @@
             formControlName="userUuid"
             [readonly]="true"
           />
-          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('userUuid')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="vermegApp.devis.projet" for="field_projet">Projet</label>
+          <select class="form-control" id="field_projet" data-cy="projet" name="projet" formControlName="projet">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="projetOption.id === editForm.get('projet')!.value?.id ? editForm.get('projet')!.value : projetOption"
+              *ngFor="let projetOption of projetsCollection; trackBy: trackProjetById"
             >
-              This field is required.
-            </small>
-          </div>
+              {{ projetOption.nomProjet }}
+            </option>
+          </select>
         </div>
       </div>
 

@@ -15,16 +15,15 @@
 
         <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.projet.userUuid" for="field_userUuid">User Uuid</label>
-          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
-          <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('userUuid')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="userUuid"
+            id="field_userUuid"
+            data-cy="userUuid"
+            formControlName="userUuid"
+            [readonly]="true"
+          />
         </div>
 
         <div class="row mb-3">
@@ -95,6 +94,7 @@
             id="field_nombreTotal"
             data-cy="nombreTotal"
             formControlName="nombreTotal"
+            [readonly]="true"
           />
         </div>
 
@@ -107,20 +107,8 @@
             id="field_nombreRestant"
             data-cy="nombreRestant"
             formControlName="nombreRestant"
+            [readonly]="true"
           />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.projet.devis" for="field_devis">Devis</label>
-          <select class="form-control" id="field_devis" data-cy="devis" name="devis" formControlName="devis">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="devisOption.id === editForm.get('devis')!.value?.id ? editForm.get('devis')!.value : devisOption"
-              *ngFor="let devisOption of devisCollection; trackBy: trackDevisById"
-            >
-              {{ devisOption.id }}
-            </option>
-          </select>
         </div>
 
         <div class="row mb-3">
@@ -131,20 +119,19 @@
               [ngValue]="equipeOption.id === editForm.get('equipe')!.value?.id ? editForm.get('equipe')!.value : equipeOption"
               *ngFor="let equipeOption of equipesCollection; trackBy: trackEquipeById"
             >
-              {{ equipeOption.id }}
+              {{ equipeOption.nom }}
             </option>
           </select>
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.projet.tache" for="field_tache">Tache</label>
-          <select class="form-control" id="field_tache" data-cy="tache" name="tache" formControlName="tache">
-            <option [ngValue]="null"></option>
+          <label jhiTranslate="vermegApp.projet.taches" for="field_taches">Taches</label>
+          <select class="form-control" id="field_taches" data-cy="taches" multiple name="taches" formControlName="taches">
             <option
-              [ngValue]="tacheOption.id === editForm.get('tache')!.value?.id ? editForm.get('tache')!.value : tacheOption"
+              [ngValue]="getSelectedTache(tacheOption, editForm.get('taches')!.value)"
               *ngFor="let tacheOption of tachesSharedCollection; trackBy: trackTacheById"
             >
-              {{ tacheOption.id }}
+              {{ tacheOption.titre }}<label>:</label> <label>"</label>{{ tacheOption.description }}<label>"</label>
             </option>
           </select>
         </div>

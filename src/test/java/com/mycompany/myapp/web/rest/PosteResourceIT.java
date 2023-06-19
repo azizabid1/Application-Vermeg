@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -9,9 +10,11 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Poste;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.PosteRepository;
+import com.mycompany.myapp.service.PosteService;
 import com.mycompany.myapp.service.criteria.PosteCriteria;
 import com.mycompany.myapp.service.dto.PosteDTO;
 import com.mycompany.myapp.service.mapper.PosteMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -19,8 +22,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link PosteResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class PosteResourceIT {
@@ -52,8 +61,14 @@ class PosteResourceIT {
     @Autowired
     private PosteRepository posteRepository;
 
+    @Mock
+    private PosteRepository posteRepositoryMock;
+
     @Autowired
     private PosteMapper posteMapper;
+
+    @Mock
+    private PosteService posteServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -161,6 +176,24 @@ class PosteResourceIT {
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPostesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(posteServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPosteMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(posteServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPostesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(posteServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPosteMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(posteServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -408,28 +441,28 @@ class PosteResourceIT {
 
     @Test
     @Transactional
-    void getAllPostesByUserIdIsEqualToSomething() throws Exception {
+    void getAllPostesByUsersIsEqualToSomething() throws Exception {
         // Initialize the database
         posteRepository.saveAndFlush(poste);
-        User userId;
+        User users;
         if (TestUtil.findAll(em, User.class).isEmpty()) {
-            userId = UserResourceIT.createEntity(em);
-            em.persist(userId);
+            users = UserResourceIT.createEntity(em);
+            em.persist(users);
             em.flush();
         } else {
-            userId = TestUtil.findAll(em, User.class).get(0);
+            users = TestUtil.findAll(em, User.class).get(0);
         }
-        em.persist(userId);
+        em.persist(users);
         em.flush();
-        poste.setUserId(userId);
+        poste.addUsers(users);
         posteRepository.saveAndFlush(poste);
-        Long userIdId = userId.getId();
+        Long usersId = users.getId();
 
-        // Get all the posteList where userId equals to userIdId
-        defaultPosteShouldBeFound("userIdId.equals=" + userIdId);
+        // Get all the posteList where users equals to usersId
+        defaultPosteShouldBeFound("usersId.equals=" + usersId);
 
-        // Get all the posteList where userId equals to (userIdId + 1)
-        defaultPosteShouldNotBeFound("userIdId.equals=" + (userIdId + 1));
+        // Get all the posteList where users equals to (usersId + 1)
+        defaultPosteShouldNotBeFound("usersId.equals=" + (usersId + 1));
     }
 
     /**

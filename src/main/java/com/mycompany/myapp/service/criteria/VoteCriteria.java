@@ -51,7 +51,7 @@ public class VoteCriteria implements Serializable, Criteria {
 
     private RendementFilter typeVote;
 
-    private LongFilter equipeId;
+    private LongFilter equipesId;
 
     private Boolean distinct;
 
@@ -61,7 +61,7 @@ public class VoteCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.typeVote = other.typeVote == null ? null : other.typeVote.copy();
-        this.equipeId = other.equipeId == null ? null : other.equipeId.copy();
+        this.equipesId = other.equipesId == null ? null : other.equipesId.copy();
         this.distinct = other.distinct;
     }
 
@@ -115,19 +115,19 @@ public class VoteCriteria implements Serializable, Criteria {
         this.typeVote = typeVote;
     }
 
-    public LongFilter getEquipeId() {
-        return equipeId;
+    public LongFilter getEquipesId() {
+        return equipesId;
     }
 
-    public LongFilter equipeId() {
-        if (equipeId == null) {
-            equipeId = new LongFilter();
+    public LongFilter equipesId() {
+        if (equipesId == null) {
+            equipesId = new LongFilter();
         }
-        return equipeId;
+        return equipesId;
     }
 
-    public void setEquipeId(LongFilter equipeId) {
-        this.equipeId = equipeId;
+    public void setEquipesId(LongFilter equipesId) {
+        this.equipesId = equipesId;
     }
 
     public Boolean getDistinct() {
@@ -151,14 +151,14 @@ public class VoteCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(typeVote, that.typeVote) &&
-            Objects.equals(equipeId, that.equipeId) &&
+            Objects.equals(equipesId, that.equipesId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userUuid, typeVote, equipeId, distinct);
+        return Objects.hash(id, userUuid, typeVote, equipesId, distinct);
     }
 
     // prettier-ignore
@@ -168,7 +168,7 @@ public class VoteCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (typeVote != null ? "typeVote=" + typeVote + ", " : "") +
-            (equipeId != null ? "equipeId=" + equipeId + ", " : "") +
+            (equipesId != null ? "equipesId=" + equipesId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

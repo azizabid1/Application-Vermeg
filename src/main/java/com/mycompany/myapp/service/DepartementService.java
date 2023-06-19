@@ -42,6 +42,14 @@ public interface DepartementService {
     Page<DepartementDTO> findAll(Pageable pageable);
 
     /**
+     * Get all the departements with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<DepartementDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" departement.
      *
      * @param id the id of the entity.

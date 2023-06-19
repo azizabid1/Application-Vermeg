@@ -34,17 +34,8 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="vermegApp.departement.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="nom"><span jhiTranslate="vermegApp.departement.nom">Nom</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="userUuid">
-            <span jhiTranslate="vermegApp.departement.userUuid">User Uuid</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="userId.firstName">
-            <span jhiTranslate="vermegApp.departement.firstName">First Name</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="userId.lastName">
-            <span jhiTranslate="vermegApp.departement.lastName">Last Name</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="userId.email">
-            <span jhiTranslate="vermegApp.departement.email">Email</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="user.id">
+            <span jhiTranslate="vermegApp.departement.users">Users</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -55,15 +46,13 @@
             <a [routerLink]="['/departement', departement.id, 'view']">{{ departement.id }}</a>
           </td>
           <td jhiTranslate="{{ 'vermegApp.TypeDepartement.' + departement.nom }}">{{ departement.nom }}</td>
-          <td>{{ departement.userUuid }}</td>
           <td>
-            {{ departement.userId?.firstName }}
-          </td>
-          <td>
-            {{ departement.userId?.lastName }}
-          </td>
-          <td>
-            {{ departement.userId?.email }}
+            <div *ngFor="let user of departement.users">
+              <span class="badge bg-info">
+                <label>First Name:</label> {{ user.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
+                {{ user.email }}</span
+              >
+            </div>
           </td>
           <td class="text-end">
             <div class="btn-group">

@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230618143057",
+  "changelogDate": "20230619021807",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "devis",
@@ -39,6 +39,15 @@
   "name": "Devis",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "projet",
+      "otherEntityRelationshipName": "devis",
+      "ownerSide": true,
+      "relationshipName": "projet",
+      "relationshipType": "one-to-one"
+    }
+  ],
   "service": "serviceImpl"
 }

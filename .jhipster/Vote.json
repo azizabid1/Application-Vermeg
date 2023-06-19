@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230618143103",
+  "changelogDate": "20230619021813",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "vote",
@@ -31,9 +31,8 @@
     {
       "otherEntityName": "equipe",
       "otherEntityRelationshipName": "vote",
-      "ownerSide": false,
-      "relationshipName": "equipe",
-      "relationshipType": "many-to-many"
+      "relationshipName": "equipes",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceImpl"

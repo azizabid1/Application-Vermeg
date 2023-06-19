@@ -6,23 +6,23 @@
     <!--
         Added the constraints for entity Equipe.
     -->
-    <changeSet id="20230618143058-2" author="jhipster">
-
-        <addForeignKeyConstraint baseColumnNames="user_id_id"
-                                 baseTableName="equipe"
-                                 constraintName="fk_equipe__user_id_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+    <changeSet id="20230619021808-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="equipe_id"
-                                 baseTableName="rel_equipe__vote"
-                                 constraintName="fk_rel_equipe__vote__equipe_id"
+                                 baseTableName="rel_equipe__users"
+                                 constraintName="fk_rel_equipe__users__equipe_id"
                                  referencedColumnNames="id"
                                  referencedTableName="equipe"/>
 
+        <addForeignKeyConstraint baseColumnNames="users_id"
+                                 baseTableName="rel_equipe__users"
+                                 constraintName="fk_rel_equipe__users__users_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
         <addForeignKeyConstraint baseColumnNames="vote_id"
-                                 baseTableName="rel_equipe__vote"
-                                 constraintName="fk_rel_equipe__vote__vote_id"
+                                 baseTableName="equipe"
+                                 constraintName="fk_equipe__vote_id"
                                  referencedColumnNames="id"
                                  referencedTableName="vote"/>
     </changeSet>

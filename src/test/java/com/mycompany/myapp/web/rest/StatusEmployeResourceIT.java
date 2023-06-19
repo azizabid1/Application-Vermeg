@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -9,11 +10,13 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.StatusEmploye;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.StatusEmployeRepository;
+import com.mycompany.myapp.service.StatusEmployeService;
 import com.mycompany.myapp.service.criteria.StatusEmployeCriteria;
 import com.mycompany.myapp.service.dto.StatusEmployeDTO;
 import com.mycompany.myapp.service.mapper.StatusEmployeMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -21,8 +24,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link StatusEmployeResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class StatusEmployeResourceIT {
@@ -62,8 +71,14 @@ class StatusEmployeResourceIT {
     @Autowired
     private StatusEmployeRepository statusEmployeRepository;
 
+    @Mock
+    private StatusEmployeRepository statusEmployeRepositoryMock;
+
     @Autowired
     private StatusEmployeMapper statusEmployeMapper;
+
+    @Mock
+    private StatusEmployeService statusEmployeServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -191,6 +206,24 @@ class StatusEmployeResourceIT {
             .andExpect(jsonPath("$.[*].mission").value(hasItem(DEFAULT_MISSION.booleanValue())))
             .andExpect(jsonPath("$.[*].debutConge").value(hasItem(DEFAULT_DEBUT_CONGE.toString())))
             .andExpect(jsonPath("$.[*].finConge").value(hasItem(DEFAULT_FIN_CONGE.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllStatusEmployesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(statusEmployeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restStatusEmployeMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(statusEmployeServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllStatusEmployesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(statusEmployeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restStatusEmployeMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(statusEmployeServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -596,28 +629,28 @@ class StatusEmployeResourceIT {
 
     @Test
     @Transactional
-    void getAllStatusEmployesByUserIdIsEqualToSomething() throws Exception {
+    void getAllStatusEmployesByUsersIsEqualToSomething() throws Exception {
         // Initialize the database
         statusEmployeRepository.saveAndFlush(statusEmploye);
-        User userId;
+        User users;
         if (TestUtil.findAll(em, User.class).isEmpty()) {
-            userId = UserResourceIT.createEntity(em);
-            em.persist(userId);
+            users = UserResourceIT.createEntity(em);
+            em.persist(users);
             em.flush();
         } else {
-            userId = TestUtil.findAll(em, User.class).get(0);
+            users = TestUtil.findAll(em, User.class).get(0);
         }
-        em.persist(userId);
+        em.persist(users);
         em.flush();
-        statusEmploye.setUserId(userId);
+        statusEmploye.addUsers(users);
         statusEmployeRepository.saveAndFlush(statusEmploye);
-        Long userIdId = userId.getId();
+        Long usersId = users.getId();
 
-        // Get all the statusEmployeList where userId equals to userIdId
-        defaultStatusEmployeShouldBeFound("userIdId.equals=" + userIdId);
+        // Get all the statusEmployeList where users equals to usersId
+        defaultStatusEmployeShouldBeFound("usersId.equals=" + usersId);
 
-        // Get all the statusEmployeList where userId equals to (userIdId + 1)
-        defaultStatusEmployeShouldNotBeFound("userIdId.equals=" + (userIdId + 1));
+        // Get all the statusEmployeList where users equals to (usersId + 1)
+        defaultStatusEmployeShouldNotBeFound("usersId.equals=" + (usersId + 1));
     }
 
     /**

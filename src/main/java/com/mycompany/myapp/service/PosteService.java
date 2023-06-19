@@ -42,6 +42,14 @@ public interface PosteService {
     Page<PosteDTO> findAll(Pageable pageable);
 
     /**
+     * Get all the postes with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<PosteDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" poste.
      *
      * @param id the id of the entity.

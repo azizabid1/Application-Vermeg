@@ -21,7 +21,7 @@ public class EquipeRepositoryWithBagRelationshipsImpl implements EquipeRepositor
 
     @Override
     public Optional<Equipe> fetchBagRelationships(Optional<Equipe> equipe) {
-        return equipe.map(this::fetchVotes);
+        return equipe.map(this::fetchUsers);
     }
 
     @Override
@@ -31,20 +31,20 @@ public class EquipeRepositoryWithBagRelationshipsImpl implements EquipeRepositor
 
     @Override
     public List<Equipe> fetchBagRelationships(List<Equipe> equipes) {
-        return Optional.of(equipes).map(this::fetchVotes).orElse(Collections.emptyList());
+        return Optional.of(equipes).map(this::fetchUsers).orElse(Collections.emptyList());
     }
 
-    Equipe fetchVotes(Equipe result) {
+    Equipe fetchUsers(Equipe result) {
         return entityManager
-            .createQuery("select equipe from Equipe equipe left join fetch equipe.votes where equipe is :equipe", Equipe.class)
+            .createQuery("select equipe from Equipe equipe left join fetch equipe.users where equipe is :equipe", Equipe.class)
             .setParameter("equipe", result)
             .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getSingleResult();
     }
 
-    List<Equipe> fetchVotes(List<Equipe> equipes) {
+    List<Equipe> fetchUsers(List<Equipe> equipes) {
         return entityManager
-            .createQuery("select distinct equipe from Equipe equipe left join fetch equipe.votes where equipe in :equipes", Equipe.class)
+            .createQuery("select distinct equipe from Equipe equipe left join fetch equipe.users where equipe in :equipes", Equipe.class)
             .setParameter("equipes", equipes)
             .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();

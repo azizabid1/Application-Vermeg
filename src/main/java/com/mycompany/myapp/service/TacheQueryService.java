@@ -102,10 +102,10 @@ public class TacheQueryService extends QueryService<Tache> {
             if (criteria.getStatusTache() != null) {
                 specification = specification.and(buildSpecification(criteria.getStatusTache(), Tache_.statusTache));
             }
-            if (criteria.getProjetsId() != null) {
+            if (criteria.getProjetId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getProjetsId(), root -> root.join(Tache_.projets, JoinType.LEFT).get(Projet_.id))
+                        buildSpecification(criteria.getProjetId(), root -> root.join(Tache_.projets, JoinType.LEFT).get(Projet_.id))
                     );
             }
         }

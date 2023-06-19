@@ -21,7 +21,8 @@
       "nom": "Nom",
       "nombrePersonne": "Nombre Personne",
       "userUuid": "User Uuid",
-      "userId": "User Id",
+      "users": "Users",
+      "projet": "Projet",
       "vote": "Vote"
     }
   }

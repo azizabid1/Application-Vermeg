@@ -7,8 +7,6 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IProjet, Projet } from '../projet.model';
 import { ProjetService } from '../service/projet.service';
-import { IDevis } from 'app/entities/devis/devis.model';
-import { DevisService } from 'app/entities/devis/service/devis.service';
 import { IEquipe } from 'app/entities/equipe/equipe.model';
 import { EquipeService } from 'app/entities/equipe/service/equipe.service';
 import { ITache } from 'app/entities/tache/tache.model';
@@ -23,7 +21,6 @@ export class ProjetUpdateComponent implements OnInit {
   isSaving = false;
   statusValues = Object.keys(Status);
 
-  devisCollection: IDevis[] = [];
   equipesCollection: IEquipe[] = [];
   tachesSharedCollection: ITache[] = [];
 
@@ -37,14 +34,12 @@ export class ProjetUpdateComponent implements OnInit {
     statusProjet: [],
     nombreTotal: [],
     nombreRestant: [],
-    devis: [],
     equipe: [],
-    tache: [],
+    taches: [],
   });
 
   constructor(
     protected projetService: ProjetService,
-    protected devisService: DevisService,
     protected equipeService: EquipeService,
     protected tacheService: TacheService,
     protected activatedRoute: ActivatedRoute,
@@ -73,16 +68,23 @@ export class ProjetUpdateComponent implements OnInit {
     }
   }
 
-  trackDevisById(_index: number, item: IDevis): number {
-    return item.id!;
-  }
-
   trackEquipeById(_index: number, item: IEquipe): number {
     return item.id!;
   }
 
   trackTacheById(_index: number, item: ITache): number {
     return item.id!;
+  }
+
+  getSelectedTache(option: ITache, selectedVals?: ITache[]): ITache {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IProjet>>): void {
@@ -115,23 +117,15 @@ export class ProjetUpdateComponent implements OnInit {
       statusProjet: projet.statusProjet,
       nombreTotal: projet.nombreTotal,
       nombreRestant: projet.nombreRestant,
-      devis: projet.devis,
       equipe: projet.equipe,
-      tache: projet.tache,
+      taches: projet.taches,
     });
 
-    this.devisCollection = this.devisService.addDevisToCollectionIfMissing(this.devisCollection, projet.devis);
     this.equipesCollection = this.equipeService.addEquipeToCollectionIfMissing(this.equipesCollection, projet.equipe);
-    this.tachesSharedCollection = this.tacheService.addTacheToCollectionIfMissing(this.tachesSharedCollection, projet.tache);
+    this.tachesSharedCollection = this.tacheService.addTacheToCollectionIfMissing(this.tachesSharedCollection, ...(projet.taches ?? []));
   }
 
   protected loadRelationshipsOptions(): void {
-    this.devisService
-      .query({ 'projetId.specified': 'false' })
-      .pipe(map((res: HttpResponse<IDevis[]>) => res.body ?? []))
-      .pipe(map((devis: IDevis[]) => this.devisService.addDevisToCollectionIfMissing(devis, this.editForm.get('devis')!.value)))
-      .subscribe((devis: IDevis[]) => (this.devisCollection = devis));
-
     this.equipeService
       .query({ 'projetId.specified': 'false' })
       .pipe(map((res: HttpResponse<IEquipe[]>) => res.body ?? []))
@@ -141,7 +135,9 @@ export class ProjetUpdateComponent implements OnInit {
     this.tacheService
       .query()
       .pipe(map((res: HttpResponse<ITache[]>) => res.body ?? []))
-      .pipe(map((taches: ITache[]) => this.tacheService.addTacheToCollectionIfMissing(taches, this.editForm.get('tache')!.value)))
+      .pipe(
+        map((taches: ITache[]) => this.tacheService.addTacheToCollectionIfMissing(taches, ...(this.editForm.get('taches')!.value ?? [])))
+      )
       .subscribe((taches: ITache[]) => (this.tachesSharedCollection = taches));
   }
 
@@ -157,9 +153,8 @@ export class ProjetUpdateComponent implements OnInit {
       statusProjet: this.editForm.get(['statusProjet'])!.value,
       nombreTotal: this.editForm.get(['nombreTotal'])!.value,
       nombreRestant: this.editForm.get(['nombreRestant'])!.value,
-      devis: this.editForm.get(['devis'])!.value,
       equipe: this.editForm.get(['equipe'])!.value,
-      tache: this.editForm.get(['tache'])!.value,
+      taches: this.editForm.get(['taches'])!.value,
     };
   }
 }

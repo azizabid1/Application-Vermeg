@@ -39,6 +39,8 @@ public class DevisCriteria implements Serializable, Criteria {
 
     private UUIDFilter userUuid;
 
+    private LongFilter projetId;
+
     private Boolean distinct;
 
     public DevisCriteria() {}
@@ -50,6 +52,7 @@ public class DevisCriteria implements Serializable, Criteria {
         this.prixService = other.prixService == null ? null : other.prixService.copy();
         this.dureeProjet = other.dureeProjet == null ? null : other.dureeProjet.copy();
         this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
+        this.projetId = other.projetId == null ? null : other.projetId.copy();
         this.distinct = other.distinct;
     }
 
@@ -148,6 +151,21 @@ public class DevisCriteria implements Serializable, Criteria {
         this.userUuid = userUuid;
     }
 
+    public LongFilter getProjetId() {
+        return projetId;
+    }
+
+    public LongFilter projetId() {
+        if (projetId == null) {
+            projetId = new LongFilter();
+        }
+        return projetId;
+    }
+
+    public void setProjetId(LongFilter projetId) {
+        this.projetId = projetId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -172,13 +190,14 @@ public class DevisCriteria implements Serializable, Criteria {
             Objects.equals(prixService, that.prixService) &&
             Objects.equals(dureeProjet, that.dureeProjet) &&
             Objects.equals(userUuid, that.userUuid) &&
+            Objects.equals(projetId, that.projetId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, prixTotal, prixHT, prixService, dureeProjet, userUuid, distinct);
+        return Objects.hash(id, prixTotal, prixHT, prixService, dureeProjet, userUuid, projetId, distinct);
     }
 
     // prettier-ignore
@@ -191,6 +210,7 @@ public class DevisCriteria implements Serializable, Criteria {
             (prixService != null ? "prixService=" + prixService + ", " : "") +
             (dureeProjet != null ? "dureeProjet=" + dureeProjet + ", " : "") +
             (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
+            (projetId != null ? "projetId=" + projetId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

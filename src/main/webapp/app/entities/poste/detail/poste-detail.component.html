@@ -26,9 +26,14 @@
         <dd>
           <span>{{ poste.userUuid }}</span>
         </dd>
-        <dt><span jhiTranslate="vermegApp.poste.userId">User Id</span></dt>
+        <dt><span jhiTranslate="vermegApp.poste.users">Users</span></dt>
         <dd>
-          <span>{{ poste.userId?.id }}</span>
+          <span *ngFor="let user of poste.users; let last = last">
+            <label>First Name:</label> {{ user.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
+            {{ user.email }}
+            <p style="white-space: pre-wrap"></p>
+            {{ last ? '' : '  \n ' }}
+          </span>
         </dd>
       </dl>
 

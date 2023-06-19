@@ -34,6 +34,12 @@
         <dd>
           <span>{{ devis.userUuid }}</span>
         </dd>
+        <dt><span jhiTranslate="vermegApp.devis.projet">Projet</span></dt>
+        <dd>
+          <div *ngIf="devis.projet">
+            <a [routerLink]="['/projet', devis.projet?.id, 'view']">{{ devis.projet?.nomProjet }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

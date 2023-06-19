@@ -1,9 +1,11 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
@@ -34,9 +36,15 @@ public class Devis implements Serializable {
     private Float dureeProjet;
 
     @NotNull
-    @Type(type = "uuid-char")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false)
     private UUID userUuid;
+
+    @JsonIgnoreProperties(value = { "equipe", "taches", "devis" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Projet projet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -116,6 +124,19 @@ public class Devis implements Serializable {
 
     public void setUserUuid(UUID userUuid) {
         this.userUuid = userUuid;
+    }
+
+    public Projet getProjet() {
+        return this.projet;
+    }
+
+    public void setProjet(Projet projet) {
+        this.projet = projet;
+    }
+
+    public Devis projet(Projet projet) {
+        this.setProjet(projet);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

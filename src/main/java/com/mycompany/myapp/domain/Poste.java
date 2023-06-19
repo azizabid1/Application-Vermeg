@@ -1,9 +1,12 @@
 package com.mycompany.myapp.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
@@ -27,12 +30,14 @@ public class Poste implements Serializable {
     private String description;
 
     @NotNull
-    @Type(type = "uuid-char")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false)
     private UUID userUuid;
 
-    @ManyToOne
-    private User userId;
+    @ManyToMany
+    @JoinTable(name = "rel_poste__users", joinColumns = @JoinColumn(name = "poste_id"), inverseJoinColumns = @JoinColumn(name = "users_id"))
+    private Set<User> users = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -88,16 +93,26 @@ public class Poste implements Serializable {
         this.userUuid = userUuid;
     }
 
-    public User getUserId() {
-        return this.userId;
+    public Set<User> getUsers() {
+        return this.users;
     }
 
-    public void setUserId(User user) {
-        this.userId = user;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
-    public Poste userId(User user) {
-        this.setUserId(user);
+    public Poste users(Set<User> users) {
+        this.setUsers(users);
+        return this;
+    }
+
+    public Poste addUsers(User user) {
+        this.users.add(user);
+        return this;
+    }
+
+    public Poste removeUsers(User user) {
+        this.users.remove(user);
         return this;
     }
 

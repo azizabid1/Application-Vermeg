@@ -40,7 +40,7 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
 
     private LocalDateFilter finConge;
 
-    private LongFilter userIdId;
+    private LongFilter usersId;
 
     private Boolean distinct;
 
@@ -53,7 +53,7 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
         this.mission = other.mission == null ? null : other.mission.copy();
         this.debutConge = other.debutConge == null ? null : other.debutConge.copy();
         this.finConge = other.finConge == null ? null : other.finConge.copy();
-        this.userIdId = other.userIdId == null ? null : other.userIdId.copy();
+        this.usersId = other.usersId == null ? null : other.usersId.copy();
         this.distinct = other.distinct;
     }
 
@@ -152,19 +152,19 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
         this.finConge = finConge;
     }
 
-    public LongFilter getUserIdId() {
-        return userIdId;
+    public LongFilter getUsersId() {
+        return usersId;
     }
 
-    public LongFilter userIdId() {
-        if (userIdId == null) {
-            userIdId = new LongFilter();
+    public LongFilter usersId() {
+        if (usersId == null) {
+            usersId = new LongFilter();
         }
-        return userIdId;
+        return usersId;
     }
 
-    public void setUserIdId(LongFilter userIdId) {
-        this.userIdId = userIdId;
+    public void setUsersId(LongFilter usersId) {
+        this.usersId = usersId;
     }
 
     public Boolean getDistinct() {
@@ -191,14 +191,14 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
             Objects.equals(mission, that.mission) &&
             Objects.equals(debutConge, that.debutConge) &&
             Objects.equals(finConge, that.finConge) &&
-            Objects.equals(userIdId, that.userIdId) &&
+            Objects.equals(usersId, that.usersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userUuid, disponibilite, mission, debutConge, finConge, userIdId, distinct);
+        return Objects.hash(id, userUuid, disponibilite, mission, debutConge, finConge, usersId, distinct);
     }
 
     // prettier-ignore
@@ -211,7 +211,7 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
             (mission != null ? "mission=" + mission + ", " : "") +
             (debutConge != null ? "debutConge=" + debutConge + ", " : "") +
             (finConge != null ? "finConge=" + finConge + ", " : "") +
-            (userIdId != null ? "userIdId=" + userIdId + ", " : "") +
+            (usersId != null ? "usersId=" + usersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

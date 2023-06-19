@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Equipe;
+import com.mycompany.myapp.domain.Projet;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.domain.Vote;
 import com.mycompany.myapp.repository.EquipeRepository;
@@ -469,28 +470,55 @@ class EquipeResourceIT {
 
     @Test
     @Transactional
-    void getAllEquipesByUserIdIsEqualToSomething() throws Exception {
+    void getAllEquipesByUsersIsEqualToSomething() throws Exception {
         // Initialize the database
         equipeRepository.saveAndFlush(equipe);
-        User userId;
+        User users;
         if (TestUtil.findAll(em, User.class).isEmpty()) {
-            userId = UserResourceIT.createEntity(em);
-            em.persist(userId);
+            users = UserResourceIT.createEntity(em);
+            em.persist(users);
             em.flush();
         } else {
-            userId = TestUtil.findAll(em, User.class).get(0);
+            users = TestUtil.findAll(em, User.class).get(0);
         }
-        em.persist(userId);
+        em.persist(users);
         em.flush();
-        equipe.setUserId(userId);
+        equipe.addUsers(users);
         equipeRepository.saveAndFlush(equipe);
-        Long userIdId = userId.getId();
+        Long usersId = users.getId();
 
-        // Get all the equipeList where userId equals to userIdId
-        defaultEquipeShouldBeFound("userIdId.equals=" + userIdId);
+        // Get all the equipeList where users equals to usersId
+        defaultEquipeShouldBeFound("usersId.equals=" + usersId);
 
-        // Get all the equipeList where userId equals to (userIdId + 1)
-        defaultEquipeShouldNotBeFound("userIdId.equals=" + (userIdId + 1));
+        // Get all the equipeList where users equals to (usersId + 1)
+        defaultEquipeShouldNotBeFound("usersId.equals=" + (usersId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllEquipesByProjetIsEqualToSomething() throws Exception {
+        // Initialize the database
+        equipeRepository.saveAndFlush(equipe);
+        Projet projet;
+        if (TestUtil.findAll(em, Projet.class).isEmpty()) {
+            projet = ProjetResourceIT.createEntity(em);
+            em.persist(projet);
+            em.flush();
+        } else {
+            projet = TestUtil.findAll(em, Projet.class).get(0);
+        }
+        em.persist(projet);
+        em.flush();
+        equipe.setProjet(projet);
+        projet.setEquipe(equipe);
+        equipeRepository.saveAndFlush(equipe);
+        Long projetId = projet.getId();
+
+        // Get all the equipeList where projet equals to projetId
+        defaultEquipeShouldBeFound("projetId.equals=" + projetId);
+
+        // Get all the equipeList where projet equals to (projetId + 1)
+        defaultEquipeShouldNotBeFound("projetId.equals=" + (projetId + 1));
     }
 
     @Test
@@ -508,7 +536,7 @@ class EquipeResourceIT {
         }
         em.persist(vote);
         em.flush();
-        equipe.addVote(vote);
+        equipe.setVote(vote);
         equipeRepository.saveAndFlush(equipe);
         Long voteId = vote.getId();
 

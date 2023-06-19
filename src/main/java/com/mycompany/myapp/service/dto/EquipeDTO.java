@@ -23,9 +23,9 @@ public class EquipeDTO implements Serializable {
     @NotNull
     private UUID userUuid;
 
-    private UserDTO userId;
+    private Set<UserDTO> users = new HashSet<>();
 
-    private Set<VoteDTO> votes = new HashSet<>();
+    private VoteDTO vote;
 
     public Long getId() {
         return id;
@@ -59,20 +59,20 @@ public class EquipeDTO implements Serializable {
         this.userUuid = userUuid;
     }
 
-    public UserDTO getUserId() {
-        return userId;
+    public Set<UserDTO> getUsers() {
+        return users;
     }
 
-    public void setUserId(UserDTO userId) {
-        this.userId = userId;
+    public void setUsers(Set<UserDTO> users) {
+        this.users = users;
     }
 
-    public Set<VoteDTO> getVotes() {
-        return votes;
+    public VoteDTO getVote() {
+        return vote;
     }
 
-    public void setVotes(Set<VoteDTO> votes) {
-        this.votes = votes;
+    public void setVote(VoteDTO vote) {
+        this.vote = vote;
     }
 
     @Override
@@ -104,8 +104,8 @@ public class EquipeDTO implements Serializable {
             ", nom='" + getNom() + "'" +
             ", nombrePersonne=" + getNombrePersonne() +
             ", userUuid='" + getUserUuid() + "'" +
-            ", userId=" + getUserId() +
-            ", votes=" + getVotes() +
+            ", users=" + getUsers() +
+            ", vote=" + getVote() +
             "}";
     }
 }

@@ -3,10 +3,12 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { IDevis, Devis } from '../devis.model';
 import { DevisService } from '../service/devis.service';
+import { IProjet } from 'app/entities/projet/projet.model';
+import { ProjetService } from 'app/entities/projet/service/projet.service';
 
 @Component({
   selector: 'jhi-devis-update',
@@ -15,6 +17,8 @@ import { DevisService } from '../service/devis.service';
 export class DevisUpdateComponent implements OnInit {
   isSaving = false;
 
+  projetsCollection: IProjet[] = [];
+
   editForm = this.fb.group({
     id: [],
     prixTotal: [],
@@ -22,13 +26,21 @@ export class DevisUpdateComponent implements OnInit {
     prixService: [],
     dureeProjet: [null, [Validators.min(0)]],
     userUuid: [null, [Validators.required]],
+    projet: [],
   });
 
-  constructor(protected devisService: DevisService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected devisService: DevisService,
+    protected projetService: ProjetService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ devis }) => {
       this.updateForm(devis);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -44,6 +56,10 @@ export class DevisUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.devisService.create(devis));
     }
+  }
+
+  trackProjetById(_index: number, item: IProjet): number {
+    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDevis>>): void {
@@ -73,7 +89,18 @@ export class DevisUpdateComponent implements OnInit {
       prixService: devis.prixService,
       dureeProjet: devis.dureeProjet,
       userUuid: devis.userUuid,
+      projet: devis.projet,
     });
+
+    this.projetsCollection = this.projetService.addProjetToCollectionIfMissing(this.projetsCollection, devis.projet);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.projetService
+      .query({ 'devisId.specified': 'false' })
+      .pipe(map((res: HttpResponse<IProjet[]>) => res.body ?? []))
+      .pipe(map((projets: IProjet[]) => this.projetService.addProjetToCollectionIfMissing(projets, this.editForm.get('projet')!.value)))
+      .subscribe((projets: IProjet[]) => (this.projetsCollection = projets));
   }
 
   protected createFromForm(): IDevis {
@@ -85,6 +112,7 @@ export class DevisUpdateComponent implements OnInit {
       prixService: this.editForm.get(['prixService'])!.value,
       dureeProjet: this.editForm.get(['dureeProjet'])!.value,
       userUuid: this.editForm.get(['userUuid'])!.value,
+      projet: this.editForm.get(['projet'])!.value,
     };
   }
 }

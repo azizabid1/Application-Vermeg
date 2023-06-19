@@ -26,6 +26,8 @@ public class DevisDTO implements Serializable {
     @NotNull
     private UUID userUuid;
 
+    private ProjetDTO projet;
+
     public Long getId() {
         return id;
     }
@@ -74,6 +76,14 @@ public class DevisDTO implements Serializable {
         this.userUuid = userUuid;
     }
 
+    public ProjetDTO getProjet() {
+        return projet;
+    }
+
+    public void setProjet(ProjetDTO projet) {
+        this.projet = projet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -105,6 +115,7 @@ public class DevisDTO implements Serializable {
             ", prixService=" + getPrixService() +
             ", dureeProjet=" + getDureeProjet() +
             ", userUuid='" + getUserUuid() + "'" +
+            ", projet=" + getProjet() +
             "}";
     }
 }

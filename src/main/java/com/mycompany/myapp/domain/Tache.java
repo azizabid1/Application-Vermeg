@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
@@ -25,7 +26,8 @@ public class Tache implements Serializable {
     private Long id;
 
     @NotNull
-    @Type(type = "uuid-char")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false)
     private UUID userUuid;
 
@@ -39,8 +41,8 @@ public class Tache implements Serializable {
     @Column(name = "status_tache")
     private Status statusTache;
 
-    @OneToMany(mappedBy = "tache")
-    @JsonIgnoreProperties(value = { "devis", "equipe", "tache" }, allowSetters = true)
+    @ManyToMany(mappedBy = "taches")
+    @JsonIgnoreProperties(value = { "equipe", "taches", "devis" }, allowSetters = true)
     private Set<Projet> projets = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -116,10 +118,10 @@ public class Tache implements Serializable {
 
     public void setProjets(Set<Projet> projets) {
         if (this.projets != null) {
-            this.projets.forEach(i -> i.setTache(null));
+            this.projets.forEach(i -> i.removeTaches(this));
         }
         if (projets != null) {
-            projets.forEach(i -> i.setTache(this));
+            projets.forEach(i -> i.addTaches(this));
         }
         this.projets = projets;
     }
@@ -129,15 +131,15 @@ public class Tache implements Serializable {
         return this;
     }
 
-    public Tache addProjets(Projet projet) {
+    public Tache addProjet(Projet projet) {
         this.projets.add(projet);
-        projet.setTache(this);
+        projet.getTaches().add(this);
         return this;
     }
 
-    public Tache removeProjets(Projet projet) {
+    public Tache removeProjet(Projet projet) {
         this.projets.remove(projet);
-        projet.setTache(null);
+        projet.getTaches().remove(this);
         return this;
     }
 

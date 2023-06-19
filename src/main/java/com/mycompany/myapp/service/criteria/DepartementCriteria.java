@@ -51,7 +51,7 @@ public class DepartementCriteria implements Serializable, Criteria {
 
     private UUIDFilter userUuid;
 
-    private LongFilter userIdId;
+    private LongFilter usersId;
 
     private Boolean distinct;
 
@@ -61,7 +61,7 @@ public class DepartementCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.nom = other.nom == null ? null : other.nom.copy();
         this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
-        this.userIdId = other.userIdId == null ? null : other.userIdId.copy();
+        this.usersId = other.usersId == null ? null : other.usersId.copy();
         this.distinct = other.distinct;
     }
 
@@ -115,19 +115,19 @@ public class DepartementCriteria implements Serializable, Criteria {
         this.userUuid = userUuid;
     }
 
-    public LongFilter getUserIdId() {
-        return userIdId;
+    public LongFilter getUsersId() {
+        return usersId;
     }
 
-    public LongFilter userIdId() {
-        if (userIdId == null) {
-            userIdId = new LongFilter();
+    public LongFilter usersId() {
+        if (usersId == null) {
+            usersId = new LongFilter();
         }
-        return userIdId;
+        return usersId;
     }
 
-    public void setUserIdId(LongFilter userIdId) {
-        this.userIdId = userIdId;
+    public void setUsersId(LongFilter usersId) {
+        this.usersId = usersId;
     }
 
     public Boolean getDistinct() {
@@ -151,14 +151,14 @@ public class DepartementCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(nom, that.nom) &&
             Objects.equals(userUuid, that.userUuid) &&
-            Objects.equals(userIdId, that.userIdId) &&
+            Objects.equals(usersId, that.usersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nom, userUuid, userIdId, distinct);
+        return Objects.hash(id, nom, userUuid, usersId, distinct);
     }
 
     // prettier-ignore
@@ -168,7 +168,7 @@ public class DepartementCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (nom != null ? "nom=" + nom + ", " : "") +
             (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
-            (userIdId != null ? "userIdId=" + userIdId + ", " : "") +
+            (usersId != null ? "usersId=" + usersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
