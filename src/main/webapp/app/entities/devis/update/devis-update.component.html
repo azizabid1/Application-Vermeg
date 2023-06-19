@@ -66,7 +66,15 @@
 
         <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.devis.userUuid" for="field_userUuid">User Uuid</label>
-          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
+          <input
+            type="text"
+            class="form-control"
+            name="userUuid"
+            id="field_userUuid"
+            data-cy="userUuid"
+            formControlName="userUuid"
+            [readonly]="true"
+          />
           <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
             <small
               class="form-text text-danger"

@@ -51,7 +51,15 @@
 
         <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.departement.userUuid" for="field_userUuid">User Uuid</label>
-          <input type="text" class="form-control" name="userUuid" id="field_userUuid" data-cy="userUuid" formControlName="userUuid" />
+          <input
+            type="text"
+            class="form-control"
+            name="userUuid"
+            id="field_userUuid"
+            data-cy="userUuid"
+            formControlName="userUuid"
+            [readonly]="true"
+          />
           <div *ngIf="editForm.get('userUuid')!.invalid && (editForm.get('userUuid')!.dirty || editForm.get('userUuid')!.touched)">
             <small
               class="form-text text-danger"
@@ -64,11 +72,11 @@
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.departement.userId" for="field_userId">User Id</label>
+          <label class="form-label" jhiTranslate="vermegApp.departement.email" for="field_userId">Email</label>
           <select class="form-control" id="field_userId" data-cy="userId" name="userId" formControlName="userId">
             <option [ngValue]="null"></option>
             <option
-              [ngValue]="userOption.id === editForm.get('userId')!.value?.id ? editForm.get('userId')!.value : userOption"
+              [ngValue]="getSelectedEmail(userOption, editForm.get('userId')!.value)"
               *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
             >
               {{ userOption.id }}

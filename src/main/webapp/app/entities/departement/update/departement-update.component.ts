@@ -47,6 +47,17 @@ export class DepartementUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  getSelectedEmail(option: IUser, selectedVals?: IUser[]): IUser {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   save(): void {
     this.isSaving = true;
     const departement = this.createFromForm();
@@ -95,7 +106,7 @@ export class DepartementUpdateComponent implements OnInit {
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('userId')!.value)))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, ...(this.editForm.get('userId')!.value ?? []))))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 

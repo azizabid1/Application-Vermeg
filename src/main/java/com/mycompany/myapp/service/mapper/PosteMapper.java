@@ -11,7 +11,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface PosteMapper extends EntityMapper<PosteDTO, Poste> {
-    @Mapping(target = "userId", source = "userId", qualifiedByName = "userId")
+    // @Mapping(target = "userId", source = "userId", qualifiedByName = "userId")
     PosteDTO toDto(Poste s);
 
     @Named("userId")

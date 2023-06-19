@@ -15,8 +15,8 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface EquipeMapper extends EntityMapper<EquipeDTO, Equipe> {
-    @Mapping(target = "userId", source = "userId", qualifiedByName = "userId")
-    @Mapping(target = "votes", source = "votes", qualifiedByName = "voteIdSet")
+    // @Mapping(target = "userId", source = "userId", qualifiedByName = "userId")
+    //  @Mapping(target = "votes", source = "votes", qualifiedByName = "voteIdSet")
     EquipeDTO toDto(Equipe s);
 
     @Mapping(target = "removeVote", ignore = true)

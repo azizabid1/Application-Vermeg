@@ -20,7 +20,10 @@
       "id": "Id",
       "nom": "Nom",
       "userUuid": "User Uuid",
-      "userId": "User Id"
+      "userId": "User Id",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email"
     }
   }
 }

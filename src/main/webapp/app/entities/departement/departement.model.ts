@@ -1,4 +1,4 @@
-import { IUser } from 'app/entities/user/user.model';
+import { IUser } from 'app/admin/user-management/user-management.model';
 import { TypeDepartement } from 'app/entities/enumerations/type-departement.model';
 
 export interface IDepartement {
