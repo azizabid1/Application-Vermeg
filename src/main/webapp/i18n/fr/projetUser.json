@@ -1,0 +1,36 @@
+{
+  "vermegApp": {
+    "projet": {
+      "users": {
+        "home": {
+          "title": "Projets",
+          "refreshListLabel": "Actualiser la liste",
+          "createLabel": "Créer un nouveau Projet",
+          "createOrEditLabel": "Créer ou éditer un Projet",
+          "notFound": "Aucun Projet trouvé"
+        },
+        "created": "Un nouveau Projet a été créé avec l'identifiant {{ param }}",
+        "updated": "Le Projet avec l'identifiant {{ param }} a été mis à jour",
+        "deleted": "Le Projet avec l'identifiant {{ param }} a été supprimé",
+        "delete": {
+          "question": "Êtes-vous certain de vouloir supprimer le Projet {{ id }} ?"
+        },
+        "detail": {
+          "title": "Projet"
+        },
+        "id": "Id",
+        "userUuid": "User Uuid",
+        "nomProjet": "Nom Projet",
+        "dateDebut": "Date Debut",
+        "dateFin": "Date Fin",
+        "technologies": "Technologies",
+        "statusProjet": "Status Projet",
+        "nombreTotal": "Nombre Total",
+        "nombreRestant": "Nombre Restant",
+        "equipe": "Equipe",
+        "tache": "Taches",
+        "devis": "Devis"
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+<div>
+  <h2 id="page-heading" data-cy="ProjetHeading">
+    <span jhiTranslate="vermegApp.projet.users.home.title">Projets</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="vermegApp.projet.users.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="projets?.length === 0">
+    <span jhiTranslate="vermegApp.projet.users.home.notFound">No projets found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="projets && projets.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="nomProjet">
+            <span jhiTranslate="vermegApp.projet.users.nomProjet">Nom Projet</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="dateDebut">
+            <span jhiTranslate="vermegApp.projet.users.dateDebut">Date Debut</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="dateFin">
+            <span jhiTranslate="vermegApp.projet.users.dateFin">Date Fin</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="technologies">
+            <span jhiTranslate="vermegApp.projet.users.technologies">Technologies</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="statusProjet">
+            <span jhiTranslate="vermegApp.projet.users.statusProjet">Status Projet</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="nombreTotal">
+            <span jhiTranslate="vermegApp.projet.users.nombreTotal">Nombre Total</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="nombreRestant">
+            <span jhiTranslate="vermegApp.projet.users.nombreRestant">Nombre Restant</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="equipe.id">
+            <span jhiTranslate="vermegApp.projet.users.equipe">Equipe</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="tache.id">
+            <span jhiTranslate="vermegApp.projet.users.tache">Taches</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let projet of projets; trackBy: trackId" data-cy="entityTable">
+          <td>{{ projet.nomProjet }}</td>
+          <td>{{ projet.dateDebut | formatMediumDate }}</td>
+          <td>{{ projet.dateFin | formatMediumDate }}</td>
+          <td>{{ projet.technologies }}</td>
+          <td jhiTranslate="{{ 'vermegApp.Status.' + projet.statusProjet }}">{{ projet.statusProjet }}</td>
+          <td>{{ projet.nombreTotal }}</td>
+          <td>{{ projet.nombreRestant }}</td>
+          <td>
+            <div *ngIf="projet.equipe">
+              {{ projet.equipe?.nom }}
+            </div>
+          </td>
+          <td>
+            <div *ngFor="let tache of projet.taches">
+              {{ tache?.titre }}<label>:</label> <label>"</label>{{ tache?.description }}<label>"</label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="projets && projets.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

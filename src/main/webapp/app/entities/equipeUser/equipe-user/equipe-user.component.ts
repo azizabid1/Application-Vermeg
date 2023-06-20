@@ -1,22 +1,19 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { IDepartement } from '../departement.model';
-
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { DepartementService } from '../service/departement.service';
-import { DepartementDeleteDialogComponent } from '../delete/departement-delete-dialog.component';
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+import { IEquipe } from 'app/entities/equipe/equipe.model';
+import { EquipeService } from 'app/entities/equipe/service/equipe.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
-  selector: 'jhi-departement',
-  templateUrl: './departement.component.html',
+  selector: 'jhi-equipe-user',
+  templateUrl: './equipe-user.component.html',
 })
-export class DepartementComponent implements OnInit {
-  departements?: IDepartement[];
+export class EquipeUserComponent implements OnInit {
+  equipes?: IEquipe[];
   isLoading = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
@@ -26,50 +23,43 @@ export class DepartementComponent implements OnInit {
   ngbPaginationPage = 1;
 
   constructor(
-    protected departementService: DepartementService,
+    protected equipeService: EquipeService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected authServerProvider: AuthServerProvider
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
-    this.departementService
-      .query({
-        page: pageToLoad - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe({
-        next: (res: HttpResponse<IDepartement[]>) => {
-          this.isLoading = false;
-          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-        },
-        error: () => {
-          this.isLoading = false;
-          this.onError();
-        },
-      });
+    if (this.authServerProvider.getId()) {
+      this.equipeService
+        .query({
+          page: pageToLoad - 1,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+          'usersId.equals': this.authServerProvider.getId(),
+        })
+        .subscribe({
+          next: (res: HttpResponse<IEquipe[]>) => {
+            this.isLoading = false;
+            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+          },
+          error: () => {
+            this.isLoading = false;
+            this.onError();
+          },
+        });
+    }
   }
 
   ngOnInit(): void {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IDepartement): number {
+  trackId(_index: number, item: IEquipe): number {
     return item.id!;
-  }
-
-  delete(departement: IDepartement): void {
-    const modalRef = this.modalService.open(DepartementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.departement = departement;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.loadPage();
-      }
-    });
   }
 
   protected sort(): string[] {
@@ -95,11 +85,11 @@ export class DepartementComponent implements OnInit {
     });
   }
 
-  protected onSuccess(data: IDepartement[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+  protected onSuccess(data: IEquipe[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     if (navigate) {
-      this.router.navigate(['/departement'], {
+      this.router.navigate(['/equipe_user'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,
@@ -107,7 +97,7 @@ export class DepartementComponent implements OnInit {
         },
       });
     }
-    this.departements = data ?? [];
+    this.equipes = data ?? [];
     this.ngbPaginationPage = this.page;
   }
 

@@ -10,6 +10,11 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./PosteUser/posteCheck.module').then(m => m.PosteCheckModule),
       },
       {
+        path: 'departement_user',
+        data: { pageTitle: 'vermegApp.departement.users.home.title' },
+        loadChildren: () => import('./departementUser/departement-user.module').then(m => m.DepartementUserModule),
+      },
+      {
         path: 'departement',
         data: { pageTitle: 'vermegApp.departement.home.title' },
         loadChildren: () => import('./departement/departement.module').then(m => m.DepartementModule),
@@ -20,6 +25,11 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./devis/devis.module').then(m => m.DevisModule),
       },
       {
+        path: 'equipe_user',
+        data: { pageTitle: 'vermegApp.equipe.users.home.title' },
+        loadChildren: () => import('./equipeUser/equipe-user.module').then(m => m.EquipeUserModule),
+      },
+      {
         path: 'equipe',
         data: { pageTitle: 'vermegApp.equipe.home.title' },
         loadChildren: () => import('./equipe/equipe.module').then(m => m.EquipeModule),
@@ -28,6 +38,11 @@ import { RouterModule } from '@angular/router';
         path: 'poste',
         data: { pageTitle: 'vermegApp.poste.home.title' },
         loadChildren: () => import('./poste/poste.module').then(m => m.PosteModule),
+      },
+      {
+        path: 'projet_user',
+        data: { pageTitle: 'vermegApp.projet.users.home.title' },
+        loadChildren: () => import('./projetUser/projet-user.module').then(m => m.ProjetUserModule),
       },
       {
         path: 'projet',

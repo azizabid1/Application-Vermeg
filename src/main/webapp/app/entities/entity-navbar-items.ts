@@ -1,6 +1,21 @@
 export const EntityNavbarItems = [
   {
     name: 'Departement',
+    route: 'departement_user',
+    translationKey: 'global.menu.entities.departementUser',
+  },
+  {
+    name: 'Equipe ',
+    route: 'equipe_user',
+    translationKey: 'global.menu.entities.equipeUser',
+  },
+  {
+    name: 'Projet',
+    route: 'projet_user',
+    translationKey: 'global.menu.entities.projetUser',
+  },
+  {
+    name: 'Departement',
     route: 'departement',
     translationKey: 'global.menu.entities.departement',
   },

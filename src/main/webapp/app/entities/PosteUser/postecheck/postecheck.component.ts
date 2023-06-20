@@ -1,13 +1,11 @@
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { IUser } from 'app/admin/user-management/user-management.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { IPoste, Poste } from 'app/entities/poste/poste.model';
 import { PosteService } from 'app/entities/poste/service/poste.service';
-import { Observable, combineLatest, finalize } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'jhi-postecheck',

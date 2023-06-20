@@ -1,6 +1,6 @@
 <div>
   <h2 id="page-heading" data-cy="PosteHeading">
-    <span jhiTranslate="vermegApp.poste.home.title">Postes</span>
+    <span jhiTranslate="vermegApp.checkPoste.home.title">Postes</span>
   </h2>
 
   <jhi-alert-error></jhi-alert-error>
@@ -8,7 +8,7 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="postes?.length === 0">
-    <span jhiTranslate="vermegApp.poste.home.notFound">No postes found</span>
+    <span jhiTranslate="vermegApp.checkPoste.home.notFound">No postes found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="postes && postes.length > 0">
@@ -16,9 +16,11 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th></th>
-          <th scope="col" jhiSortBy="title"><span jhiTranslate="vermegApp.poste.title">Title</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="title">
+            <span jhiTranslate="vermegApp.checkPoste.title">Title</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="description">
-            <span jhiTranslate="vermegApp.poste.description">Description</span> <fa-icon icon="sort"></fa-icon>
+            <span jhiTranslate="vermegApp.checkPoste.description">Description</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>

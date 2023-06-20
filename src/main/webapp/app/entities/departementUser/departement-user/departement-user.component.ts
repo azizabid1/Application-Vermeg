@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { IDepartement } from '../departement.model';
-
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { DepartementService } from '../service/departement.service';
-import { DepartementDeleteDialogComponent } from '../delete/departement-delete-dialog.component';
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+import { IDepartement } from 'app/entities/departement/departement.model';
+import { DepartementService } from 'app/entities/departement/service/departement.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
-  selector: 'jhi-departement',
-  templateUrl: './departement.component.html',
+  selector: 'jhi-departement-user',
+  templateUrl: './departement-user.component.html',
 })
-export class DepartementComponent implements OnInit {
+export class DepartementUserComponent implements OnInit {
   departements?: IDepartement[];
   isLoading = false;
   totalItems = 0;
@@ -29,28 +26,32 @@ export class DepartementComponent implements OnInit {
     protected departementService: DepartementService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected authServerProvider: AuthServerProvider
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
-    this.departementService
-      .query({
-        page: pageToLoad - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe({
-        next: (res: HttpResponse<IDepartement[]>) => {
-          this.isLoading = false;
-          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-        },
-        error: () => {
-          this.isLoading = false;
-          this.onError();
-        },
-      });
+    if (this.authServerProvider.getId()) {
+      this.departementService
+        .query({
+          page: pageToLoad - 1,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+          'usersId.equals': this.authServerProvider.getId(),
+        })
+        .subscribe({
+          next: (res: HttpResponse<IDepartement[]>) => {
+            this.isLoading = false;
+            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+          },
+          error: () => {
+            this.isLoading = false;
+            this.onError();
+          },
+        });
+    }
   }
 
   ngOnInit(): void {
@@ -59,17 +60,6 @@ export class DepartementComponent implements OnInit {
 
   trackId(_index: number, item: IDepartement): number {
     return item.id!;
-  }
-
-  delete(departement: IDepartement): void {
-    const modalRef = this.modalService.open(DepartementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.departement = departement;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.loadPage();
-      }
-    });
   }
 
   protected sort(): string[] {
@@ -99,7 +89,7 @@ export class DepartementComponent implements OnInit {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     if (navigate) {
-      this.router.navigate(['/departement'], {
+      this.router.navigate(['/departement_user'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

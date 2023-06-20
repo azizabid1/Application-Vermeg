@@ -1,0 +1,75 @@
+<div>
+  <h2 id="page-heading" data-cy="EquipeHeading">
+    <span jhiTranslate="vermegApp.equipe.users.home.title">Equipes</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="vermegApp.equipe.users.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="equipes?.length === 0">
+    <span jhiTranslate="vermegApp.equipe.users.home.notFound">No equipes found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="equipes && equipes.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="nom"><span jhiTranslate="vermegApp.equipe.users.nom">Nom</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="nombrePersonne">
+            <span jhiTranslate="vermegApp.equipe.users.nombrePersonne">Nombre Personne</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="user.id">
+            <span jhiTranslate="vermegApp.equipe.users.users">Users</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="vote.id">
+            <span jhiTranslate="vermegApp.equipe.users.vote">Vote</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let equipe of equipes; trackBy: trackId" data-cy="entityTable">
+          <td>{{ equipe.nom }}</td>
+          <td>{{ equipe.nombrePersonne }}</td>
+          <td>
+            <div *ngFor="let user of equipe.users">
+              <span class="badge bg-info"
+                ><label>First Name:</label> {{ user.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
+                {{ user.email }}</span
+              >
+            </div>
+          </td>
+          <td>
+            {{ equipe.vote?.typeVote }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="equipes && equipes.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

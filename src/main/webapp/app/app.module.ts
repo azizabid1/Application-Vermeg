@@ -25,7 +25,6 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
-import { PostecheckComponent } from './entities/PosteUser/postecheck/postecheck.component';
 
 @NgModule({
   imports: [
@@ -46,15 +45,7 @@ import { PostecheckComponent } from './entities/PosteUser/postecheck/postecheck.
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     httpInterceptorProviders,
   ],
-  declarations: [
-    MainComponent,
-    NavbarComponent,
-    ErrorComponent,
-    PageRibbonComponent,
-    ActiveMenuDirective,
-    FooterComponent,
-    PostecheckComponent,
-  ],
+  declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
   bootstrap: [MainComponent],
 })
 export class AppModule {

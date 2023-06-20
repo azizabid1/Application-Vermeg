@@ -28,134 +28,191 @@
           </a>
         </li>
         <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-        <li
-          *ngSwitchCase="true"
-          ngbDropdown
-          class="nav-item dropdown pointer"
-          display="dynamic"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+
+        <li *ngSwitchCase="true">
+          <a
+            routerLink="departement"
+            routerLinkActive="active"
+            *jhiHasAnyAuthority="'ROLE_ADMIN'"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
             <span>
-              <fa-icon icon="th-list"></fa-icon>
-              <span jhiTranslate="global.menu.entities.main">Entities</span>
+              <fa-icon icon="key"></fa-icon>
+              <span jhiTranslate="global.menu.entities.departement">Departement</span>
             </span>
           </a>
-          <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-            <li>
-              <a
-                class="dropdown-item"
-                *jhiHasAnyAuthority="'ROLE_USER'"
-                routerLink="Poste_user"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.checkPoste">check Poste</span>
-              </a>
-            </li>
-
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="departement"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.departement">Departement</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="devis"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.devis">Devis</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="equipe"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.equipe">Equipe</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="poste"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.poste">Poste</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="projet"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.projet">Projet</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="status-employe"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.statusEmploye">Status Employe</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="tache"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.tache">Tache</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="vote"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.vote">Vote</span>
-              </a>
-            </li>
-            <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
-          </ul>
         </li>
+        <li *ngSwitchCase="true">
+          <a
+            routerLink="departement_user"
+            routerLinkActive="active"
+            *jhiHasAnyAuthority="'ROLE_MANAGER'"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="key"></fa-icon>
+              <span jhiTranslate="global.menu.entities.departementUser">Departement</span>
+            </span>
+          </a>
+        </li>
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_USER'"
+            routerLink="Poste_user"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="star"></fa-icon>
+              <span jhiTranslate="global.menu.entities.checkPoste">check Poste</span>
+            </span>
+          </a>
+        </li>
+
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_ADMIN'"
+            routerLink="devis"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="file-pen"></fa-icon>
+              <span jhiTranslate="global.menu.entities.devis">Devis</span>
+            </span>
+          </a>
+        </li>
+
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_MANAGER'"
+            routerLink="equipe"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="handshake"></fa-icon>
+              <span jhiTranslate="global.menu.entities.equipe">Equipe</span>
+            </span>
+          </a>
+        </li>
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_USER'"
+            routerLink="equipe_user"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="handshake"></fa-icon>
+              <span jhiTranslate="global.menu.entities.equipeUser">Equipe</span>
+            </span>
+          </a>
+        </li>
+
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_ADMIN'"
+            routerLink="poste"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="face-smile"></fa-icon>
+              <span jhiTranslate="global.menu.entities.poste">Poste</span>
+            </span>
+          </a>
+        </li>
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_MANAGER'"
+            routerLink="projet"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="rocket"></fa-icon>
+              <span jhiTranslate="global.menu.entities.projet">Projet</span>
+            </span>
+          </a>
+        </li>
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_USER'"
+            routerLink="projet_user"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="rocket"></fa-icon>
+              <span jhiTranslate="global.menu.entities.projetUser">Projet</span>
+            </span>
+          </a>
+        </li>
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_ADMIN'"
+            routerLink="status-employe"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="gavel"></fa-icon>
+              <span jhiTranslate="global.menu.entities.statusEmploye">Status Employe</span>
+            </span>
+          </a>
+        </li>
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_MANAGER'"
+            routerLink="tache"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="timer"></fa-icon>
+              <span jhiTranslate="global.menu.entities.tache">Tache</span>
+            </span>
+          </a>
+        </li>
+        <li *ngSwitchCase="true">
+          <a
+            *jhiHasAnyAuthority="'ROLE_MANAGER'"
+            routerLink="vote"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            data-bs-toggle="collapse"
+            class="nav-link"
+          >
+            <span>
+              <fa-icon icon="asterisk"></fa-icon>
+              <span jhiTranslate="global.menu.entities.vote">Vote</span>
+            </span>
+          </a>
+        </li>
+
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown
