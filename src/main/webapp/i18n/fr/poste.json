@@ -6,7 +6,8 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Poste",
         "createOrEditLabel": "Créer ou éditer un Poste",
-        "notFound": "Aucun Poste trouvé"
+        "notFound": "Aucun Poste trouvé",
+        "checkPoste": "checkPoste"
       },
       "created": "Un nouveau Poste a été créé avec l'identifiant {{ param }}",
       "updated": "Le Poste avec l'identifiant {{ param }} a été mis à jour",

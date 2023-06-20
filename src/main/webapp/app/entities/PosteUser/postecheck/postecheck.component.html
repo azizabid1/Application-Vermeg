@@ -1,0 +1,64 @@
+<div>
+  <h2 id="page-heading" data-cy="PosteHeading">
+    <span jhiTranslate="vermegApp.poste.home.title">Postes</span>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="postes?.length === 0">
+    <span jhiTranslate="vermegApp.poste.home.notFound">No postes found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="postes && postes.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th></th>
+          <th scope="col" jhiSortBy="title"><span jhiTranslate="vermegApp.poste.title">Title</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description">
+            <span jhiTranslate="vermegApp.poste.description">Description</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let poste of postes; trackBy: trackId; let i = index" data-cy="entityTable">
+          <td>
+            <label class="form-label" for="id"></label>
+            <input
+              id="id"
+              name="id"
+              data-cy="id"
+              (change)="onChangeSelect($any($event.target).value)"
+              type="radio"
+              class="custom-control-input"
+              [value]="i"
+            />
+          </td>
+          <td>{{ poste.title }}</td>
+          <td>{{ poste.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="postes && postes.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

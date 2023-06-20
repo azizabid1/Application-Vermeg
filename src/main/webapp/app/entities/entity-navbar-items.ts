@@ -5,6 +5,11 @@ export const EntityNavbarItems = [
     translationKey: 'global.menu.entities.departement',
   },
   {
+    name: 'check Poste',
+    route: 'Poste_user',
+    translationKey: 'global.menu.entities.checkPoste',
+  },
+  {
     name: 'Devis',
     route: 'devis',
     translationKey: 'global.menu.entities.devis',

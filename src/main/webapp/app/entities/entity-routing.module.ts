@@ -5,6 +5,11 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forChild([
       {
+        path: 'Poste_user',
+        data: { pageTitle: 'vermegApp.checkPoste.home.title' },
+        loadChildren: () => import('./PosteUser/posteCheck.module').then(m => m.PosteCheckModule),
+      },
+      {
         path: 'departement',
         data: { pageTitle: 'vermegApp.departement.home.title' },
         loadChildren: () => import('./departement/departement.module').then(m => m.DepartementModule),

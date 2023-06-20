@@ -1,22 +1,21 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { IDepartement } from '../departement.model';
-
+import { IUser } from 'app/admin/user-management/user-management.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { DepartementService } from '../service/departement.service';
-import { DepartementDeleteDialogComponent } from '../delete/departement-delete-dialog.component';
-import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+import { IPoste, Poste } from 'app/entities/poste/poste.model';
+import { PosteService } from 'app/entities/poste/service/poste.service';
+import { Observable, combineLatest, finalize } from 'rxjs';
 
 @Component({
-  selector: 'jhi-departement',
-  templateUrl: './departement.component.html',
+  selector: 'jhi-postecheck',
+  templateUrl: './postecheck.component.html',
 })
-export class DepartementComponent implements OnInit {
-  departements?: IDepartement[];
+export class PostecheckComponent implements OnInit {
+  postes!: IPoste[];
+  @Output() changeSelectedPoste = new EventEmitter<Poste>();
   isLoading = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
@@ -24,56 +23,54 @@ export class DepartementComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
-
+  _poste!: Poste;
+  @Input()
+  public set poste(poste) {
+    this._poste = poste;
+  }
+  public get poste(): Poste {
+    return this._poste;
+  }
   constructor(
-    protected departementService: DepartementService,
+    protected posteService: PosteService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal,
-    protected authServerProvider: AuthServerProvider
+    protected modalService: NgbModal
   ) {}
+
+  onChangeSelect(i: number): void {
+    this.poste = this.postes[i];
+    this.changeSelectedPoste.emit(this.poste);
+  }
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
-    if (this.authServerProvider.getId()) {
-      this.departementService
-        .query({
-          page: pageToLoad - 1,
-          size: this.itemsPerPage,
-          sort: this.sort(),
-          'usersId.equals': this.authServerProvider.getId(),
-        })
-        .subscribe({
-          next: (res: HttpResponse<IDepartement[]>) => {
-            this.isLoading = false;
-            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-          },
-          error: () => {
-            this.isLoading = false;
-            this.onError();
-          },
-        });
-    }
+
+    this.posteService
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe({
+        next: (res: HttpResponse<IPoste[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        error: () => {
+          this.isLoading = false;
+          this.onError();
+        },
+      });
   }
 
   ngOnInit(): void {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IDepartement): number {
+  trackId(_index: number, item: IPoste): number {
     return item.id!;
-  }
-
-  delete(departement: IDepartement): void {
-    const modalRef = this.modalService.open(DepartementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.departement = departement;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.loadPage();
-      }
-    });
   }
 
   protected sort(): string[] {
@@ -99,11 +96,11 @@ export class DepartementComponent implements OnInit {
     });
   }
 
-  protected onSuccess(data: IDepartement[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+  protected onSuccess(data: IPoste[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     if (navigate) {
-      this.router.navigate(['/departement'], {
+      this.router.navigate(['/Poste_user'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,
@@ -111,7 +108,7 @@ export class DepartementComponent implements OnInit {
         },
       });
     }
-    this.departements = data ?? [];
+    this.postes = data ?? [];
     this.ngbPaginationPage = this.page;
   }
 
