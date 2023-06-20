@@ -48,7 +48,7 @@
           <a
             routerLink="departement_user"
             routerLinkActive="active"
-            *jhiHasAnyAuthority="'ROLE_MANAGER'"
+            *jhiHasAnyAuthority="'ROLE_USER'"
             [routerLinkActiveOptions]="{ exact: true }"
             data-bs-toggle="collapse"
             class="nav-link"
@@ -192,14 +192,14 @@
             class="nav-link"
           >
             <span>
-              <fa-icon icon="timer"></fa-icon>
+              <fa-icon icon="times-circle"></fa-icon>
               <span jhiTranslate="global.menu.entities.tache">Tache</span>
             </span>
           </a>
         </li>
         <li *ngSwitchCase="true">
           <a
-            *jhiHasAnyAuthority="'ROLE_MANAGER'"
+            *jhiHasAnyAuthority="'ROLE_ADMIN'"
             routerLink="vote"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"

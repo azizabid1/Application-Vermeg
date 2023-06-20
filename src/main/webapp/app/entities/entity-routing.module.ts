@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'departement_user',
-        data: { pageTitle: 'vermegApp.departement.users.home.title' },
+        data: { pageTitle: 'vermegApp.departementUser.users.home.title' },
         loadChildren: () => import('./departementUser/departement-user.module').then(m => m.DepartementUserModule),
       },
       {
@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'equipe_user',
-        data: { pageTitle: 'vermegApp.equipe.users.home.title' },
+        data: { pageTitle: 'vermegApp.equipeUser.users.home.title' },
         loadChildren: () => import('./equipeUser/equipe-user.module').then(m => m.EquipeUserModule),
       },
       {

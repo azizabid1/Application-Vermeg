@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="EquipeHeading">
-    <span jhiTranslate="vermegApp.equipe.users.home.title">Equipes</span>
+    <span jhiTranslate="vermegApp.equipeUser.users.home.title">Equipes</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="vermegApp.equipe.users.home.refreshListLabel">Refresh List</span>
+        <span jhiTranslate="vermegApp.equipeUser.users.home.refreshListLabel">Refresh List</span>
       </button>
     </div>
   </h2>
@@ -15,22 +15,24 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="equipes?.length === 0">
-    <span jhiTranslate="vermegApp.equipe.users.home.notFound">No equipes found</span>
+    <span jhiTranslate="vermegApp.equipeUser.users.home.notFound">No equipes found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="equipes && equipes.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="nom"><span jhiTranslate="vermegApp.equipe.users.nom">Nom</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="nom">
+            <span jhiTranslate="vermegApp.equipeUser.users.nom">Nom</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="nombrePersonne">
-            <span jhiTranslate="vermegApp.equipe.users.nombrePersonne">Nombre Personne</span> <fa-icon icon="sort"></fa-icon>
+            <span jhiTranslate="vermegApp.equipeUser.users.nombrePersonne">Nombre Personne</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="user.id">
-            <span jhiTranslate="vermegApp.equipe.users.users">Users</span> <fa-icon icon="sort"></fa-icon>
+            <span jhiTranslate="vermegApp.equipeUser.users.users">Users</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="vote.id">
-            <span jhiTranslate="vermegApp.equipe.users.vote">Vote</span> <fa-icon icon="sort"></fa-icon>
+            <span jhiTranslate="vermegApp.equipeUser.users.vote">Vote</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>

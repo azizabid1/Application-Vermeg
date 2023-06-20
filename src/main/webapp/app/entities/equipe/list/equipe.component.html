@@ -50,11 +50,11 @@
           <td>{{ equipe.nom }}</td>
           <td>{{ equipe.nombrePersonne }}</td>
           <td>
-            <div *ngFor="let user of equipe.users">
+            <div *ngFor="let user of equipe?.users">
               <span class="badge bg-info"
-                ><label>First Name:</label> {{ user.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
-                {{ user.email }}</span
-              >
+                ><label>First Name:</label> {{ user?.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
+                {{ user.email }}
+              </span>
             </div>
           </td>
           <td>

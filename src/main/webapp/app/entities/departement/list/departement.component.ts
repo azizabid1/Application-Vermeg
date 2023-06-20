@@ -9,7 +9,6 @@ import { IDepartement } from '../departement.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { DepartementService } from '../service/departement.service';
 import { DepartementDeleteDialogComponent } from '../delete/departement-delete-dialog.component';
-import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 
 @Component({
   selector: 'jhi-departement',

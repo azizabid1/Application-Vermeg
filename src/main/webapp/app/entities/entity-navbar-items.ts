@@ -1,16 +1,16 @@
 export const EntityNavbarItems = [
   {
-    name: 'Departement',
+    name: 'Mes Departements',
     route: 'departement_user',
     translationKey: 'global.menu.entities.departementUser',
   },
   {
-    name: 'Equipe ',
+    name: 'Mon Equipe ',
     route: 'equipe_user',
     translationKey: 'global.menu.entities.equipeUser',
   },
   {
-    name: 'Projet',
+    name: 'Mon Projet',
     route: 'projet_user',
     translationKey: 'global.menu.entities.projetUser',
   },
@@ -20,7 +20,7 @@ export const EntityNavbarItems = [
     translationKey: 'global.menu.entities.departement',
   },
   {
-    name: 'check Poste',
+    name: 'Mon Poste',
     route: 'Poste_user',
     translationKey: 'global.menu.entities.checkPoste',
   },

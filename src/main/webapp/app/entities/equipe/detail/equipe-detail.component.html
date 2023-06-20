@@ -30,7 +30,7 @@
         </dd>
         <dt><span jhiTranslate="vermegApp.equipe.users">Users</span></dt>
         <dd>
-          <span *ngFor="let user of equipe.users; let last = last">
+          <span *ngFor="let user of equipe?.users; let last = last">
             <label>First Name:</label> {{ user.firstName }} <label>Last Name:</label> {{ user.lastName }} <label>Email:</label>
             {{ user.email }}
             <p style="white-space: pre-wrap"></p>
