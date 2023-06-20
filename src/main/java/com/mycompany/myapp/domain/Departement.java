@@ -4,11 +4,8 @@ import com.mycompany.myapp.domain.enumeration.TypeDepartement;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * A Departement.
@@ -24,16 +21,9 @@ public class Departement implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "nom", unique = true)
     private TypeDepartement nom;
-
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
 
     @ManyToMany
     @JoinTable(
@@ -69,19 +59,6 @@ public class Departement implements Serializable {
 
     public void setNom(TypeDepartement nom) {
         this.nom = nom;
-    }
-
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public Departement userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Set<User> getUsers() {
@@ -132,7 +109,6 @@ public class Departement implements Serializable {
         return "Departement{" +
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
-            ", userUuid='" + getUserUuid() + "'" +
             "}";
     }
 }

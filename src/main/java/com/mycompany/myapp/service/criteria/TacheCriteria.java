@@ -12,7 +12,6 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.Tache} entity. This class is used
@@ -47,8 +46,6 @@ public class TacheCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private UUIDFilter userUuid;
-
     private StringFilter titre;
 
     private StringFilter description;
@@ -63,7 +60,6 @@ public class TacheCriteria implements Serializable, Criteria {
 
     public TacheCriteria(TacheCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.titre = other.titre == null ? null : other.titre.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.statusTache = other.statusTache == null ? null : other.statusTache.copy();
@@ -89,21 +85,6 @@ public class TacheCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public UUIDFilter getUserUuid() {
-        return userUuid;
-    }
-
-    public UUIDFilter userUuid() {
-        if (userUuid == null) {
-            userUuid = new UUIDFilter();
-        }
-        return userUuid;
-    }
-
-    public void setUserUuid(UUIDFilter userUuid) {
-        this.userUuid = userUuid;
     }
 
     public StringFilter getTitre() {
@@ -185,7 +166,6 @@ public class TacheCriteria implements Serializable, Criteria {
         final TacheCriteria that = (TacheCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(titre, that.titre) &&
             Objects.equals(description, that.description) &&
             Objects.equals(statusTache, that.statusTache) &&
@@ -196,7 +176,7 @@ public class TacheCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userUuid, titre, description, statusTache, projetId, distinct);
+        return Objects.hash(id, titre, description, statusTache, projetId, distinct);
     }
 
     // prettier-ignore
@@ -204,7 +184,6 @@ public class TacheCriteria implements Serializable, Criteria {
     public String toString() {
         return "TacheCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (titre != null ? "titre=" + titre + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (statusTache != null ? "statusTache=" + statusTache + ", " : "") +

@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +58,7 @@ public class TacheResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/taches")
-    public ResponseEntity<TacheDTO> createTache(@Valid @RequestBody TacheDTO tacheDTO) throws URISyntaxException {
+    public ResponseEntity<TacheDTO> createTache(@RequestBody TacheDTO tacheDTO) throws URISyntaxException {
         log.debug("REST request to save Tache : {}", tacheDTO);
         if (tacheDTO.getId() != null) {
             throw new BadRequestAlertException("A new tache cannot already have an ID", ENTITY_NAME, "idexists");
@@ -85,7 +83,7 @@ public class TacheResource {
     @PutMapping("/taches/{id}")
     public ResponseEntity<TacheDTO> updateTache(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody TacheDTO tacheDTO
+        @RequestBody TacheDTO tacheDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Tache : {}, {}", id, tacheDTO);
         if (tacheDTO.getId() == null) {
@@ -120,7 +118,7 @@ public class TacheResource {
     @PatchMapping(value = "/taches/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<TacheDTO> partialUpdateTache(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody TacheDTO tacheDTO
+        @RequestBody TacheDTO tacheDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Tache partially : {}, {}", id, tacheDTO);
         if (tacheDTO.getId() == null) {

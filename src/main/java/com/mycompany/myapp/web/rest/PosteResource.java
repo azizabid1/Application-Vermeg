@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +58,7 @@ public class PosteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/postes")
-    public ResponseEntity<PosteDTO> createPoste(@Valid @RequestBody PosteDTO posteDTO) throws URISyntaxException {
+    public ResponseEntity<PosteDTO> createPoste(@RequestBody PosteDTO posteDTO) throws URISyntaxException {
         log.debug("REST request to save Poste : {}", posteDTO);
         if (posteDTO.getId() != null) {
             throw new BadRequestAlertException("A new poste cannot already have an ID", ENTITY_NAME, "idexists");
@@ -85,7 +83,7 @@ public class PosteResource {
     @PutMapping("/postes/{id}")
     public ResponseEntity<PosteDTO> updatePoste(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody PosteDTO posteDTO
+        @RequestBody PosteDTO posteDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Poste : {}, {}", id, posteDTO);
         if (posteDTO.getId() == null) {
@@ -120,7 +118,7 @@ public class PosteResource {
     @PatchMapping(value = "/postes/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<PosteDTO> partialUpdatePoste(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody PosteDTO posteDTO
+        @RequestBody PosteDTO posteDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Poste partially : {}, {}", id, posteDTO);
         if (posteDTO.getId() == null) {

@@ -23,7 +23,6 @@ describe('Departement Service', () => {
     elemDefault = {
       id: 0,
       nom: TypeDepartement.RH,
-      userUuid: 'AAAAAAA',
     };
   });
 
@@ -60,7 +59,6 @@ describe('Departement Service', () => {
         {
           id: 1,
           nom: 'BBBBBB',
-          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -78,7 +76,6 @@ describe('Departement Service', () => {
       const patchObject = Object.assign(
         {
           nom: 'BBBBBB',
-          userUuid: 'BBBBBB',
         },
         new Departement()
       );
@@ -99,7 +96,6 @@ describe('Departement Service', () => {
         {
           id: 1,
           nom: 'BBBBBB',
-          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -151,7 +147,7 @@ describe('Departement Service', () => {
       });
 
       it('should add only unique Departement to an array', () => {
-        const departementArray: IDepartement[] = [{ id: 123 }, { id: 456 }, { id: 68055 }];
+        const departementArray: IDepartement[] = [{ id: 123 }, { id: 456 }, { id: 60282 }];
         const departementCollection: IDepartement[] = [{ id: 123 }];
         expectedResult = service.addDepartementToCollectionIfMissing(departementCollection, ...departementArray);
         expect(expectedResult).toHaveLength(3);

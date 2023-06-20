@@ -25,7 +25,6 @@ describe('Devis Service', () => {
       prixHT: 0,
       prixService: 0,
       dureeProjet: 0,
-      userUuid: 'AAAAAAA',
     };
   });
 
@@ -65,7 +64,6 @@ describe('Devis Service', () => {
           prixHT: 1,
           prixService: 1,
           dureeProjet: 1,
-          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -84,7 +82,6 @@ describe('Devis Service', () => {
         {
           prixHT: 1,
           prixService: 1,
-          userUuid: 'BBBBBB',
         },
         new Devis()
       );
@@ -108,7 +105,6 @@ describe('Devis Service', () => {
           prixHT: 1,
           prixService: 1,
           dureeProjet: 1,
-          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -160,7 +156,7 @@ describe('Devis Service', () => {
       });
 
       it('should add only unique Devis to an array', () => {
-        const devisArray: IDevis[] = [{ id: 123 }, { id: 456 }, { id: 45738 }];
+        const devisArray: IDevis[] = [{ id: 123 }, { id: 456 }, { id: 67561 }];
         const devisCollection: IDevis[] = [{ id: 123 }];
         expectedResult = service.addDevisToCollectionIfMissing(devisCollection, ...devisArray);
         expect(expectedResult).toHaveLength(3);

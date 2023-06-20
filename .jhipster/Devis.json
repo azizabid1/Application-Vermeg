@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230619021807",
+  "changelogDate": "20230620012300",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "devis",
@@ -26,11 +26,6 @@
       "fieldType": "Float",
       "fieldValidateRules": ["min"],
       "fieldValidateRulesMin": "0"
-    },
-    {
-      "fieldName": "userUuid",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,

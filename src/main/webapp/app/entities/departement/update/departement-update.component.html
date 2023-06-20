@@ -21,22 +21,12 @@
               {{ 'vermegApp.TypeDepartement.' + typeDepartement | translate }}
             </option>
           </select>
-          <div *ngIf="editForm.get('nom')!.invalid && (editForm.get('nom')!.dirty || editForm.get('nom')!.touched)"></div>
+          <div *ngIf="editForm.get('nom')!.invalid && (editForm.get('nom')!.dirty || editForm.get('nom')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('nom')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
         </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.departement.userUuid" for="field_userUuid">User Uuid</label>
-          <input
-            type="text"
-            class="form-control"
-            name="userUuid"
-            id="field_userUuid"
-            data-cy="userUuid"
-            formControlName="userUuid"
-            [readonly]="true"
-          />
-        </div>
-
         <div class="row mb-3">
           <label jhiTranslate="vermegApp.departement.users" for="field_users">Users</label>
           <select class="form-control" id="field_users" data-cy="users" multiple name="users" formControlName="users">

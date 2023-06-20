@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230619021812",
+  "changelogDate": "20230620012305",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "tache",
@@ -8,11 +8,6 @@
     {
       "fieldName": "id",
       "fieldType": "Long"
-    },
-    {
-      "fieldName": "userUuid",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "titre",

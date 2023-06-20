@@ -22,7 +22,6 @@ describe('Tache Service', () => {
 
     elemDefault = {
       id: 0,
-      userUuid: 'AAAAAAA',
       titre: 'AAAAAAA',
       description: 'AAAAAAA',
       statusTache: Status.ATTENTE,
@@ -61,7 +60,6 @@ describe('Tache Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          userUuid: 'BBBBBB',
           titre: 'BBBBBB',
           description: 'BBBBBB',
           statusTache: 'BBBBBB',
@@ -81,8 +79,8 @@ describe('Tache Service', () => {
     it('should partial update a Tache', () => {
       const patchObject = Object.assign(
         {
-          userUuid: 'BBBBBB',
-          description: 'BBBBBB',
+          titre: 'BBBBBB',
+          statusTache: 'BBBBBB',
         },
         new Tache()
       );
@@ -102,7 +100,6 @@ describe('Tache Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          userUuid: 'BBBBBB',
           titre: 'BBBBBB',
           description: 'BBBBBB',
           statusTache: 'BBBBBB',
@@ -157,7 +154,7 @@ describe('Tache Service', () => {
       });
 
       it('should add only unique Tache to an array', () => {
-        const tacheArray: ITache[] = [{ id: 123 }, { id: 456 }, { id: 95365 }];
+        const tacheArray: ITache[] = [{ id: 123 }, { id: 456 }, { id: 27771 }];
         const tacheCollection: ITache[] = [{ id: 123 }];
         expectedResult = service.addTacheToCollectionIfMissing(tacheCollection, ...tacheArray);
         expect(expectedResult).toHaveLength(3);

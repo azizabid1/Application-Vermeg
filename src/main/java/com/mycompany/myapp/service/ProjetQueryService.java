@@ -90,9 +90,6 @@ public class ProjetQueryService extends QueryService<Projet> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Projet_.id));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), Projet_.userUuid));
-            }
             if (criteria.getNomProjet() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getNomProjet(), Projet_.nomProjet));
             }

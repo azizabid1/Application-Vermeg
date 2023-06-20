@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Poste} entity.
@@ -19,9 +17,6 @@ public class PosteDTO implements Serializable {
     private String title;
 
     private String description;
-
-    @NotNull
-    private UUID userUuid;
 
     private Set<UserDTO> users = new HashSet<>();
 
@@ -47,14 +42,6 @@ public class PosteDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Set<UserDTO> getUsers() {
@@ -93,7 +80,6 @@ public class PosteDTO implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
-            ", userUuid='" + getUserUuid() + "'" +
             ", users=" + getUsers() +
             "}";
     }

@@ -15,7 +15,6 @@ import com.mycompany.myapp.service.dto.TacheDTO;
 import com.mycompany.myapp.service.mapper.TacheMapper;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,9 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class TacheResourceIT {
-
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
 
     private static final String DEFAULT_TITRE = "AAAAAAAAAA";
     private static final String UPDATED_TITRE = "BBBBBBBBBB";
@@ -74,11 +70,7 @@ class TacheResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Tache createEntity(EntityManager em) {
-        Tache tache = new Tache()
-            .userUuid(DEFAULT_USER_UUID)
-            .titre(DEFAULT_TITRE)
-            .description(DEFAULT_DESCRIPTION)
-            .statusTache(DEFAULT_STATUS_TACHE);
+        Tache tache = new Tache().titre(DEFAULT_TITRE).description(DEFAULT_DESCRIPTION).statusTache(DEFAULT_STATUS_TACHE);
         return tache;
     }
 
@@ -89,11 +81,7 @@ class TacheResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Tache createUpdatedEntity(EntityManager em) {
-        Tache tache = new Tache()
-            .userUuid(UPDATED_USER_UUID)
-            .titre(UPDATED_TITRE)
-            .description(UPDATED_DESCRIPTION)
-            .statusTache(UPDATED_STATUS_TACHE);
+        Tache tache = new Tache().titre(UPDATED_TITRE).description(UPDATED_DESCRIPTION).statusTache(UPDATED_STATUS_TACHE);
         return tache;
     }
 
@@ -116,7 +104,6 @@ class TacheResourceIT {
         List<Tache> tacheList = tacheRepository.findAll();
         assertThat(tacheList).hasSize(databaseSizeBeforeCreate + 1);
         Tache testTache = tacheList.get(tacheList.size() - 1);
-        assertThat(testTache.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
         assertThat(testTache.getTitre()).isEqualTo(DEFAULT_TITRE);
         assertThat(testTache.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testTache.getStatusTache()).isEqualTo(DEFAULT_STATUS_TACHE);
@@ -143,24 +130,6 @@ class TacheResourceIT {
 
     @Test
     @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = tacheRepository.findAll().size();
-        // set the field null
-        tache.setUserUuid(null);
-
-        // Create the Tache, which fails.
-        TacheDTO tacheDTO = tacheMapper.toDto(tache);
-
-        restTacheMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tacheDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Tache> tacheList = tacheRepository.findAll();
-        assertThat(tacheList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllTaches() throws Exception {
         // Initialize the database
         tacheRepository.saveAndFlush(tache);
@@ -171,7 +140,6 @@ class TacheResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(tache.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].titre").value(hasItem(DEFAULT_TITRE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].statusTache").value(hasItem(DEFAULT_STATUS_TACHE.toString())));
@@ -189,7 +157,6 @@ class TacheResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(tache.getId().intValue()))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()))
             .andExpect(jsonPath("$.titre").value(DEFAULT_TITRE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.statusTache").value(DEFAULT_STATUS_TACHE.toString()));
@@ -211,58 +178,6 @@ class TacheResourceIT {
 
         defaultTacheShouldBeFound("id.lessThanOrEqual=" + id);
         defaultTacheShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllTachesByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        tacheRepository.saveAndFlush(tache);
-
-        // Get all the tacheList where userUuid equals to DEFAULT_USER_UUID
-        defaultTacheShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the tacheList where userUuid equals to UPDATED_USER_UUID
-        defaultTacheShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllTachesByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        tacheRepository.saveAndFlush(tache);
-
-        // Get all the tacheList where userUuid not equals to DEFAULT_USER_UUID
-        defaultTacheShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the tacheList where userUuid not equals to UPDATED_USER_UUID
-        defaultTacheShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllTachesByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        tacheRepository.saveAndFlush(tache);
-
-        // Get all the tacheList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultTacheShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the tacheList where userUuid equals to UPDATED_USER_UUID
-        defaultTacheShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllTachesByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        tacheRepository.saveAndFlush(tache);
-
-        // Get all the tacheList where userUuid is not null
-        defaultTacheShouldBeFound("userUuid.specified=true");
-
-        // Get all the tacheList where userUuid is null
-        defaultTacheShouldNotBeFound("userUuid.specified=false");
     }
 
     @Test
@@ -508,7 +423,6 @@ class TacheResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(tache.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].titre").value(hasItem(DEFAULT_TITRE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].statusTache").value(hasItem(DEFAULT_STATUS_TACHE.toString())));
@@ -559,7 +473,7 @@ class TacheResourceIT {
         Tache updatedTache = tacheRepository.findById(tache.getId()).get();
         // Disconnect from session so that the updates on updatedTache are not directly saved in db
         em.detach(updatedTache);
-        updatedTache.userUuid(UPDATED_USER_UUID).titre(UPDATED_TITRE).description(UPDATED_DESCRIPTION).statusTache(UPDATED_STATUS_TACHE);
+        updatedTache.titre(UPDATED_TITRE).description(UPDATED_DESCRIPTION).statusTache(UPDATED_STATUS_TACHE);
         TacheDTO tacheDTO = tacheMapper.toDto(updatedTache);
 
         restTacheMockMvc
@@ -574,7 +488,6 @@ class TacheResourceIT {
         List<Tache> tacheList = tacheRepository.findAll();
         assertThat(tacheList).hasSize(databaseSizeBeforeUpdate);
         Tache testTache = tacheList.get(tacheList.size() - 1);
-        assertThat(testTache.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testTache.getTitre()).isEqualTo(UPDATED_TITRE);
         assertThat(testTache.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testTache.getStatusTache()).isEqualTo(UPDATED_STATUS_TACHE);
@@ -657,7 +570,7 @@ class TacheResourceIT {
         Tache partialUpdatedTache = new Tache();
         partialUpdatedTache.setId(tache.getId());
 
-        partialUpdatedTache.userUuid(UPDATED_USER_UUID).titre(UPDATED_TITRE);
+        partialUpdatedTache.titre(UPDATED_TITRE).description(UPDATED_DESCRIPTION);
 
         restTacheMockMvc
             .perform(
@@ -671,9 +584,8 @@ class TacheResourceIT {
         List<Tache> tacheList = tacheRepository.findAll();
         assertThat(tacheList).hasSize(databaseSizeBeforeUpdate);
         Tache testTache = tacheList.get(tacheList.size() - 1);
-        assertThat(testTache.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testTache.getTitre()).isEqualTo(UPDATED_TITRE);
-        assertThat(testTache.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testTache.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testTache.getStatusTache()).isEqualTo(DEFAULT_STATUS_TACHE);
     }
 
@@ -689,11 +601,7 @@ class TacheResourceIT {
         Tache partialUpdatedTache = new Tache();
         partialUpdatedTache.setId(tache.getId());
 
-        partialUpdatedTache
-            .userUuid(UPDATED_USER_UUID)
-            .titre(UPDATED_TITRE)
-            .description(UPDATED_DESCRIPTION)
-            .statusTache(UPDATED_STATUS_TACHE);
+        partialUpdatedTache.titre(UPDATED_TITRE).description(UPDATED_DESCRIPTION).statusTache(UPDATED_STATUS_TACHE);
 
         restTacheMockMvc
             .perform(
@@ -707,7 +615,6 @@ class TacheResourceIT {
         List<Tache> tacheList = tacheRepository.findAll();
         assertThat(tacheList).hasSize(databaseSizeBeforeUpdate);
         Tache testTache = tacheList.get(tacheList.size() - 1);
-        assertThat(testTache.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testTache.getTitre()).isEqualTo(UPDATED_TITRE);
         assertThat(testTache.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testTache.getStatusTache()).isEqualTo(UPDATED_STATUS_TACHE);

@@ -26,7 +26,6 @@ export class EquipeUpdateComponent implements OnInit {
     id: [],
     nom: [],
     nombrePersonne: [null, [Validators.min(4), Validators.max(6)]],
-    userUuid: [null, [Validators.required]],
     users: [],
     vote: [],
   });
@@ -104,7 +103,6 @@ export class EquipeUpdateComponent implements OnInit {
       id: equipe.id,
       nom: equipe.nom,
       nombrePersonne: equipe.nombrePersonne,
-      userUuid: equipe.userUuid,
       users: equipe.users,
       vote: equipe.vote,
     });
@@ -133,7 +131,6 @@ export class EquipeUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       nom: this.editForm.get(['nom'])!.value,
       nombrePersonne: this.editForm.get(['nombrePersonne'])!.value,
-      userUuid: this.editForm.get(['userUuid'])!.value,
       users: this.editForm.get(['users'])!.value,
       vote: this.editForm.get(['vote'])!.value,
     };

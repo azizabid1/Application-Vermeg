@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230619021811",
+  "changelogDate": "20230620012304",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "status_employe",
@@ -8,11 +8,6 @@
     {
       "fieldName": "id",
       "fieldType": "Long"
-    },
-    {
-      "fieldName": "userUuid",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "disponibilite",

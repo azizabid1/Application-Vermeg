@@ -18,7 +18,6 @@ import com.mycompany.myapp.service.mapper.DepartementMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,9 +45,6 @@ class DepartementResourceIT {
 
     private static final TypeDepartement DEFAULT_NOM = TypeDepartement.RH;
     private static final TypeDepartement UPDATED_NOM = TypeDepartement.INFORMATIQUE;
-
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/departements";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -83,7 +79,7 @@ class DepartementResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Departement createEntity(EntityManager em) {
-        Departement departement = new Departement().nom(DEFAULT_NOM).userUuid(DEFAULT_USER_UUID);
+        Departement departement = new Departement().nom(DEFAULT_NOM);
         return departement;
     }
 
@@ -94,7 +90,7 @@ class DepartementResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Departement createUpdatedEntity(EntityManager em) {
-        Departement departement = new Departement().nom(UPDATED_NOM).userUuid(UPDATED_USER_UUID);
+        Departement departement = new Departement().nom(UPDATED_NOM);
         return departement;
     }
 
@@ -120,7 +116,6 @@ class DepartementResourceIT {
         assertThat(departementList).hasSize(databaseSizeBeforeCreate + 1);
         Departement testDepartement = departementList.get(departementList.size() - 1);
         assertThat(testDepartement.getNom()).isEqualTo(DEFAULT_NOM);
-        assertThat(testDepartement.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
     }
 
     @Test
@@ -146,26 +141,6 @@ class DepartementResourceIT {
 
     @Test
     @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = departementRepository.findAll().size();
-        // set the field null
-        departement.setUserUuid(null);
-
-        // Create the Departement, which fails.
-        DepartementDTO departementDTO = departementMapper.toDto(departement);
-
-        restDepartementMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(departementDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<Departement> departementList = departementRepository.findAll();
-        assertThat(departementList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllDepartements() throws Exception {
         // Initialize the database
         departementRepository.saveAndFlush(departement);
@@ -176,8 +151,7 @@ class DepartementResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(departement.getId().intValue())))
-            .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM.toString())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -210,8 +184,7 @@ class DepartementResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(departement.getId().intValue()))
-            .andExpect(jsonPath("$.nom").value(DEFAULT_NOM.toString()))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()));
+            .andExpect(jsonPath("$.nom").value(DEFAULT_NOM.toString()));
     }
 
     @Test
@@ -286,58 +259,6 @@ class DepartementResourceIT {
 
     @Test
     @Transactional
-    void getAllDepartementsByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        departementRepository.saveAndFlush(departement);
-
-        // Get all the departementList where userUuid equals to DEFAULT_USER_UUID
-        defaultDepartementShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the departementList where userUuid equals to UPDATED_USER_UUID
-        defaultDepartementShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllDepartementsByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        departementRepository.saveAndFlush(departement);
-
-        // Get all the departementList where userUuid not equals to DEFAULT_USER_UUID
-        defaultDepartementShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the departementList where userUuid not equals to UPDATED_USER_UUID
-        defaultDepartementShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllDepartementsByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        departementRepository.saveAndFlush(departement);
-
-        // Get all the departementList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultDepartementShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the departementList where userUuid equals to UPDATED_USER_UUID
-        defaultDepartementShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllDepartementsByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        departementRepository.saveAndFlush(departement);
-
-        // Get all the departementList where userUuid is not null
-        defaultDepartementShouldBeFound("userUuid.specified=true");
-
-        // Get all the departementList where userUuid is null
-        defaultDepartementShouldNotBeFound("userUuid.specified=false");
-    }
-
-    @Test
-    @Transactional
     void getAllDepartementsByUsersIsEqualToSomething() throws Exception {
         // Initialize the database
         departementRepository.saveAndFlush(departement);
@@ -371,8 +292,7 @@ class DepartementResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(departement.getId().intValue())))
-            .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM.toString())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM.toString())));
 
         // Check, that the count call also returns 1
         restDepartementMockMvc
@@ -420,7 +340,7 @@ class DepartementResourceIT {
         Departement updatedDepartement = departementRepository.findById(departement.getId()).get();
         // Disconnect from session so that the updates on updatedDepartement are not directly saved in db
         em.detach(updatedDepartement);
-        updatedDepartement.nom(UPDATED_NOM).userUuid(UPDATED_USER_UUID);
+        updatedDepartement.nom(UPDATED_NOM);
         DepartementDTO departementDTO = departementMapper.toDto(updatedDepartement);
 
         restDepartementMockMvc
@@ -436,7 +356,6 @@ class DepartementResourceIT {
         assertThat(departementList).hasSize(databaseSizeBeforeUpdate);
         Departement testDepartement = departementList.get(departementList.size() - 1);
         assertThat(testDepartement.getNom()).isEqualTo(UPDATED_NOM);
-        assertThat(testDepartement.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test
@@ -516,7 +435,7 @@ class DepartementResourceIT {
         Departement partialUpdatedDepartement = new Departement();
         partialUpdatedDepartement.setId(departement.getId());
 
-        partialUpdatedDepartement.nom(UPDATED_NOM).userUuid(UPDATED_USER_UUID);
+        partialUpdatedDepartement.nom(UPDATED_NOM);
 
         restDepartementMockMvc
             .perform(
@@ -531,7 +450,6 @@ class DepartementResourceIT {
         assertThat(departementList).hasSize(databaseSizeBeforeUpdate);
         Departement testDepartement = departementList.get(departementList.size() - 1);
         assertThat(testDepartement.getNom()).isEqualTo(UPDATED_NOM);
-        assertThat(testDepartement.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test
@@ -546,7 +464,7 @@ class DepartementResourceIT {
         Departement partialUpdatedDepartement = new Departement();
         partialUpdatedDepartement.setId(departement.getId());
 
-        partialUpdatedDepartement.nom(UPDATED_NOM).userUuid(UPDATED_USER_UUID);
+        partialUpdatedDepartement.nom(UPDATED_NOM);
 
         restDepartementMockMvc
             .perform(
@@ -561,7 +479,6 @@ class DepartementResourceIT {
         assertThat(departementList).hasSize(databaseSizeBeforeUpdate);
         Departement testDepartement = departementList.get(departementList.size() - 1);
         assertThat(testDepartement.getNom()).isEqualTo(UPDATED_NOM);
-        assertThat(testDepartement.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test

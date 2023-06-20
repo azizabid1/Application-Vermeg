@@ -19,7 +19,6 @@ export class TacheUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    userUuid: [null, [Validators.required]],
     titre: [],
     description: [],
     statusTache: [],
@@ -69,7 +68,6 @@ export class TacheUpdateComponent implements OnInit {
   protected updateForm(tache: ITache): void {
     this.editForm.patchValue({
       id: tache.id,
-      userUuid: tache.userUuid,
       titre: tache.titre,
       description: tache.description,
       statusTache: tache.statusTache,
@@ -80,7 +78,6 @@ export class TacheUpdateComponent implements OnInit {
     return {
       ...new Tache(),
       id: this.editForm.get(['id'])!.value,
-      userUuid: this.editForm.get(['userUuid'])!.value,
       titre: this.editForm.get(['titre'])!.value,
       description: this.editForm.get(['description'])!.value,
       statusTache: this.editForm.get(['statusTache'])!.value,

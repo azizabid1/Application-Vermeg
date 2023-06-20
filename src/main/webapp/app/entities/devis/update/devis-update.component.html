@@ -46,36 +46,6 @@
             formControlName="dureeProjet"
             [readonly]="true"
           />
-          <div *ngIf="editForm.get('dureeProjet')!.invalid && (editForm.get('dureeProjet')!.dirty || editForm.get('dureeProjet')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('dureeProjet')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              This field should be at least 0.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('dureeProjet')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.devis.userUuid" for="field_userUuid">User Uuid</label>
-          <input
-            type="text"
-            class="form-control"
-            name="userUuid"
-            id="field_userUuid"
-            data-cy="userUuid"
-            formControlName="userUuid"
-            [readonly]="true"
-          />
         </div>
 
         <div class="row mb-3">

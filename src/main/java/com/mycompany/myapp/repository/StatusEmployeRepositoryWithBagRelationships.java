@@ -3,7 +3,6 @@ package com.mycompany.myapp.repository;
 import com.mycompany.myapp.domain.StatusEmploye;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.springframework.data.domain.Page;
 
 public interface StatusEmployeRepositoryWithBagRelationships {

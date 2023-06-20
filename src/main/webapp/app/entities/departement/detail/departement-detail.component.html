@@ -18,10 +18,6 @@
         <dd>
           <span jhiTranslate="{{ 'vermegApp.TypeDepartement.' + departement.nom }}">{{ departement.nom }}</span>
         </dd>
-        <dt><span jhiTranslate="vermegApp.departement.userUuid">User Uuid</span></dt>
-        <dd>
-          <span>{{ departement.userUuid }}</span>
-        </dd>
         <dt><span jhiTranslate="vermegApp.departement.users">Users</span></dt>
         <dd>
           <span *ngFor="let user of departement.users; let last = last">

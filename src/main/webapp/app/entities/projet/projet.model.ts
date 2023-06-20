@@ -6,7 +6,6 @@ import { Status } from 'app/entities/enumerations/status.model';
 
 export interface IProjet {
   id?: number;
-  userUuid?: string;
   nomProjet?: string | null;
   dateDebut?: dayjs.Dayjs | null;
   dateFin?: dayjs.Dayjs | null;
@@ -22,7 +21,6 @@ export interface IProjet {
 export class Projet implements IProjet {
   constructor(
     public id?: number,
-    public userUuid?: string,
     public nomProjet?: string | null,
     public dateDebut?: dayjs.Dayjs | null,
     public dateFin?: dayjs.Dayjs | null,

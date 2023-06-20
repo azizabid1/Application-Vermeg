@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.StatusEmploye} entity.
@@ -14,9 +12,6 @@ import javax.validation.constraints.*;
 public class StatusEmployeDTO implements Serializable {
 
     private Long id;
-
-    @NotNull
-    private UUID userUuid;
 
     private Boolean disponibilite;
 
@@ -34,14 +29,6 @@ public class StatusEmployeDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Boolean getDisponibilite() {
@@ -110,7 +97,6 @@ public class StatusEmployeDTO implements Serializable {
     public String toString() {
         return "StatusEmployeDTO{" +
             "id=" + getId() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", disponibilite='" + getDisponibilite() + "'" +
             ", mission='" + getMission() + "'" +
             ", debutConge='" + getDebutConge() + "'" +

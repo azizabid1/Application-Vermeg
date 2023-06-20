@@ -25,7 +25,6 @@ export class DevisUpdateComponent implements OnInit {
     prixHT: [],
     prixService: [],
     dureeProjet: [null, [Validators.min(0)]],
-    userUuid: [null, [Validators.required]],
     projet: [],
   });
 
@@ -88,7 +87,6 @@ export class DevisUpdateComponent implements OnInit {
       prixHT: devis.prixHT,
       prixService: devis.prixService,
       dureeProjet: devis.dureeProjet,
-      userUuid: devis.userUuid,
       projet: devis.projet,
     });
 
@@ -111,7 +109,6 @@ export class DevisUpdateComponent implements OnInit {
       prixHT: this.editForm.get(['prixHT'])!.value,
       prixService: this.editForm.get(['prixService'])!.value,
       dureeProjet: this.editForm.get(['dureeProjet'])!.value,
-      userUuid: this.editForm.get(['userUuid'])!.value,
       projet: this.editForm.get(['projet'])!.value,
     };
   }

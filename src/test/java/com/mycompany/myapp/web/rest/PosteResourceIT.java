@@ -17,7 +17,6 @@ import com.mycompany.myapp.service.mapper.PosteMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,9 +47,6 @@ class PosteResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/postes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -85,7 +81,7 @@ class PosteResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Poste createEntity(EntityManager em) {
-        Poste poste = new Poste().title(DEFAULT_TITLE).description(DEFAULT_DESCRIPTION).userUuid(DEFAULT_USER_UUID);
+        Poste poste = new Poste().title(DEFAULT_TITLE).description(DEFAULT_DESCRIPTION);
         return poste;
     }
 
@@ -96,7 +92,7 @@ class PosteResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Poste createUpdatedEntity(EntityManager em) {
-        Poste poste = new Poste().title(UPDATED_TITLE).description(UPDATED_DESCRIPTION).userUuid(UPDATED_USER_UUID);
+        Poste poste = new Poste().title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
         return poste;
     }
 
@@ -121,7 +117,6 @@ class PosteResourceIT {
         Poste testPoste = posteList.get(posteList.size() - 1);
         assertThat(testPoste.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testPoste.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testPoste.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
     }
 
     @Test
@@ -145,24 +140,6 @@ class PosteResourceIT {
 
     @Test
     @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = posteRepository.findAll().size();
-        // set the field null
-        poste.setUserUuid(null);
-
-        // Create the Poste, which fails.
-        PosteDTO posteDTO = posteMapper.toDto(poste);
-
-        restPosteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(posteDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Poste> posteList = posteRepository.findAll();
-        assertThat(posteList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllPostes() throws Exception {
         // Initialize the database
         posteRepository.saveAndFlush(poste);
@@ -174,8 +151,7 @@ class PosteResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(poste.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -209,8 +185,7 @@ class PosteResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(poste.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
     @Test
@@ -389,58 +364,6 @@ class PosteResourceIT {
 
     @Test
     @Transactional
-    void getAllPostesByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        posteRepository.saveAndFlush(poste);
-
-        // Get all the posteList where userUuid equals to DEFAULT_USER_UUID
-        defaultPosteShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the posteList where userUuid equals to UPDATED_USER_UUID
-        defaultPosteShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllPostesByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        posteRepository.saveAndFlush(poste);
-
-        // Get all the posteList where userUuid not equals to DEFAULT_USER_UUID
-        defaultPosteShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the posteList where userUuid not equals to UPDATED_USER_UUID
-        defaultPosteShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllPostesByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        posteRepository.saveAndFlush(poste);
-
-        // Get all the posteList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultPosteShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the posteList where userUuid equals to UPDATED_USER_UUID
-        defaultPosteShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllPostesByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        posteRepository.saveAndFlush(poste);
-
-        // Get all the posteList where userUuid is not null
-        defaultPosteShouldBeFound("userUuid.specified=true");
-
-        // Get all the posteList where userUuid is null
-        defaultPosteShouldNotBeFound("userUuid.specified=false");
-    }
-
-    @Test
-    @Transactional
     void getAllPostesByUsersIsEqualToSomething() throws Exception {
         // Initialize the database
         posteRepository.saveAndFlush(poste);
@@ -475,8 +398,7 @@ class PosteResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(poste.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restPosteMockMvc
@@ -524,7 +446,7 @@ class PosteResourceIT {
         Poste updatedPoste = posteRepository.findById(poste.getId()).get();
         // Disconnect from session so that the updates on updatedPoste are not directly saved in db
         em.detach(updatedPoste);
-        updatedPoste.title(UPDATED_TITLE).description(UPDATED_DESCRIPTION).userUuid(UPDATED_USER_UUID);
+        updatedPoste.title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
         PosteDTO posteDTO = posteMapper.toDto(updatedPoste);
 
         restPosteMockMvc
@@ -541,7 +463,6 @@ class PosteResourceIT {
         Poste testPoste = posteList.get(posteList.size() - 1);
         assertThat(testPoste.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testPoste.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testPoste.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test
@@ -621,7 +542,7 @@ class PosteResourceIT {
         Poste partialUpdatedPoste = new Poste();
         partialUpdatedPoste.setId(poste.getId());
 
-        partialUpdatedPoste.title(UPDATED_TITLE).userUuid(UPDATED_USER_UUID);
+        partialUpdatedPoste.title(UPDATED_TITLE);
 
         restPosteMockMvc
             .perform(
@@ -637,7 +558,6 @@ class PosteResourceIT {
         Poste testPoste = posteList.get(posteList.size() - 1);
         assertThat(testPoste.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testPoste.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testPoste.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test
@@ -652,7 +572,7 @@ class PosteResourceIT {
         Poste partialUpdatedPoste = new Poste();
         partialUpdatedPoste.setId(poste.getId());
 
-        partialUpdatedPoste.title(UPDATED_TITLE).description(UPDATED_DESCRIPTION).userUuid(UPDATED_USER_UUID);
+        partialUpdatedPoste.title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
 
         restPosteMockMvc
             .perform(
@@ -668,7 +588,6 @@ class PosteResourceIT {
         Poste testPoste = posteList.get(posteList.size() - 1);
         assertThat(testPoste.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testPoste.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testPoste.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test

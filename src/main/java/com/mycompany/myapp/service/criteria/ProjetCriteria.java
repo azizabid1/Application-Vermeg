@@ -13,7 +13,6 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.Projet} entity. This class is used
@@ -48,8 +47,6 @@ public class ProjetCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private UUIDFilter userUuid;
-
     private StringFilter nomProjet;
 
     private LocalDateFilter dateDebut;
@@ -76,7 +73,6 @@ public class ProjetCriteria implements Serializable, Criteria {
 
     public ProjetCriteria(ProjetCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.nomProjet = other.nomProjet == null ? null : other.nomProjet.copy();
         this.dateDebut = other.dateDebut == null ? null : other.dateDebut.copy();
         this.dateFin = other.dateFin == null ? null : other.dateFin.copy();
@@ -108,21 +104,6 @@ public class ProjetCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public UUIDFilter getUserUuid() {
-        return userUuid;
-    }
-
-    public UUIDFilter userUuid() {
-        if (userUuid == null) {
-            userUuid = new UUIDFilter();
-        }
-        return userUuid;
-    }
-
-    public void setUserUuid(UUIDFilter userUuid) {
-        this.userUuid = userUuid;
     }
 
     public StringFilter getNomProjet() {
@@ -294,7 +275,6 @@ public class ProjetCriteria implements Serializable, Criteria {
         final ProjetCriteria that = (ProjetCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(nomProjet, that.nomProjet) &&
             Objects.equals(dateDebut, that.dateDebut) &&
             Objects.equals(dateFin, that.dateFin) &&
@@ -313,7 +293,6 @@ public class ProjetCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
             id,
-            userUuid,
             nomProjet,
             dateDebut,
             dateFin,
@@ -333,7 +312,6 @@ public class ProjetCriteria implements Serializable, Criteria {
     public String toString() {
         return "ProjetCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (nomProjet != null ? "nomProjet=" + nomProjet + ", " : "") +
             (dateDebut != null ? "dateDebut=" + dateDebut + ", " : "") +
             (dateFin != null ? "dateFin=" + dateFin + ", " : "") +

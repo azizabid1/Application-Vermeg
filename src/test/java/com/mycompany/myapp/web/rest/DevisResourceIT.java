@@ -14,7 +14,6 @@ import com.mycompany.myapp.service.dto.DevisDTO;
 import com.mycompany.myapp.service.mapper.DevisMapper;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,9 +49,6 @@ class DevisResourceIT {
     private static final Float UPDATED_DUREE_PROJET = 1F;
     private static final Float SMALLER_DUREE_PROJET = 0F - 1F;
 
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
-
     private static final String ENTITY_API_URL = "/api/devis";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -84,8 +80,7 @@ class DevisResourceIT {
             .prixTotal(DEFAULT_PRIX_TOTAL)
             .prixHT(DEFAULT_PRIX_HT)
             .prixService(DEFAULT_PRIX_SERVICE)
-            .dureeProjet(DEFAULT_DUREE_PROJET)
-            .userUuid(DEFAULT_USER_UUID);
+            .dureeProjet(DEFAULT_DUREE_PROJET);
         return devis;
     }
 
@@ -100,8 +95,7 @@ class DevisResourceIT {
             .prixTotal(UPDATED_PRIX_TOTAL)
             .prixHT(UPDATED_PRIX_HT)
             .prixService(UPDATED_PRIX_SERVICE)
-            .dureeProjet(UPDATED_DUREE_PROJET)
-            .userUuid(UPDATED_USER_UUID);
+            .dureeProjet(UPDATED_DUREE_PROJET);
         return devis;
     }
 
@@ -128,7 +122,6 @@ class DevisResourceIT {
         assertThat(testDevis.getPrixHT()).isEqualTo(DEFAULT_PRIX_HT);
         assertThat(testDevis.getPrixService()).isEqualTo(DEFAULT_PRIX_SERVICE);
         assertThat(testDevis.getDureeProjet()).isEqualTo(DEFAULT_DUREE_PROJET);
-        assertThat(testDevis.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
     }
 
     @Test
@@ -152,24 +145,6 @@ class DevisResourceIT {
 
     @Test
     @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = devisRepository.findAll().size();
-        // set the field null
-        devis.setUserUuid(null);
-
-        // Create the Devis, which fails.
-        DevisDTO devisDTO = devisMapper.toDto(devis);
-
-        restDevisMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(devisDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Devis> devisList = devisRepository.findAll();
-        assertThat(devisList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllDevis() throws Exception {
         // Initialize the database
         devisRepository.saveAndFlush(devis);
@@ -183,8 +158,7 @@ class DevisResourceIT {
             .andExpect(jsonPath("$.[*].prixTotal").value(hasItem(DEFAULT_PRIX_TOTAL.doubleValue())))
             .andExpect(jsonPath("$.[*].prixHT").value(hasItem(DEFAULT_PRIX_HT.doubleValue())))
             .andExpect(jsonPath("$.[*].prixService").value(hasItem(DEFAULT_PRIX_SERVICE.doubleValue())))
-            .andExpect(jsonPath("$.[*].dureeProjet").value(hasItem(DEFAULT_DUREE_PROJET.doubleValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].dureeProjet").value(hasItem(DEFAULT_DUREE_PROJET.doubleValue())));
     }
 
     @Test
@@ -202,8 +176,7 @@ class DevisResourceIT {
             .andExpect(jsonPath("$.prixTotal").value(DEFAULT_PRIX_TOTAL.doubleValue()))
             .andExpect(jsonPath("$.prixHT").value(DEFAULT_PRIX_HT.doubleValue()))
             .andExpect(jsonPath("$.prixService").value(DEFAULT_PRIX_SERVICE.doubleValue()))
-            .andExpect(jsonPath("$.dureeProjet").value(DEFAULT_DUREE_PROJET.doubleValue()))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()));
+            .andExpect(jsonPath("$.dureeProjet").value(DEFAULT_DUREE_PROJET.doubleValue()));
     }
 
     @Test
@@ -642,58 +615,6 @@ class DevisResourceIT {
 
     @Test
     @Transactional
-    void getAllDevisByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        devisRepository.saveAndFlush(devis);
-
-        // Get all the devisList where userUuid equals to DEFAULT_USER_UUID
-        defaultDevisShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the devisList where userUuid equals to UPDATED_USER_UUID
-        defaultDevisShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllDevisByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        devisRepository.saveAndFlush(devis);
-
-        // Get all the devisList where userUuid not equals to DEFAULT_USER_UUID
-        defaultDevisShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the devisList where userUuid not equals to UPDATED_USER_UUID
-        defaultDevisShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllDevisByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        devisRepository.saveAndFlush(devis);
-
-        // Get all the devisList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultDevisShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the devisList where userUuid equals to UPDATED_USER_UUID
-        defaultDevisShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllDevisByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        devisRepository.saveAndFlush(devis);
-
-        // Get all the devisList where userUuid is not null
-        defaultDevisShouldBeFound("userUuid.specified=true");
-
-        // Get all the devisList where userUuid is null
-        defaultDevisShouldNotBeFound("userUuid.specified=false");
-    }
-
-    @Test
-    @Transactional
     void getAllDevisByProjetIsEqualToSomething() throws Exception {
         // Initialize the database
         devisRepository.saveAndFlush(devis);
@@ -730,8 +651,7 @@ class DevisResourceIT {
             .andExpect(jsonPath("$.[*].prixTotal").value(hasItem(DEFAULT_PRIX_TOTAL.doubleValue())))
             .andExpect(jsonPath("$.[*].prixHT").value(hasItem(DEFAULT_PRIX_HT.doubleValue())))
             .andExpect(jsonPath("$.[*].prixService").value(hasItem(DEFAULT_PRIX_SERVICE.doubleValue())))
-            .andExpect(jsonPath("$.[*].dureeProjet").value(hasItem(DEFAULT_DUREE_PROJET.doubleValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].dureeProjet").value(hasItem(DEFAULT_DUREE_PROJET.doubleValue())));
 
         // Check, that the count call also returns 1
         restDevisMockMvc
@@ -783,8 +703,7 @@ class DevisResourceIT {
             .prixTotal(UPDATED_PRIX_TOTAL)
             .prixHT(UPDATED_PRIX_HT)
             .prixService(UPDATED_PRIX_SERVICE)
-            .dureeProjet(UPDATED_DUREE_PROJET)
-            .userUuid(UPDATED_USER_UUID);
+            .dureeProjet(UPDATED_DUREE_PROJET);
         DevisDTO devisDTO = devisMapper.toDto(updatedDevis);
 
         restDevisMockMvc
@@ -803,7 +722,6 @@ class DevisResourceIT {
         assertThat(testDevis.getPrixHT()).isEqualTo(UPDATED_PRIX_HT);
         assertThat(testDevis.getPrixService()).isEqualTo(UPDATED_PRIX_SERVICE);
         assertThat(testDevis.getDureeProjet()).isEqualTo(UPDATED_DUREE_PROJET);
-        assertThat(testDevis.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test
@@ -883,7 +801,7 @@ class DevisResourceIT {
         Devis partialUpdatedDevis = new Devis();
         partialUpdatedDevis.setId(devis.getId());
 
-        partialUpdatedDevis.prixTotal(UPDATED_PRIX_TOTAL).prixHT(UPDATED_PRIX_HT).userUuid(UPDATED_USER_UUID);
+        partialUpdatedDevis.prixTotal(UPDATED_PRIX_TOTAL).prixHT(UPDATED_PRIX_HT);
 
         restDevisMockMvc
             .perform(
@@ -901,7 +819,6 @@ class DevisResourceIT {
         assertThat(testDevis.getPrixHT()).isEqualTo(UPDATED_PRIX_HT);
         assertThat(testDevis.getPrixService()).isEqualTo(DEFAULT_PRIX_SERVICE);
         assertThat(testDevis.getDureeProjet()).isEqualTo(DEFAULT_DUREE_PROJET);
-        assertThat(testDevis.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test
@@ -920,8 +837,7 @@ class DevisResourceIT {
             .prixTotal(UPDATED_PRIX_TOTAL)
             .prixHT(UPDATED_PRIX_HT)
             .prixService(UPDATED_PRIX_SERVICE)
-            .dureeProjet(UPDATED_DUREE_PROJET)
-            .userUuid(UPDATED_USER_UUID);
+            .dureeProjet(UPDATED_DUREE_PROJET);
 
         restDevisMockMvc
             .perform(
@@ -939,7 +855,6 @@ class DevisResourceIT {
         assertThat(testDevis.getPrixHT()).isEqualTo(UPDATED_PRIX_HT);
         assertThat(testDevis.getPrixService()).isEqualTo(UPDATED_PRIX_SERVICE);
         assertThat(testDevis.getDureeProjet()).isEqualTo(UPDATED_DUREE_PROJET);
-        assertThat(testDevis.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test

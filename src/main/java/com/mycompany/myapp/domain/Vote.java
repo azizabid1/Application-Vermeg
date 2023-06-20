@@ -5,11 +5,8 @@ import com.mycompany.myapp.domain.enumeration.Rendement;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * The Employee entity.
@@ -24,12 +21,6 @@ public class Vote implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -53,19 +44,6 @@ public class Vote implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public Vote userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Rendement getTypeVote() {
@@ -136,7 +114,6 @@ public class Vote implements Serializable {
     public String toString() {
         return "Vote{" +
             "id=" + getId() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", typeVote='" + getTypeVote() + "'" +
             "}";
     }

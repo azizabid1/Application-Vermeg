@@ -4,7 +4,6 @@ import com.mycompany.myapp.domain.Departement;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.hibernate.annotations.QueryHints;

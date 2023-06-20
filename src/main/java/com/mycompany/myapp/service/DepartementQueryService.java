@@ -93,9 +93,6 @@ public class DepartementQueryService extends QueryService<Departement> {
             if (criteria.getNom() != null) {
                 specification = specification.and(buildSpecification(criteria.getNom(), Departement_.nom));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), Departement_.userUuid));
-            }
             if (criteria.getUsersId() != null) {
                 specification =
                     specification.and(

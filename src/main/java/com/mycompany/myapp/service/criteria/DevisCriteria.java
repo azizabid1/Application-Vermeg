@@ -11,7 +11,6 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.Devis} entity. This class is used
@@ -37,8 +36,6 @@ public class DevisCriteria implements Serializable, Criteria {
 
     private FloatFilter dureeProjet;
 
-    private UUIDFilter userUuid;
-
     private LongFilter projetId;
 
     private Boolean distinct;
@@ -51,7 +48,6 @@ public class DevisCriteria implements Serializable, Criteria {
         this.prixHT = other.prixHT == null ? null : other.prixHT.copy();
         this.prixService = other.prixService == null ? null : other.prixService.copy();
         this.dureeProjet = other.dureeProjet == null ? null : other.dureeProjet.copy();
-        this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.projetId = other.projetId == null ? null : other.projetId.copy();
         this.distinct = other.distinct;
     }
@@ -136,21 +132,6 @@ public class DevisCriteria implements Serializable, Criteria {
         this.dureeProjet = dureeProjet;
     }
 
-    public UUIDFilter getUserUuid() {
-        return userUuid;
-    }
-
-    public UUIDFilter userUuid() {
-        if (userUuid == null) {
-            userUuid = new UUIDFilter();
-        }
-        return userUuid;
-    }
-
-    public void setUserUuid(UUIDFilter userUuid) {
-        this.userUuid = userUuid;
-    }
-
     public LongFilter getProjetId() {
         return projetId;
     }
@@ -189,7 +170,6 @@ public class DevisCriteria implements Serializable, Criteria {
             Objects.equals(prixHT, that.prixHT) &&
             Objects.equals(prixService, that.prixService) &&
             Objects.equals(dureeProjet, that.dureeProjet) &&
-            Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(projetId, that.projetId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -197,7 +177,7 @@ public class DevisCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, prixTotal, prixHT, prixService, dureeProjet, userUuid, projetId, distinct);
+        return Objects.hash(id, prixTotal, prixHT, prixService, dureeProjet, projetId, distinct);
     }
 
     // prettier-ignore
@@ -209,7 +189,6 @@ public class DevisCriteria implements Serializable, Criteria {
             (prixHT != null ? "prixHT=" + prixHT + ", " : "") +
             (prixService != null ? "prixService=" + prixService + ", " : "") +
             (dureeProjet != null ? "dureeProjet=" + dureeProjet + ", " : "") +
-            (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (projetId != null ? "projetId=" + projetId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -7,38 +7,32 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity Poste.
+        Added the entity Departement.
     -->
-    <changeSet id="20230619021809-1" author="jhipster">
-        <createTable tableName="poste" remarks="Task entity.\n@author The JHipster team.">
+    <changeSet id="20230620012259-1" author="jhipster">
+        <createTable tableName="departement">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="title" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="description" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="user_uuid" type="${uuidType}">
-                <constraints nullable="false" />
+            <column name="nom" type="varchar(255)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_departement__nom" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
-    <changeSet id="20230619021809-1-relations" author="jhipster">
+    <changeSet id="20230620012259-1-relations" author="jhipster">
 
-        <createTable tableName="rel_poste__users">
+        <createTable tableName="rel_departement__users">
             <column name="users_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="poste_id" type="bigint">
+            <column name="departement_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="poste_id, users_id" tableName="rel_poste__users"/>
+        <addPrimaryKey columnNames="departement_id, users_id" tableName="rel_departement__users"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -51,16 +45,14 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20230619021809-1-data" author="jhipster" context="faker">
+    <changeSet id="20230620012259-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/poste.csv"
+                  file="config/liquibase/fake-data/departement.csv"
                   separator=";"
-                  tableName="poste"
+                  tableName="departement"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="title" type="string"/>
-            <column name="description" type="string"/>
-            <column name="user_uuid" type="string"/>
+            <column name="nom" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

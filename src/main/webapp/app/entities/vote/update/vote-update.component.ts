@@ -19,7 +19,6 @@ export class VoteUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    userUuid: [null, [Validators.required]],
     typeVote: [null, [Validators.required]],
   });
 
@@ -67,7 +66,6 @@ export class VoteUpdateComponent implements OnInit {
   protected updateForm(vote: IVote): void {
     this.editForm.patchValue({
       id: vote.id,
-      userUuid: vote.userUuid,
       typeVote: vote.typeVote,
     });
   }
@@ -76,7 +74,6 @@ export class VoteUpdateComponent implements OnInit {
     return {
       ...new Vote(),
       id: this.editForm.get(['id'])!.value,
-      userUuid: this.editForm.get(['userUuid'])!.value,
       typeVote: this.editForm.get(['typeVote'])!.value,
     };
   }

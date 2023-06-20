@@ -2,11 +2,8 @@ package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * not an ignored comment
@@ -34,12 +31,6 @@ public class Devis implements Serializable {
     @DecimalMin(value = "0")
     @Column(name = "duree_projet")
     private Float dureeProjet;
-
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
 
     @JsonIgnoreProperties(value = { "equipe", "taches", "devis" }, allowSetters = true)
     @OneToOne
@@ -113,19 +104,6 @@ public class Devis implements Serializable {
         this.dureeProjet = dureeProjet;
     }
 
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public Devis userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
-    }
-
     public Projet getProjet() {
         return this.projet;
     }
@@ -167,7 +145,6 @@ public class Devis implements Serializable {
             ", prixHT=" + getPrixHT() +
             ", prixService=" + getPrixService() +
             ", dureeProjet=" + getDureeProjet() +
-            ", userUuid='" + getUserUuid() + "'" +
             "}";
     }
 }

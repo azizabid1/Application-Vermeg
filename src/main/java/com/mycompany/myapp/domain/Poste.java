@@ -3,11 +3,7 @@ package com.mycompany.myapp.domain;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * Task entity.\n@author The JHipster team.
@@ -28,12 +24,6 @@ public class Poste implements Serializable {
 
     @Column(name = "description")
     private String description;
-
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
 
     @ManyToMany
     @JoinTable(name = "rel_poste__users", joinColumns = @JoinColumn(name = "poste_id"), inverseJoinColumns = @JoinColumn(name = "users_id"))
@@ -78,19 +68,6 @@ public class Poste implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public Poste userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Set<User> getUsers() {
@@ -142,7 +119,6 @@ public class Poste implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
-            ", userUuid='" + getUserUuid() + "'" +
             "}";
     }
 }

@@ -26,7 +26,6 @@ export class ProjetUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    userUuid: [null, [Validators.required]],
     nomProjet: [],
     dateDebut: [],
     dateFin: [],
@@ -109,7 +108,6 @@ export class ProjetUpdateComponent implements OnInit {
   protected updateForm(projet: IProjet): void {
     this.editForm.patchValue({
       id: projet.id,
-      userUuid: projet.userUuid,
       nomProjet: projet.nomProjet,
       dateDebut: projet.dateDebut,
       dateFin: projet.dateFin,
@@ -145,7 +143,6 @@ export class ProjetUpdateComponent implements OnInit {
     return {
       ...new Projet(),
       id: this.editForm.get(['id'])!.value,
-      userUuid: this.editForm.get(['userUuid'])!.value,
       nomProjet: this.editForm.get(['nomProjet'])!.value,
       dateDebut: this.editForm.get(['dateDebut'])!.value,
       dateFin: this.editForm.get(['dateFin'])!.value,

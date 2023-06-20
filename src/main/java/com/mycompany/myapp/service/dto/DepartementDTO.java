@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -16,9 +15,6 @@ public class DepartementDTO implements Serializable {
     private Long id;
 
     private TypeDepartement nom;
-
-    @NotNull
-    private UUID userUuid;
 
     private Set<UserDTO> users = new HashSet<>();
 
@@ -36,14 +32,6 @@ public class DepartementDTO implements Serializable {
 
     public void setNom(TypeDepartement nom) {
         this.nom = nom;
-    }
-
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Set<UserDTO> getUsers() {
@@ -81,7 +69,6 @@ public class DepartementDTO implements Serializable {
         return "DepartementDTO{" +
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
-            ", userUuid='" + getUserUuid() + "'" +
             ", users=" + getUsers() +
             "}";
     }

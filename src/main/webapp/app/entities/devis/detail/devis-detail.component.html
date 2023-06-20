@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center">
-  <div class="col-8">
+  <div class="col-8" id="htmlData">
     <div *ngIf="devis">
       <h2 data-cy="devisDetailsHeading"><span jhiTranslate="vermegApp.devis.detail.title">Devis</span></h2>
 
@@ -28,11 +28,7 @@
         </dd>
         <dt><span jhiTranslate="vermegApp.devis.dureeProjet">Duree Projet</span></dt>
         <dd>
-          <span>{{ devis.dureeProjet }}</span>
-        </dd>
-        <dt><span jhiTranslate="vermegApp.devis.userUuid">User Uuid</span></dt>
-        <dd>
-          <span>{{ devis.userUuid }}</span>
+          <span>{{ devis.projet?.nombreTotal }}</span>
         </dd>
         <dt><span jhiTranslate="vermegApp.devis.projet">Projet</span></dt>
         <dd>
@@ -49,6 +45,7 @@
       <button type="button" [routerLink]="['/devis', devis.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
+      <button class="btn btn-success btn-block" (click)="openPDF()">Download PDF</button>
     </div>
   </div>
 </div>

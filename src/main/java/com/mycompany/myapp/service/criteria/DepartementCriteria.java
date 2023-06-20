@@ -12,7 +12,6 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.Departement} entity. This class is used
@@ -49,8 +48,6 @@ public class DepartementCriteria implements Serializable, Criteria {
 
     private TypeDepartementFilter nom;
 
-    private UUIDFilter userUuid;
-
     private LongFilter usersId;
 
     private Boolean distinct;
@@ -60,7 +57,6 @@ public class DepartementCriteria implements Serializable, Criteria {
     public DepartementCriteria(DepartementCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.nom = other.nom == null ? null : other.nom.copy();
-        this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.usersId = other.usersId == null ? null : other.usersId.copy();
         this.distinct = other.distinct;
     }
@@ -100,21 +96,6 @@ public class DepartementCriteria implements Serializable, Criteria {
         this.nom = nom;
     }
 
-    public UUIDFilter getUserUuid() {
-        return userUuid;
-    }
-
-    public UUIDFilter userUuid() {
-        if (userUuid == null) {
-            userUuid = new UUIDFilter();
-        }
-        return userUuid;
-    }
-
-    public void setUserUuid(UUIDFilter userUuid) {
-        this.userUuid = userUuid;
-    }
-
     public LongFilter getUsersId() {
         return usersId;
     }
@@ -150,7 +131,6 @@ public class DepartementCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(nom, that.nom) &&
-            Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(usersId, that.usersId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -158,7 +138,7 @@ public class DepartementCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nom, userUuid, usersId, distinct);
+        return Objects.hash(id, nom, usersId, distinct);
     }
 
     // prettier-ignore
@@ -167,7 +147,6 @@ public class DepartementCriteria implements Serializable, Criteria {
         return "DepartementCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (nom != null ? "nom=" + nom + ", " : "") +
-            (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (usersId != null ? "usersId=" + usersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

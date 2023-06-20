@@ -12,20 +12,6 @@
           <label class="form-label" jhiTranslate="vermegApp.projet.id" for="field_id">Id</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="vermegApp.projet.userUuid" for="field_userUuid">User Uuid</label>
-          <input
-            type="text"
-            class="form-control"
-            name="userUuid"
-            id="field_userUuid"
-            data-cy="userUuid"
-            formControlName="userUuid"
-            [readonly]="true"
-          />
-        </div>
-
         <div class="row mb-3">
           <label class="form-label" jhiTranslate="vermegApp.projet.nomProjet" for="field_nomProjet">Nom Projet</label>
           <input type="text" class="form-control" name="nomProjet" id="field_nomProjet" data-cy="nomProjet" formControlName="nomProjet" />
@@ -125,7 +111,7 @@
         </div>
 
         <div class="row mb-3">
-          <label jhiTranslate="vermegApp.projet.taches" for="field_taches">Taches</label>
+          <label jhiTranslate="vermegApp.projet.tache" for="field_taches">Taches</label>
           <select class="form-control" id="field_taches" data-cy="taches" multiple name="taches" formControlName="taches">
             <option
               [ngValue]="getSelectedTache(tacheOption, editForm.get('taches')!.value)"

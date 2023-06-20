@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230619021806",
+  "changelogDate": "20230620012259",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "departement",
@@ -14,11 +14,6 @@
       "fieldType": "TypeDepartement",
       "fieldValidateRules": ["unique"],
       "fieldValues": "RH,INFORMATIQUE,MOA,FINANCE"
-    },
-    {
-      "fieldName": "userUuid",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,

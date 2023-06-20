@@ -90,9 +90,6 @@ public class VoteQueryService extends QueryService<Vote> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Vote_.id));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), Vote_.userUuid));
-            }
             if (criteria.getTypeVote() != null) {
                 specification = specification.and(buildSpecification(criteria.getTypeVote(), Vote_.typeVote));
             }

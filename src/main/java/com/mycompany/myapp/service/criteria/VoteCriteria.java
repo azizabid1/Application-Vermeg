@@ -12,7 +12,6 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.Vote} entity. This class is used
@@ -47,8 +46,6 @@ public class VoteCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private UUIDFilter userUuid;
-
     private RendementFilter typeVote;
 
     private LongFilter equipesId;
@@ -59,7 +56,6 @@ public class VoteCriteria implements Serializable, Criteria {
 
     public VoteCriteria(VoteCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.typeVote = other.typeVote == null ? null : other.typeVote.copy();
         this.equipesId = other.equipesId == null ? null : other.equipesId.copy();
         this.distinct = other.distinct;
@@ -83,21 +79,6 @@ public class VoteCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public UUIDFilter getUserUuid() {
-        return userUuid;
-    }
-
-    public UUIDFilter userUuid() {
-        if (userUuid == null) {
-            userUuid = new UUIDFilter();
-        }
-        return userUuid;
-    }
-
-    public void setUserUuid(UUIDFilter userUuid) {
-        this.userUuid = userUuid;
     }
 
     public RendementFilter getTypeVote() {
@@ -149,7 +130,6 @@ public class VoteCriteria implements Serializable, Criteria {
         final VoteCriteria that = (VoteCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(typeVote, that.typeVote) &&
             Objects.equals(equipesId, that.equipesId) &&
             Objects.equals(distinct, that.distinct)
@@ -158,7 +138,7 @@ public class VoteCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userUuid, typeVote, equipesId, distinct);
+        return Objects.hash(id, typeVote, equipesId, distinct);
     }
 
     // prettier-ignore
@@ -166,7 +146,6 @@ public class VoteCriteria implements Serializable, Criteria {
     public String toString() {
         return "VoteCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (typeVote != null ? "typeVote=" + typeVote + ", " : "") +
             (equipesId != null ? "equipesId=" + equipesId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

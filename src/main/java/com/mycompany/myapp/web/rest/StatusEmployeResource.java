@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,8 +62,7 @@ public class StatusEmployeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/status-employes")
-    public ResponseEntity<StatusEmployeDTO> createStatusEmploye(@Valid @RequestBody StatusEmployeDTO statusEmployeDTO)
-        throws URISyntaxException {
+    public ResponseEntity<StatusEmployeDTO> createStatusEmploye(@RequestBody StatusEmployeDTO statusEmployeDTO) throws URISyntaxException {
         log.debug("REST request to save StatusEmploye : {}", statusEmployeDTO);
         if (statusEmployeDTO.getId() != null) {
             throw new BadRequestAlertException("A new statusEmploye cannot already have an ID", ENTITY_NAME, "idexists");
@@ -90,7 +87,7 @@ public class StatusEmployeResource {
     @PutMapping("/status-employes/{id}")
     public ResponseEntity<StatusEmployeDTO> updateStatusEmploye(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody StatusEmployeDTO statusEmployeDTO
+        @RequestBody StatusEmployeDTO statusEmployeDTO
     ) throws URISyntaxException {
         log.debug("REST request to update StatusEmploye : {}, {}", id, statusEmployeDTO);
         if (statusEmployeDTO.getId() == null) {
@@ -125,7 +122,7 @@ public class StatusEmployeResource {
     @PatchMapping(value = "/status-employes/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<StatusEmployeDTO> partialUpdateStatusEmploye(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody StatusEmployeDTO statusEmployeDTO
+        @RequestBody StatusEmployeDTO statusEmployeDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update StatusEmploye partially : {}, {}", id, statusEmployeDTO);
         if (statusEmployeDTO.getId() == null) {

@@ -22,7 +22,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,9 +46,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class ProjetResourceIT {
-
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
 
     private static final String DEFAULT_NOM_PROJET = "AAAAAAAAAA";
     private static final String UPDATED_NOM_PROJET = "BBBBBBBBBB";
@@ -110,7 +106,6 @@ class ProjetResourceIT {
      */
     public static Projet createEntity(EntityManager em) {
         Projet projet = new Projet()
-            .userUuid(DEFAULT_USER_UUID)
             .nomProjet(DEFAULT_NOM_PROJET)
             .dateDebut(DEFAULT_DATE_DEBUT)
             .dateFin(DEFAULT_DATE_FIN)
@@ -129,7 +124,6 @@ class ProjetResourceIT {
      */
     public static Projet createUpdatedEntity(EntityManager em) {
         Projet projet = new Projet()
-            .userUuid(UPDATED_USER_UUID)
             .nomProjet(UPDATED_NOM_PROJET)
             .dateDebut(UPDATED_DATE_DEBUT)
             .dateFin(UPDATED_DATE_FIN)
@@ -159,7 +153,6 @@ class ProjetResourceIT {
         List<Projet> projetList = projetRepository.findAll();
         assertThat(projetList).hasSize(databaseSizeBeforeCreate + 1);
         Projet testProjet = projetList.get(projetList.size() - 1);
-        assertThat(testProjet.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
         assertThat(testProjet.getNomProjet()).isEqualTo(DEFAULT_NOM_PROJET);
         assertThat(testProjet.getDateDebut()).isEqualTo(DEFAULT_DATE_DEBUT);
         assertThat(testProjet.getDateFin()).isEqualTo(DEFAULT_DATE_FIN);
@@ -190,24 +183,6 @@ class ProjetResourceIT {
 
     @Test
     @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = projetRepository.findAll().size();
-        // set the field null
-        projet.setUserUuid(null);
-
-        // Create the Projet, which fails.
-        ProjetDTO projetDTO = projetMapper.toDto(projet);
-
-        restProjetMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(projetDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Projet> projetList = projetRepository.findAll();
-        assertThat(projetList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllProjets() throws Exception {
         // Initialize the database
         projetRepository.saveAndFlush(projet);
@@ -218,7 +193,6 @@ class ProjetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(projet.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].nomProjet").value(hasItem(DEFAULT_NOM_PROJET)))
             .andExpect(jsonPath("$.[*].dateDebut").value(hasItem(DEFAULT_DATE_DEBUT.toString())))
             .andExpect(jsonPath("$.[*].dateFin").value(hasItem(DEFAULT_DATE_FIN.toString())))
@@ -258,7 +232,6 @@ class ProjetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(projet.getId().intValue()))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()))
             .andExpect(jsonPath("$.nomProjet").value(DEFAULT_NOM_PROJET))
             .andExpect(jsonPath("$.dateDebut").value(DEFAULT_DATE_DEBUT.toString()))
             .andExpect(jsonPath("$.dateFin").value(DEFAULT_DATE_FIN.toString()))
@@ -284,58 +257,6 @@ class ProjetResourceIT {
 
         defaultProjetShouldBeFound("id.lessThanOrEqual=" + id);
         defaultProjetShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllProjetsByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        projetRepository.saveAndFlush(projet);
-
-        // Get all the projetList where userUuid equals to DEFAULT_USER_UUID
-        defaultProjetShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the projetList where userUuid equals to UPDATED_USER_UUID
-        defaultProjetShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllProjetsByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        projetRepository.saveAndFlush(projet);
-
-        // Get all the projetList where userUuid not equals to DEFAULT_USER_UUID
-        defaultProjetShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the projetList where userUuid not equals to UPDATED_USER_UUID
-        defaultProjetShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllProjetsByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        projetRepository.saveAndFlush(projet);
-
-        // Get all the projetList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultProjetShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the projetList where userUuid equals to UPDATED_USER_UUID
-        defaultProjetShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllProjetsByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        projetRepository.saveAndFlush(projet);
-
-        // Get all the projetList where userUuid is not null
-        defaultProjetShouldBeFound("userUuid.specified=true");
-
-        // Get all the projetList where userUuid is null
-        defaultProjetShouldNotBeFound("userUuid.specified=false");
     }
 
     @Test
@@ -1050,7 +971,6 @@ class ProjetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(projet.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].nomProjet").value(hasItem(DEFAULT_NOM_PROJET)))
             .andExpect(jsonPath("$.[*].dateDebut").value(hasItem(DEFAULT_DATE_DEBUT.toString())))
             .andExpect(jsonPath("$.[*].dateFin").value(hasItem(DEFAULT_DATE_FIN.toString())))
@@ -1106,7 +1026,6 @@ class ProjetResourceIT {
         // Disconnect from session so that the updates on updatedProjet are not directly saved in db
         em.detach(updatedProjet);
         updatedProjet
-            .userUuid(UPDATED_USER_UUID)
             .nomProjet(UPDATED_NOM_PROJET)
             .dateDebut(UPDATED_DATE_DEBUT)
             .dateFin(UPDATED_DATE_FIN)
@@ -1128,7 +1047,6 @@ class ProjetResourceIT {
         List<Projet> projetList = projetRepository.findAll();
         assertThat(projetList).hasSize(databaseSizeBeforeUpdate);
         Projet testProjet = projetList.get(projetList.size() - 1);
-        assertThat(testProjet.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testProjet.getNomProjet()).isEqualTo(UPDATED_NOM_PROJET);
         assertThat(testProjet.getDateDebut()).isEqualTo(UPDATED_DATE_DEBUT);
         assertThat(testProjet.getDateFin()).isEqualTo(UPDATED_DATE_FIN);
@@ -1215,7 +1133,7 @@ class ProjetResourceIT {
         Projet partialUpdatedProjet = new Projet();
         partialUpdatedProjet.setId(projet.getId());
 
-        partialUpdatedProjet.dateDebut(UPDATED_DATE_DEBUT);
+        partialUpdatedProjet.dateFin(UPDATED_DATE_FIN);
 
         restProjetMockMvc
             .perform(
@@ -1229,10 +1147,9 @@ class ProjetResourceIT {
         List<Projet> projetList = projetRepository.findAll();
         assertThat(projetList).hasSize(databaseSizeBeforeUpdate);
         Projet testProjet = projetList.get(projetList.size() - 1);
-        assertThat(testProjet.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
         assertThat(testProjet.getNomProjet()).isEqualTo(DEFAULT_NOM_PROJET);
-        assertThat(testProjet.getDateDebut()).isEqualTo(UPDATED_DATE_DEBUT);
-        assertThat(testProjet.getDateFin()).isEqualTo(DEFAULT_DATE_FIN);
+        assertThat(testProjet.getDateDebut()).isEqualTo(DEFAULT_DATE_DEBUT);
+        assertThat(testProjet.getDateFin()).isEqualTo(UPDATED_DATE_FIN);
         assertThat(testProjet.getTechnologies()).isEqualTo(DEFAULT_TECHNOLOGIES);
         assertThat(testProjet.getStatusProjet()).isEqualTo(DEFAULT_STATUS_PROJET);
         assertThat(testProjet.getNombreTotal()).isEqualTo(DEFAULT_NOMBRE_TOTAL);
@@ -1252,7 +1169,6 @@ class ProjetResourceIT {
         partialUpdatedProjet.setId(projet.getId());
 
         partialUpdatedProjet
-            .userUuid(UPDATED_USER_UUID)
             .nomProjet(UPDATED_NOM_PROJET)
             .dateDebut(UPDATED_DATE_DEBUT)
             .dateFin(UPDATED_DATE_FIN)
@@ -1273,7 +1189,6 @@ class ProjetResourceIT {
         List<Projet> projetList = projetRepository.findAll();
         assertThat(projetList).hasSize(databaseSizeBeforeUpdate);
         Projet testProjet = projetList.get(projetList.size() - 1);
-        assertThat(testProjet.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testProjet.getNomProjet()).isEqualTo(UPDATED_NOM_PROJET);
         assertThat(testProjet.getDateDebut()).isEqualTo(UPDATED_DATE_DEBUT);
         assertThat(testProjet.getDateFin()).isEqualTo(UPDATED_DATE_FIN);

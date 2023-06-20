@@ -1,11 +1,11 @@
-id;user_uuid;nom_projet;date_debut;date_fin;technologies;status_projet;nombre_total;nombre_restant
-1;4fafd399-cd7a-4692-8b9b-cf65a46a6cf7;Metal Account;2023-06-18;2023-06-18;orchestration revolutionary;COURS;44506;51009
-2;de38546c-9837-4408-a3b5-48f5300eca34;Garden Electronics;2023-06-18;2023-06-18;Producteur Assistant Hat;TERMINER;7938;27922
-3;fd44cf4f-4a5e-4117-a1d7-3d9960dd0835;next-generation;2023-06-19;2023-06-18;embrace;COURS;14887;2014
-4;ab9c8a80-72ff-41a5-98e3-32f53a023e2d;schemas Soap;2023-06-18;2023-06-18;Du Granite Investment;COURS;23346;96011
-5;6f56516b-1a42-4222-9dde-b67595595612;Rupee Checking;2023-06-18;2023-06-18;Chips Bike monitor;ATTENTE;7508;54219
-6;c42ff2de-28d4-4d00-9476-b55df008f26d;indexing;2023-06-18;2023-06-18;Lorraine impactful intranet;COURS;79005;98697
-7;712dbc9c-7593-4319-bb0d-db726ceafe8c;capacitor;2023-06-18;2023-06-18;Picardie;ATTENTE;81411;97821
-8;6b2b23b2-61c3-4ee8-8ee0-6c08391fb728;Licensed Chicken enterprise;2023-06-18;2023-06-18;Pants c;EXECUTION;59290;34447
-9;44f276c7-e8e1-42c4-9284-b8db3563ad8d;bus Intelligent;2023-06-18;2023-06-18;Specialiste e-markets;TERMINER;27596;93586
-10;fcc9493f-adea-4c30-95a0-d26697af2488;Fidji grow;2023-06-18;2023-06-18;cultivate Intelligent des;EXECUTION;10998;11424
+id;nom_projet;date_debut;date_fin;technologies;status_projet;nombre_total;nombre_restant
+1;Technicien;2023-06-19;2023-06-19;Account Pastourelle;EXECUTION;14815;52728
+2;Account Coordinateur withdrawal;2023-06-19;2023-06-19;Administrateur Metal Account;EXECUTION;85757;63014
+3;interface;2023-06-19;2023-06-19;Montorgueil;TERMINER;24855;54778
+4;full-range;2023-06-19;2023-06-19;Bedfordshire;EXECUTION;89240;22833
+5;granular b Books;2023-06-19;2023-06-19;fault-tolerant;COURS;12247;2525
+6;Fresh;2023-06-19;2023-06-19;Industrial bypass b;TERMINER;7938;27922
+7;compressing parse a;2023-06-19;2023-06-19;Cotton;ATTENTE;84580;44211
+8;generating;2023-06-19;2023-06-20;up Fundamental next-generation;ATTENTE;91211;1216
+9;Cotton Chair;2023-06-19;2023-06-19;Nigeria Grocery Stagiaire;EXECUTION;32417;35421
+10;SSL Chips;2023-06-19;2023-06-19;Concrete;ATTENTE;84805;40424

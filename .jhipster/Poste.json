@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230619021809",
+  "changelogDate": "20230620012302",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "poste",
@@ -16,11 +16,6 @@
     {
       "fieldName": "description",
       "fieldType": "String"
-    },
-    {
-      "fieldName": "userUuid",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,

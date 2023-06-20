@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -19,9 +18,6 @@ public class EquipeDTO implements Serializable {
     @Min(value = 4L)
     @Max(value = 6L)
     private Long nombrePersonne;
-
-    @NotNull
-    private UUID userUuid;
 
     private Set<UserDTO> users = new HashSet<>();
 
@@ -49,14 +45,6 @@ public class EquipeDTO implements Serializable {
 
     public void setNombrePersonne(Long nombrePersonne) {
         this.nombrePersonne = nombrePersonne;
-    }
-
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Set<UserDTO> getUsers() {
@@ -103,7 +91,6 @@ public class EquipeDTO implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", nombrePersonne=" + getNombrePersonne() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", users=" + getUsers() +
             ", vote=" + getVote() +
             "}";

@@ -22,7 +22,6 @@ describe('Vote Service', () => {
 
     elemDefault = {
       id: 0,
-      userUuid: 'AAAAAAA',
       typeVote: Rendement.FAIBLE,
     };
   });
@@ -59,7 +58,6 @@ describe('Vote Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          userUuid: 'BBBBBB',
           typeVote: 'BBBBBB',
         },
         elemDefault
@@ -77,7 +75,6 @@ describe('Vote Service', () => {
     it('should partial update a Vote', () => {
       const patchObject = Object.assign(
         {
-          userUuid: 'BBBBBB',
           typeVote: 'BBBBBB',
         },
         new Vote()
@@ -98,7 +95,6 @@ describe('Vote Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          userUuid: 'BBBBBB',
           typeVote: 'BBBBBB',
         },
         elemDefault
@@ -151,7 +147,7 @@ describe('Vote Service', () => {
       });
 
       it('should add only unique Vote to an array', () => {
-        const voteArray: IVote[] = [{ id: 123 }, { id: 456 }, { id: 24037 }];
+        const voteArray: IVote[] = [{ id: 123 }, { id: 456 }, { id: 60868 }];
         const voteCollection: IVote[] = [{ id: 123 }];
         expectedResult = service.addVoteToCollectionIfMissing(voteCollection, ...voteArray);
         expect(expectedResult).toHaveLength(3);

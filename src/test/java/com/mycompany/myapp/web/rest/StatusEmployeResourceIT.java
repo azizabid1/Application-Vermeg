@@ -19,7 +19,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,9 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class StatusEmployeResourceIT {
-
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
 
     private static final Boolean DEFAULT_DISPONIBILITE = false;
     private static final Boolean UPDATED_DISPONIBILITE = true;
@@ -96,7 +92,6 @@ class StatusEmployeResourceIT {
      */
     public static StatusEmploye createEntity(EntityManager em) {
         StatusEmploye statusEmploye = new StatusEmploye()
-            .userUuid(DEFAULT_USER_UUID)
             .disponibilite(DEFAULT_DISPONIBILITE)
             .mission(DEFAULT_MISSION)
             .debutConge(DEFAULT_DEBUT_CONGE)
@@ -112,7 +107,6 @@ class StatusEmployeResourceIT {
      */
     public static StatusEmploye createUpdatedEntity(EntityManager em) {
         StatusEmploye statusEmploye = new StatusEmploye()
-            .userUuid(UPDATED_USER_UUID)
             .disponibilite(UPDATED_DISPONIBILITE)
             .mission(UPDATED_MISSION)
             .debutConge(UPDATED_DEBUT_CONGE)
@@ -141,7 +135,6 @@ class StatusEmployeResourceIT {
         List<StatusEmploye> statusEmployeList = statusEmployeRepository.findAll();
         assertThat(statusEmployeList).hasSize(databaseSizeBeforeCreate + 1);
         StatusEmploye testStatusEmploye = statusEmployeList.get(statusEmployeList.size() - 1);
-        assertThat(testStatusEmploye.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
         assertThat(testStatusEmploye.getDisponibilite()).isEqualTo(DEFAULT_DISPONIBILITE);
         assertThat(testStatusEmploye.getMission()).isEqualTo(DEFAULT_MISSION);
         assertThat(testStatusEmploye.getDebutConge()).isEqualTo(DEFAULT_DEBUT_CONGE);
@@ -171,26 +164,6 @@ class StatusEmployeResourceIT {
 
     @Test
     @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = statusEmployeRepository.findAll().size();
-        // set the field null
-        statusEmploye.setUserUuid(null);
-
-        // Create the StatusEmploye, which fails.
-        StatusEmployeDTO statusEmployeDTO = statusEmployeMapper.toDto(statusEmploye);
-
-        restStatusEmployeMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(statusEmployeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<StatusEmploye> statusEmployeList = statusEmployeRepository.findAll();
-        assertThat(statusEmployeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllStatusEmployes() throws Exception {
         // Initialize the database
         statusEmployeRepository.saveAndFlush(statusEmploye);
@@ -201,7 +174,6 @@ class StatusEmployeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(statusEmploye.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].disponibilite").value(hasItem(DEFAULT_DISPONIBILITE.booleanValue())))
             .andExpect(jsonPath("$.[*].mission").value(hasItem(DEFAULT_MISSION.booleanValue())))
             .andExpect(jsonPath("$.[*].debutConge").value(hasItem(DEFAULT_DEBUT_CONGE.toString())))
@@ -238,7 +210,6 @@ class StatusEmployeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(statusEmploye.getId().intValue()))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()))
             .andExpect(jsonPath("$.disponibilite").value(DEFAULT_DISPONIBILITE.booleanValue()))
             .andExpect(jsonPath("$.mission").value(DEFAULT_MISSION.booleanValue()))
             .andExpect(jsonPath("$.debutConge").value(DEFAULT_DEBUT_CONGE.toString()))
@@ -261,58 +232,6 @@ class StatusEmployeResourceIT {
 
         defaultStatusEmployeShouldBeFound("id.lessThanOrEqual=" + id);
         defaultStatusEmployeShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllStatusEmployesByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        statusEmployeRepository.saveAndFlush(statusEmploye);
-
-        // Get all the statusEmployeList where userUuid equals to DEFAULT_USER_UUID
-        defaultStatusEmployeShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the statusEmployeList where userUuid equals to UPDATED_USER_UUID
-        defaultStatusEmployeShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllStatusEmployesByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        statusEmployeRepository.saveAndFlush(statusEmploye);
-
-        // Get all the statusEmployeList where userUuid not equals to DEFAULT_USER_UUID
-        defaultStatusEmployeShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the statusEmployeList where userUuid not equals to UPDATED_USER_UUID
-        defaultStatusEmployeShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllStatusEmployesByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        statusEmployeRepository.saveAndFlush(statusEmploye);
-
-        // Get all the statusEmployeList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultStatusEmployeShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the statusEmployeList where userUuid equals to UPDATED_USER_UUID
-        defaultStatusEmployeShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllStatusEmployesByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        statusEmployeRepository.saveAndFlush(statusEmploye);
-
-        // Get all the statusEmployeList where userUuid is not null
-        defaultStatusEmployeShouldBeFound("userUuid.specified=true");
-
-        // Get all the statusEmployeList where userUuid is null
-        defaultStatusEmployeShouldNotBeFound("userUuid.specified=false");
     }
 
     @Test
@@ -662,7 +581,6 @@ class StatusEmployeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(statusEmploye.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].disponibilite").value(hasItem(DEFAULT_DISPONIBILITE.booleanValue())))
             .andExpect(jsonPath("$.[*].mission").value(hasItem(DEFAULT_MISSION.booleanValue())))
             .andExpect(jsonPath("$.[*].debutConge").value(hasItem(DEFAULT_DEBUT_CONGE.toString())))
@@ -715,7 +633,6 @@ class StatusEmployeResourceIT {
         // Disconnect from session so that the updates on updatedStatusEmploye are not directly saved in db
         em.detach(updatedStatusEmploye);
         updatedStatusEmploye
-            .userUuid(UPDATED_USER_UUID)
             .disponibilite(UPDATED_DISPONIBILITE)
             .mission(UPDATED_MISSION)
             .debutConge(UPDATED_DEBUT_CONGE)
@@ -734,7 +651,6 @@ class StatusEmployeResourceIT {
         List<StatusEmploye> statusEmployeList = statusEmployeRepository.findAll();
         assertThat(statusEmployeList).hasSize(databaseSizeBeforeUpdate);
         StatusEmploye testStatusEmploye = statusEmployeList.get(statusEmployeList.size() - 1);
-        assertThat(testStatusEmploye.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testStatusEmploye.getDisponibilite()).isEqualTo(UPDATED_DISPONIBILITE);
         assertThat(testStatusEmploye.getMission()).isEqualTo(UPDATED_MISSION);
         assertThat(testStatusEmploye.getDebutConge()).isEqualTo(UPDATED_DEBUT_CONGE);
@@ -820,8 +736,6 @@ class StatusEmployeResourceIT {
         StatusEmploye partialUpdatedStatusEmploye = new StatusEmploye();
         partialUpdatedStatusEmploye.setId(statusEmploye.getId());
 
-        partialUpdatedStatusEmploye.finConge(UPDATED_FIN_CONGE);
-
         restStatusEmployeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedStatusEmploye.getId())
@@ -834,11 +748,10 @@ class StatusEmployeResourceIT {
         List<StatusEmploye> statusEmployeList = statusEmployeRepository.findAll();
         assertThat(statusEmployeList).hasSize(databaseSizeBeforeUpdate);
         StatusEmploye testStatusEmploye = statusEmployeList.get(statusEmployeList.size() - 1);
-        assertThat(testStatusEmploye.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
         assertThat(testStatusEmploye.getDisponibilite()).isEqualTo(DEFAULT_DISPONIBILITE);
         assertThat(testStatusEmploye.getMission()).isEqualTo(DEFAULT_MISSION);
         assertThat(testStatusEmploye.getDebutConge()).isEqualTo(DEFAULT_DEBUT_CONGE);
-        assertThat(testStatusEmploye.getFinConge()).isEqualTo(UPDATED_FIN_CONGE);
+        assertThat(testStatusEmploye.getFinConge()).isEqualTo(DEFAULT_FIN_CONGE);
     }
 
     @Test
@@ -854,7 +767,6 @@ class StatusEmployeResourceIT {
         partialUpdatedStatusEmploye.setId(statusEmploye.getId());
 
         partialUpdatedStatusEmploye
-            .userUuid(UPDATED_USER_UUID)
             .disponibilite(UPDATED_DISPONIBILITE)
             .mission(UPDATED_MISSION)
             .debutConge(UPDATED_DEBUT_CONGE)
@@ -872,7 +784,6 @@ class StatusEmployeResourceIT {
         List<StatusEmploye> statusEmployeList = statusEmployeRepository.findAll();
         assertThat(statusEmployeList).hasSize(databaseSizeBeforeUpdate);
         StatusEmploye testStatusEmploye = statusEmployeList.get(statusEmployeList.size() - 1);
-        assertThat(testStatusEmploye.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testStatusEmploye.getDisponibilite()).isEqualTo(UPDATED_DISPONIBILITE);
         assertThat(testStatusEmploye.getMission()).isEqualTo(UPDATED_MISSION);
         assertThat(testStatusEmploye.getDebutConge()).isEqualTo(UPDATED_DEBUT_CONGE);

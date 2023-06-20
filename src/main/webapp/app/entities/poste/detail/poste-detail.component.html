@@ -22,10 +22,6 @@
         <dd>
           <span>{{ poste.description }}</span>
         </dd>
-        <dt><span jhiTranslate="vermegApp.poste.userUuid">User Uuid</span></dt>
-        <dd>
-          <span>{{ poste.userUuid }}</span>
-        </dd>
         <dt><span jhiTranslate="vermegApp.poste.users">Users</span></dt>
         <dd>
           <span *ngFor="let user of poste.users; let last = last">

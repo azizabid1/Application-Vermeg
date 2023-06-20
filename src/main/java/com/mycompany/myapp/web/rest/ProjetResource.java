@@ -11,8 +11,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +59,7 @@ public class ProjetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/projets")
-    public ResponseEntity<ProjetDTO> createProjet(@Valid @RequestBody ProjetDTO projetDTO) throws URISyntaxException {
+    public ResponseEntity<ProjetDTO> createProjet(@RequestBody ProjetDTO projetDTO) throws URISyntaxException {
         log.debug("REST request to save Projet : {}", projetDTO);
         if (projetDTO.getId() != null) {
             throw new BadRequestAlertException("A new projet cannot already have an ID", ENTITY_NAME, "idexists");
@@ -85,7 +84,7 @@ public class ProjetResource {
     @PutMapping("/projets/{id}")
     public ResponseEntity<ProjetDTO> updateProjet(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody ProjetDTO projetDTO
+        @RequestBody ProjetDTO projetDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Projet : {}, {}", id, projetDTO);
         if (projetDTO.getId() == null) {
@@ -120,7 +119,7 @@ public class ProjetResource {
     @PatchMapping(value = "/projets/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ProjetDTO> partialUpdateProjet(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody ProjetDTO projetDTO
+        @RequestBody ProjetDTO projetDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Projet partially : {}, {}", id, projetDTO);
         if (projetDTO.getId() == null) {

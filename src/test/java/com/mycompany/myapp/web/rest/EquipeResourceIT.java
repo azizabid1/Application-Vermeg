@@ -19,7 +19,6 @@ import com.mycompany.myapp.service.mapper.EquipeMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,9 +50,6 @@ class EquipeResourceIT {
     private static final Long DEFAULT_NOMBRE_PERSONNE = 4L;
     private static final Long UPDATED_NOMBRE_PERSONNE = 5L;
     private static final Long SMALLER_NOMBRE_PERSONNE = 4L - 1L;
-
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/equipes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -88,7 +84,7 @@ class EquipeResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Equipe createEntity(EntityManager em) {
-        Equipe equipe = new Equipe().nom(DEFAULT_NOM).nombrePersonne(DEFAULT_NOMBRE_PERSONNE).userUuid(DEFAULT_USER_UUID);
+        Equipe equipe = new Equipe().nom(DEFAULT_NOM).nombrePersonne(DEFAULT_NOMBRE_PERSONNE);
         return equipe;
     }
 
@@ -99,7 +95,7 @@ class EquipeResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Equipe createUpdatedEntity(EntityManager em) {
-        Equipe equipe = new Equipe().nom(UPDATED_NOM).nombrePersonne(UPDATED_NOMBRE_PERSONNE).userUuid(UPDATED_USER_UUID);
+        Equipe equipe = new Equipe().nom(UPDATED_NOM).nombrePersonne(UPDATED_NOMBRE_PERSONNE);
         return equipe;
     }
 
@@ -124,7 +120,6 @@ class EquipeResourceIT {
         Equipe testEquipe = equipeList.get(equipeList.size() - 1);
         assertThat(testEquipe.getNom()).isEqualTo(DEFAULT_NOM);
         assertThat(testEquipe.getNombrePersonne()).isEqualTo(DEFAULT_NOMBRE_PERSONNE);
-        assertThat(testEquipe.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
     }
 
     @Test
@@ -148,24 +143,6 @@ class EquipeResourceIT {
 
     @Test
     @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = equipeRepository.findAll().size();
-        // set the field null
-        equipe.setUserUuid(null);
-
-        // Create the Equipe, which fails.
-        EquipeDTO equipeDTO = equipeMapper.toDto(equipe);
-
-        restEquipeMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(equipeDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Equipe> equipeList = equipeRepository.findAll();
-        assertThat(equipeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllEquipes() throws Exception {
         // Initialize the database
         equipeRepository.saveAndFlush(equipe);
@@ -177,8 +154,7 @@ class EquipeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(equipe.getId().intValue())))
             .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM)))
-            .andExpect(jsonPath("$.[*].nombrePersonne").value(hasItem(DEFAULT_NOMBRE_PERSONNE.intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].nombrePersonne").value(hasItem(DEFAULT_NOMBRE_PERSONNE.intValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -212,8 +188,7 @@ class EquipeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(equipe.getId().intValue()))
             .andExpect(jsonPath("$.nom").value(DEFAULT_NOM))
-            .andExpect(jsonPath("$.nombrePersonne").value(DEFAULT_NOMBRE_PERSONNE.intValue()))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()));
+            .andExpect(jsonPath("$.nombrePersonne").value(DEFAULT_NOMBRE_PERSONNE.intValue()));
     }
 
     @Test
@@ -418,58 +393,6 @@ class EquipeResourceIT {
 
     @Test
     @Transactional
-    void getAllEquipesByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        equipeRepository.saveAndFlush(equipe);
-
-        // Get all the equipeList where userUuid equals to DEFAULT_USER_UUID
-        defaultEquipeShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the equipeList where userUuid equals to UPDATED_USER_UUID
-        defaultEquipeShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllEquipesByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        equipeRepository.saveAndFlush(equipe);
-
-        // Get all the equipeList where userUuid not equals to DEFAULT_USER_UUID
-        defaultEquipeShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the equipeList where userUuid not equals to UPDATED_USER_UUID
-        defaultEquipeShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllEquipesByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        equipeRepository.saveAndFlush(equipe);
-
-        // Get all the equipeList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultEquipeShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the equipeList where userUuid equals to UPDATED_USER_UUID
-        defaultEquipeShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllEquipesByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        equipeRepository.saveAndFlush(equipe);
-
-        // Get all the equipeList where userUuid is not null
-        defaultEquipeShouldBeFound("userUuid.specified=true");
-
-        // Get all the equipeList where userUuid is null
-        defaultEquipeShouldNotBeFound("userUuid.specified=false");
-    }
-
-    @Test
-    @Transactional
     void getAllEquipesByUsersIsEqualToSomething() throws Exception {
         // Initialize the database
         equipeRepository.saveAndFlush(equipe);
@@ -557,8 +480,7 @@ class EquipeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(equipe.getId().intValue())))
             .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM)))
-            .andExpect(jsonPath("$.[*].nombrePersonne").value(hasItem(DEFAULT_NOMBRE_PERSONNE.intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())));
+            .andExpect(jsonPath("$.[*].nombrePersonne").value(hasItem(DEFAULT_NOMBRE_PERSONNE.intValue())));
 
         // Check, that the count call also returns 1
         restEquipeMockMvc
@@ -606,7 +528,7 @@ class EquipeResourceIT {
         Equipe updatedEquipe = equipeRepository.findById(equipe.getId()).get();
         // Disconnect from session so that the updates on updatedEquipe are not directly saved in db
         em.detach(updatedEquipe);
-        updatedEquipe.nom(UPDATED_NOM).nombrePersonne(UPDATED_NOMBRE_PERSONNE).userUuid(UPDATED_USER_UUID);
+        updatedEquipe.nom(UPDATED_NOM).nombrePersonne(UPDATED_NOMBRE_PERSONNE);
         EquipeDTO equipeDTO = equipeMapper.toDto(updatedEquipe);
 
         restEquipeMockMvc
@@ -623,7 +545,6 @@ class EquipeResourceIT {
         Equipe testEquipe = equipeList.get(equipeList.size() - 1);
         assertThat(testEquipe.getNom()).isEqualTo(UPDATED_NOM);
         assertThat(testEquipe.getNombrePersonne()).isEqualTo(UPDATED_NOMBRE_PERSONNE);
-        assertThat(testEquipe.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test
@@ -719,7 +640,6 @@ class EquipeResourceIT {
         Equipe testEquipe = equipeList.get(equipeList.size() - 1);
         assertThat(testEquipe.getNom()).isEqualTo(UPDATED_NOM);
         assertThat(testEquipe.getNombrePersonne()).isEqualTo(UPDATED_NOMBRE_PERSONNE);
-        assertThat(testEquipe.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
     }
 
     @Test
@@ -734,7 +654,7 @@ class EquipeResourceIT {
         Equipe partialUpdatedEquipe = new Equipe();
         partialUpdatedEquipe.setId(equipe.getId());
 
-        partialUpdatedEquipe.nom(UPDATED_NOM).nombrePersonne(UPDATED_NOMBRE_PERSONNE).userUuid(UPDATED_USER_UUID);
+        partialUpdatedEquipe.nom(UPDATED_NOM).nombrePersonne(UPDATED_NOMBRE_PERSONNE);
 
         restEquipeMockMvc
             .perform(
@@ -750,7 +670,6 @@ class EquipeResourceIT {
         Equipe testEquipe = equipeList.get(equipeList.size() - 1);
         assertThat(testEquipe.getNom()).isEqualTo(UPDATED_NOM);
         assertThat(testEquipe.getNombrePersonne()).isEqualTo(UPDATED_NOMBRE_PERSONNE);
-        assertThat(testEquipe.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
     }
 
     @Test

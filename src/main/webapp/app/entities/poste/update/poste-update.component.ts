@@ -23,7 +23,6 @@ export class PosteUpdateComponent implements OnInit {
     id: [],
     title: [],
     description: [],
-    userUuid: [null, [Validators.required]],
     users: [],
   });
 
@@ -95,7 +94,6 @@ export class PosteUpdateComponent implements OnInit {
       id: poste.id,
       title: poste.title,
       description: poste.description,
-      userUuid: poste.userUuid,
       users: poste.users,
     });
 
@@ -116,7 +114,6 @@ export class PosteUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       title: this.editForm.get(['title'])!.value,
       description: this.editForm.get(['description'])!.value,
-      userUuid: this.editForm.get(['userUuid'])!.value,
       users: this.editForm.get(['users'])!.value,
     };
   }

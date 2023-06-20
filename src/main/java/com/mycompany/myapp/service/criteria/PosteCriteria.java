@@ -11,7 +11,6 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.Poste} entity. This class is used
@@ -33,8 +32,6 @@ public class PosteCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
-    private UUIDFilter userUuid;
-
     private LongFilter usersId;
 
     private Boolean distinct;
@@ -45,7 +42,6 @@ public class PosteCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.title = other.title == null ? null : other.title.copy();
         this.description = other.description == null ? null : other.description.copy();
-        this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.usersId = other.usersId == null ? null : other.usersId.copy();
         this.distinct = other.distinct;
     }
@@ -100,21 +96,6 @@ public class PosteCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
-    public UUIDFilter getUserUuid() {
-        return userUuid;
-    }
-
-    public UUIDFilter userUuid() {
-        if (userUuid == null) {
-            userUuid = new UUIDFilter();
-        }
-        return userUuid;
-    }
-
-    public void setUserUuid(UUIDFilter userUuid) {
-        this.userUuid = userUuid;
-    }
-
     public LongFilter getUsersId() {
         return usersId;
     }
@@ -151,7 +132,6 @@ public class PosteCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(title, that.title) &&
             Objects.equals(description, that.description) &&
-            Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(usersId, that.usersId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -159,7 +139,7 @@ public class PosteCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, userUuid, usersId, distinct);
+        return Objects.hash(id, title, description, usersId, distinct);
     }
 
     // prettier-ignore
@@ -169,7 +149,6 @@ public class PosteCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (title != null ? "title=" + title + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
-            (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (usersId != null ? "usersId=" + usersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -3,7 +3,6 @@ package com.mycompany.myapp.service.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -22,9 +21,6 @@ public class DevisDTO implements Serializable {
 
     @DecimalMin(value = "0")
     private Float dureeProjet;
-
-    @NotNull
-    private UUID userUuid;
 
     private ProjetDTO projet;
 
@@ -68,14 +64,6 @@ public class DevisDTO implements Serializable {
         this.dureeProjet = dureeProjet;
     }
 
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
-    }
-
     public ProjetDTO getProjet() {
         return projet;
     }
@@ -114,7 +102,6 @@ public class DevisDTO implements Serializable {
             ", prixHT=" + getPrixHT() +
             ", prixService=" + getPrixService() +
             ", dureeProjet=" + getDureeProjet() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", projet=" + getProjet() +
             "}";
     }

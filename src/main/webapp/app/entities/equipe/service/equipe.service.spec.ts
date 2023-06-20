@@ -23,7 +23,6 @@ describe('Equipe Service', () => {
       id: 0,
       nom: 'AAAAAAA',
       nombrePersonne: 0,
-      userUuid: 'AAAAAAA',
     };
   });
 
@@ -61,7 +60,6 @@ describe('Equipe Service', () => {
           id: 1,
           nom: 'BBBBBB',
           nombrePersonne: 1,
-          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -79,7 +77,6 @@ describe('Equipe Service', () => {
       const patchObject = Object.assign(
         {
           nom: 'BBBBBB',
-          userUuid: 'BBBBBB',
         },
         new Equipe()
       );
@@ -101,7 +98,6 @@ describe('Equipe Service', () => {
           id: 1,
           nom: 'BBBBBB',
           nombrePersonne: 1,
-          userUuid: 'BBBBBB',
         },
         elemDefault
       );
@@ -153,7 +149,7 @@ describe('Equipe Service', () => {
       });
 
       it('should add only unique Equipe to an array', () => {
-        const equipeArray: IEquipe[] = [{ id: 123 }, { id: 456 }, { id: 36881 }];
+        const equipeArray: IEquipe[] = [{ id: 123 }, { id: 456 }, { id: 83507 }];
         const equipeCollection: IEquipe[] = [{ id: 123 }];
         expectedResult = service.addEquipeToCollectionIfMissing(equipeCollection, ...equipeArray);
         expect(expectedResult).toHaveLength(3);

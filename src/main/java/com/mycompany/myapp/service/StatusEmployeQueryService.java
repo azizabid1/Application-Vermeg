@@ -90,9 +90,6 @@ public class StatusEmployeQueryService extends QueryService<StatusEmploye> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), StatusEmploye_.id));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), StatusEmploye_.userUuid));
-            }
             if (criteria.getDisponibilite() != null) {
                 specification = specification.and(buildSpecification(criteria.getDisponibilite(), StatusEmploye_.disponibilite));
             }

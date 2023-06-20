@@ -15,7 +15,6 @@ import com.mycompany.myapp.service.dto.VoteDTO;
 import com.mycompany.myapp.service.mapper.VoteMapper;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,9 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class VoteResourceIT {
-
-    private static final UUID DEFAULT_USER_UUID = UUID.randomUUID();
-    private static final UUID UPDATED_USER_UUID = UUID.randomUUID();
 
     private static final Rendement DEFAULT_TYPE_VOTE = Rendement.FAIBLE;
     private static final Rendement UPDATED_TYPE_VOTE = Rendement.MOYEN;
@@ -68,7 +64,7 @@ class VoteResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Vote createEntity(EntityManager em) {
-        Vote vote = new Vote().userUuid(DEFAULT_USER_UUID).typeVote(DEFAULT_TYPE_VOTE);
+        Vote vote = new Vote().typeVote(DEFAULT_TYPE_VOTE);
         return vote;
     }
 
@@ -79,7 +75,7 @@ class VoteResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Vote createUpdatedEntity(EntityManager em) {
-        Vote vote = new Vote().userUuid(UPDATED_USER_UUID).typeVote(UPDATED_TYPE_VOTE);
+        Vote vote = new Vote().typeVote(UPDATED_TYPE_VOTE);
         return vote;
     }
 
@@ -102,7 +98,6 @@ class VoteResourceIT {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeCreate + 1);
         Vote testVote = voteList.get(voteList.size() - 1);
-        assertThat(testVote.getUserUuid()).isEqualTo(DEFAULT_USER_UUID);
         assertThat(testVote.getTypeVote()).isEqualTo(DEFAULT_TYPE_VOTE);
     }
 
@@ -123,24 +118,6 @@ class VoteResourceIT {
         // Validate the Vote in the database
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
-    void checkUserUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = voteRepository.findAll().size();
-        // set the field null
-        vote.setUserUuid(null);
-
-        // Create the Vote, which fails.
-        VoteDTO voteDTO = voteMapper.toDto(vote);
-
-        restVoteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(voteDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Vote> voteList = voteRepository.findAll();
-        assertThat(voteList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -173,7 +150,6 @@ class VoteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(vote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].typeVote").value(hasItem(DEFAULT_TYPE_VOTE.toString())));
     }
 
@@ -189,7 +165,6 @@ class VoteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(vote.getId().intValue()))
-            .andExpect(jsonPath("$.userUuid").value(DEFAULT_USER_UUID.toString()))
             .andExpect(jsonPath("$.typeVote").value(DEFAULT_TYPE_VOTE.toString()));
     }
 
@@ -209,58 +184,6 @@ class VoteResourceIT {
 
         defaultVoteShouldBeFound("id.lessThanOrEqual=" + id);
         defaultVoteShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllVotesByUserUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        voteRepository.saveAndFlush(vote);
-
-        // Get all the voteList where userUuid equals to DEFAULT_USER_UUID
-        defaultVoteShouldBeFound("userUuid.equals=" + DEFAULT_USER_UUID);
-
-        // Get all the voteList where userUuid equals to UPDATED_USER_UUID
-        defaultVoteShouldNotBeFound("userUuid.equals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllVotesByUserUuidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        voteRepository.saveAndFlush(vote);
-
-        // Get all the voteList where userUuid not equals to DEFAULT_USER_UUID
-        defaultVoteShouldNotBeFound("userUuid.notEquals=" + DEFAULT_USER_UUID);
-
-        // Get all the voteList where userUuid not equals to UPDATED_USER_UUID
-        defaultVoteShouldBeFound("userUuid.notEquals=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllVotesByUserUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        voteRepository.saveAndFlush(vote);
-
-        // Get all the voteList where userUuid in DEFAULT_USER_UUID or UPDATED_USER_UUID
-        defaultVoteShouldBeFound("userUuid.in=" + DEFAULT_USER_UUID + "," + UPDATED_USER_UUID);
-
-        // Get all the voteList where userUuid equals to UPDATED_USER_UUID
-        defaultVoteShouldNotBeFound("userUuid.in=" + UPDATED_USER_UUID);
-    }
-
-    @Test
-    @Transactional
-    void getAllVotesByUserUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        voteRepository.saveAndFlush(vote);
-
-        // Get all the voteList where userUuid is not null
-        defaultVoteShouldBeFound("userUuid.specified=true");
-
-        // Get all the voteList where userUuid is null
-        defaultVoteShouldNotBeFound("userUuid.specified=false");
     }
 
     @Test
@@ -350,7 +273,6 @@ class VoteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(vote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userUuid").value(hasItem(DEFAULT_USER_UUID.toString())))
             .andExpect(jsonPath("$.[*].typeVote").value(hasItem(DEFAULT_TYPE_VOTE.toString())));
 
         // Check, that the count call also returns 1
@@ -399,7 +321,7 @@ class VoteResourceIT {
         Vote updatedVote = voteRepository.findById(vote.getId()).get();
         // Disconnect from session so that the updates on updatedVote are not directly saved in db
         em.detach(updatedVote);
-        updatedVote.userUuid(UPDATED_USER_UUID).typeVote(UPDATED_TYPE_VOTE);
+        updatedVote.typeVote(UPDATED_TYPE_VOTE);
         VoteDTO voteDTO = voteMapper.toDto(updatedVote);
 
         restVoteMockMvc
@@ -414,7 +336,6 @@ class VoteResourceIT {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeUpdate);
         Vote testVote = voteList.get(voteList.size() - 1);
-        assertThat(testVote.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testVote.getTypeVote()).isEqualTo(UPDATED_TYPE_VOTE);
     }
 
@@ -495,7 +416,7 @@ class VoteResourceIT {
         Vote partialUpdatedVote = new Vote();
         partialUpdatedVote.setId(vote.getId());
 
-        partialUpdatedVote.userUuid(UPDATED_USER_UUID).typeVote(UPDATED_TYPE_VOTE);
+        partialUpdatedVote.typeVote(UPDATED_TYPE_VOTE);
 
         restVoteMockMvc
             .perform(
@@ -509,7 +430,6 @@ class VoteResourceIT {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeUpdate);
         Vote testVote = voteList.get(voteList.size() - 1);
-        assertThat(testVote.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testVote.getTypeVote()).isEqualTo(UPDATED_TYPE_VOTE);
     }
 
@@ -525,7 +445,7 @@ class VoteResourceIT {
         Vote partialUpdatedVote = new Vote();
         partialUpdatedVote.setId(vote.getId());
 
-        partialUpdatedVote.userUuid(UPDATED_USER_UUID).typeVote(UPDATED_TYPE_VOTE);
+        partialUpdatedVote.typeVote(UPDATED_TYPE_VOTE);
 
         restVoteMockMvc
             .perform(
@@ -539,7 +459,6 @@ class VoteResourceIT {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeUpdate);
         Vote testVote = voteList.get(voteList.size() - 1);
-        assertThat(testVote.getUserUuid()).isEqualTo(UPDATED_USER_UUID);
         assertThat(testVote.getTypeVote()).isEqualTo(UPDATED_TYPE_VOTE);
     }
 

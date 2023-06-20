@@ -4,14 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * A Projet.
@@ -26,12 +21,6 @@ public class Projet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
 
     @Column(name = "nom_projet")
     private String nomProjet;
@@ -86,19 +75,6 @@ public class Projet implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public Projet userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public String getNomProjet() {
@@ -273,7 +249,6 @@ public class Projet implements Serializable {
     public String toString() {
         return "Projet{" +
             "id=" + getId() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", nomProjet='" + getNomProjet() + "'" +
             ", dateDebut='" + getDateDebut() + "'" +
             ", dateFin='" + getDateFin() + "'" +

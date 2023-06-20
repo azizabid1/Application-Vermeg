@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * A Equipe.
@@ -32,14 +29,6 @@ public class Equipe implements Serializable {
     @Column(name = "nombre_personne")
     private Long nombrePersonne;
 
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
-
-    @Min(value = 4L)
-    @Max(value = 6L)
     @ManyToMany
     @JoinTable(
         name = "rel_equipe__users",
@@ -95,19 +84,6 @@ public class Equipe implements Serializable {
 
     public void setNombrePersonne(Long nombrePersonne) {
         this.nombrePersonne = nombrePersonne;
-    }
-
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public Equipe userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Set<User> getUsers() {
@@ -191,7 +167,6 @@ public class Equipe implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", nombrePersonne=" + getNombrePersonne() +
-            ", userUuid='" + getUserUuid() + "'" +
             "}";
     }
 }

@@ -4,11 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * A StatusEmploye.
@@ -23,12 +19,6 @@ public class StatusEmploye implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
 
     @Column(name = "disponibilite")
     private Boolean disponibilite;
@@ -63,19 +53,6 @@ public class StatusEmploye implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public StatusEmploye userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public Boolean getDisponibilite() {
@@ -177,7 +154,6 @@ public class StatusEmploye implements Serializable {
     public String toString() {
         return "StatusEmploye{" +
             "id=" + getId() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", disponibilite='" + getDisponibilite() + "'" +
             ", mission='" + getMission() + "'" +
             ", debutConge='" + getDebutConge() + "'" +

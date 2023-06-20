@@ -6,7 +6,6 @@ export interface IEquipe {
   id?: number;
   nom?: string | null;
   nombrePersonne?: number | null;
-  userUuid?: string;
   users?: IUser[] | null;
   projet?: IProjet | null;
   vote?: IVote | null;
@@ -17,7 +16,6 @@ export class Equipe implements IEquipe {
     public id?: number,
     public nom?: string | null,
     public nombrePersonne?: number | null,
-    public userUuid?: string,
     public users?: IUser[] | null,
     public projet?: IProjet | null,
     public vote?: IVote | null

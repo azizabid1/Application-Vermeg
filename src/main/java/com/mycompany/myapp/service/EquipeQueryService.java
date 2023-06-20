@@ -96,9 +96,6 @@ public class EquipeQueryService extends QueryService<Equipe> {
             if (criteria.getNombrePersonne() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getNombrePersonne(), Equipe_.nombrePersonne));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), Equipe_.userUuid));
-            }
             if (criteria.getUsersId() != null) {
                 specification =
                     specification.and(

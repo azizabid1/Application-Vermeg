@@ -96,9 +96,6 @@ public class PosteQueryService extends QueryService<Poste> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), Poste_.description));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), Poste_.userUuid));
-            }
             if (criteria.getUsersId() != null) {
                 specification =
                     specification.and(

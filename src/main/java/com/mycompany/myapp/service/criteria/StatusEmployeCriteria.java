@@ -12,7 +12,6 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.StatusEmploye} entity. This class is used
@@ -30,8 +29,6 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private UUIDFilter userUuid;
-
     private BooleanFilter disponibilite;
 
     private BooleanFilter mission;
@@ -48,7 +45,6 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
 
     public StatusEmployeCriteria(StatusEmployeCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.userUuid = other.userUuid == null ? null : other.userUuid.copy();
         this.disponibilite = other.disponibilite == null ? null : other.disponibilite.copy();
         this.mission = other.mission == null ? null : other.mission.copy();
         this.debutConge = other.debutConge == null ? null : other.debutConge.copy();
@@ -75,21 +71,6 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public UUIDFilter getUserUuid() {
-        return userUuid;
-    }
-
-    public UUIDFilter userUuid() {
-        if (userUuid == null) {
-            userUuid = new UUIDFilter();
-        }
-        return userUuid;
-    }
-
-    public void setUserUuid(UUIDFilter userUuid) {
-        this.userUuid = userUuid;
     }
 
     public BooleanFilter getDisponibilite() {
@@ -186,7 +167,6 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
         final StatusEmployeCriteria that = (StatusEmployeCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(userUuid, that.userUuid) &&
             Objects.equals(disponibilite, that.disponibilite) &&
             Objects.equals(mission, that.mission) &&
             Objects.equals(debutConge, that.debutConge) &&
@@ -198,7 +178,7 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userUuid, disponibilite, mission, debutConge, finConge, usersId, distinct);
+        return Objects.hash(id, disponibilite, mission, debutConge, finConge, usersId, distinct);
     }
 
     // prettier-ignore
@@ -206,7 +186,6 @@ public class StatusEmployeCriteria implements Serializable, Criteria {
     public String toString() {
         return "StatusEmployeCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (userUuid != null ? "userUuid=" + userUuid + ", " : "") +
             (disponibilite != null ? "disponibilite=" + disponibilite + ", " : "") +
             (mission != null ? "mission=" + mission + ", " : "") +
             (debutConge != null ? "debutConge=" + debutConge + ", " : "") +

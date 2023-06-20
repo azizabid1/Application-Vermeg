@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230619021810",
+  "changelogDate": "20230620012303",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "projet",
@@ -8,11 +8,6 @@
     {
       "fieldName": "id",
       "fieldType": "Long"
-    },
-    {
-      "fieldName": "userUuid",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "nomProjet",

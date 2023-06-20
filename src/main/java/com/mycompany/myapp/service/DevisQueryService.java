@@ -102,9 +102,6 @@ public class DevisQueryService extends QueryService<Devis> {
             if (criteria.getDureeProjet() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDureeProjet(), Devis_.dureeProjet));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), Devis_.userUuid));
-            }
             if (criteria.getProjetId() != null) {
                 specification =
                     specification.and(

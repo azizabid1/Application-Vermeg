@@ -90,9 +90,6 @@ public class TacheQueryService extends QueryService<Tache> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Tache_.id));
             }
-            if (criteria.getUserUuid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserUuid(), Tache_.userUuid));
-            }
             if (criteria.getTitre() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTitre(), Tache_.titre));
             }

@@ -17,9 +17,6 @@ public class ProjetDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
-    private UUID userUuid;
-
     private String nomProjet;
 
     private LocalDate dateDebut;
@@ -44,14 +41,6 @@ public class ProjetDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UUID getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public String getNomProjet() {
@@ -155,7 +144,6 @@ public class ProjetDTO implements Serializable {
     public String toString() {
         return "ProjetDTO{" +
             "id=" + getId() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", nomProjet='" + getNomProjet() + "'" +
             ", dateDebut='" + getDateDebut() + "'" +
             ", dateFin='" + getDateFin() + "'" +

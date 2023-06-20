@@ -1,6 +1,6 @@
 {
   "applications": ["VermegApp"],
-  "changelogDate": "20230619021808",
+  "changelogDate": "20230620012301",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "equipe",
@@ -19,11 +19,6 @@
       "fieldValidateRules": ["min", "max"],
       "fieldValidateRulesMax": "6",
       "fieldValidateRulesMin": "4"
-    },
-    {
-      "fieldName": "userUuid",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,

@@ -42,7 +42,7 @@ application {
 entity Departement {
   id Long 
   nom TypeDepartement unique
-  userUuid UUID required
+
 }
 /**
  * not an ignored comment
@@ -53,13 +53,12 @@ entity Devis {
   prixHT Double
   prixService Double
   dureeProjet Float min(0) 
-  userUuid UUID required
 }
 entity Equipe {
   id Long
   nom String
   nombrePersonne Long min(4) max(6)
-  userUuid UUID required
+ 
 }
 /**
  * Task entity.\n@author The JHipster team.
@@ -68,11 +67,9 @@ entity Poste {
   id Long
   title String
   description String
-userUuid UUID required
 }
 entity Projet {
   id Long
-userUuid UUID required
   nomProjet String
   dateDebut LocalDate
   dateFin LocalDate
@@ -83,7 +80,6 @@ userUuid UUID required
 }
 entity StatusEmploye {
   id Long
-userUuid UUID required
   disponibilite Boolean
   mission Boolean
   debutConge LocalDate
@@ -91,7 +87,6 @@ userUuid UUID required
 }
 entity Tache {
   id Long
-userUuid UUID required
   titre String
   description String
   statusTache Status
@@ -101,7 +96,6 @@ userUuid UUID required
  */
 entity Vote {
   id Long
-userUuid UUID required
   typeVote Rendement required unique
 }
 enum TypeDepartement {

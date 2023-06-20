@@ -5,11 +5,7 @@ import com.mycompany.myapp.domain.enumeration.Status;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * A Tache.
@@ -24,12 +20,6 @@ public class Tache implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @NotNull
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false)
-    private UUID userUuid;
 
     @Column(name = "titre")
     private String titre;
@@ -58,19 +48,6 @@ public class Tache implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UUID getUserUuid() {
-        return this.userUuid;
-    }
-
-    public Tache userUuid(UUID userUuid) {
-        this.setUserUuid(userUuid);
-        return this;
-    }
-
-    public void setUserUuid(UUID userUuid) {
-        this.userUuid = userUuid;
     }
 
     public String getTitre() {
@@ -167,7 +144,6 @@ public class Tache implements Serializable {
     public String toString() {
         return "Tache{" +
             "id=" + getId() +
-            ", userUuid='" + getUserUuid() + "'" +
             ", titre='" + getTitre() + "'" +
             ", description='" + getDescription() + "'" +
             ", statusTache='" + getStatusTache() + "'" +
