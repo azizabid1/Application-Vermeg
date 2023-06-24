@@ -63,32 +63,6 @@ export class PostecheckComponent implements OnInit {
     this.subscribeToSaveResponse(this.posteService.update(this.poste));
     window.history.back();
   }
-  /* addChoixPoste(): void {
-    console.log(this.poste); 
-  
-    if (this.poste && this.poste.users) {
-      if (this.poste.users.length > 0) {
-        for (let i = 0; i < this.poste.users.length; i++) {
-          if (this.poste.users[i]?.id === this.authServerProvider.getId()) {
-            console.log(`User ID found at index ${i}`);
-            break;
-          }
-        }
-      } else {
-        if (this.poste.users[0]?.id === undefined) {
-          this.poste.users[0] = { id: this.authServerProvider.getId()! };
-          console.log(`User ID added to empty users array: ${this.authServerProvider.getId()}`);
-        } else {
-          this.poste.users[0].id = this.authServerProvider.getId()!;
-          console.log(`User ID updated at index 0: ${this.authServerProvider.getId()}`);
-        }
-      }
-    }
-  
-    console.log(this.poste);
-    this.subscribeToSaveResponse(this.posteService.update(this.poste));
-    window.history.back();
-  }*/
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
