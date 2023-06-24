@@ -45,7 +45,11 @@
       </tbody>
     </table>
   </div>
-
+  <div>
+    <button type="button" id="save-entity" data-cy="entityCreateSaveButton" class="btn btn-primary" (click)="addChoixPoste()">
+      <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+    </button>
+  </div>
   <div *ngIf="postes && postes.length > 0">
     <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>

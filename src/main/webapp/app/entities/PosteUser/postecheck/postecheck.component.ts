@@ -3,9 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 import { IPoste, Poste } from 'app/entities/poste/poste.model';
 import { PosteService } from 'app/entities/poste/service/poste.service';
-import { combineLatest } from 'rxjs';
+import { Observable, combineLatest, finalize } from 'rxjs';
 
 @Component({
   selector: 'jhi-postecheck',
@@ -22,6 +23,8 @@ export class PostecheckComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
   _poste!: Poste;
+  idUser!: number | null;
+  isSaving = false;
   @Input()
   public set poste(poste) {
     this._poste = poste;
@@ -33,13 +36,59 @@ export class PostecheckComponent implements OnInit {
     protected posteService: PosteService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected authServerProvider: AuthServerProvider
   ) {}
 
   onChangeSelect(i: number): void {
     this.poste = this.postes[i];
     this.changeSelectedPoste.emit(this.poste);
   }
+
+  addChoixPoste(): void {
+    console.log(this.poste);
+    if (this.poste && this.poste.users) {
+      if (this.poste.users.length > 0) {
+        for (let i = 0; i < this.poste.users.length; i++) {
+          this.poste.users[i]?.id === this.authServerProvider.getId();
+          console.log(i);
+        }
+      } else {
+        this.poste.users[0]?.id === this.authServerProvider.getId();
+        console.log(this.poste.users[0]?.id);
+      }
+    }
+
+    console.log(this.poste);
+    this.subscribeToSaveResponse(this.posteService.update(this.poste));
+    window.history.back();
+  }
+  /* addChoixPoste(): void {
+    console.log(this.poste); 
+  
+    if (this.poste && this.poste.users) {
+      if (this.poste.users.length > 0) {
+        for (let i = 0; i < this.poste.users.length; i++) {
+          if (this.poste.users[i]?.id === this.authServerProvider.getId()) {
+            console.log(`User ID found at index ${i}`);
+            break;
+          }
+        }
+      } else {
+        if (this.poste.users[0]?.id === undefined) {
+          this.poste.users[0] = { id: this.authServerProvider.getId()! };
+          console.log(`User ID added to empty users array: ${this.authServerProvider.getId()}`);
+        } else {
+          this.poste.users[0].id = this.authServerProvider.getId()!;
+          console.log(`User ID updated at index 0: ${this.authServerProvider.getId()}`);
+        }
+      }
+    }
+  
+    console.log(this.poste);
+    this.subscribeToSaveResponse(this.posteService.update(this.poste));
+    window.history.back();
+  }*/
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
@@ -67,6 +116,10 @@ export class PostecheckComponent implements OnInit {
     this.handleNavigation();
   }
 
+  previousState(): void {
+    window.history.back();
+  }
+
   trackId(_index: number, item: IPoste): number {
     return item.id!;
   }
@@ -77,6 +130,25 @@ export class PostecheckComponent implements OnInit {
       result.push('id');
     }
     return result;
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPoste>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
+  }
+
+  protected onSaveSuccess(): void {
+    this.previousState();
+  }
+
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
   }
 
   protected handleNavigation(): void {
