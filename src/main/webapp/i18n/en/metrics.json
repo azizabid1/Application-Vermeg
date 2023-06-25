@@ -1,0 +1,102 @@
+{
+  "metrics": {
+    "title": "App Metrics",
+    "refresh.button": "Refresh",
+    "updating": "Updating...",
+    "jvm": {
+      "title": "JVM Metrics",
+      "memory": {
+        "title": "Memory",
+        "total": "Total memory",
+        "heap": "Memory \"Heap\"",
+        "nonheap": "Memory \"Non-Heap\""
+      },
+      "threads": {
+        "title": "Threads",
+        "all": "All",
+        "runnable": "Executable",
+        "timedwaiting": "Waiting time",
+        "waiting": "Waiting",
+        "blocked": "Blocked",
+        "dump": {
+          "title": "Threads dump",
+          "id": "id:",
+          "blockedtime": "Blocked time",
+          "blockedcount": "Number of times blocked",
+          "waitedtime": "Waited time",
+          "waitedcount": "Waited count times",
+          "lockname": "Name of blocking process",
+          "stacktrace": "Stacktrace",
+          "show": "Show",
+          "hide": "Hide"
+        }
+      },
+      "gc": {
+        "title": "Garbage collections",
+        "marksweepcount": "Total of \"Mark Sweep\"",
+        "marksweeptime": "\"Mark Sweep\" Time",
+        "scavengecount": "Total \"Scavenge\"",
+        "scavengetime": "\"Scavenge\" time"
+      },
+      "http": {
+        "title": "HTTP Requests (time in milliseconds)",
+        "active": "Active queries:",
+        "total": "Total queries:",
+        "table": {
+          "code": "Code",
+          "count": "Total",
+          "mean": "Median",
+          "average": "Average",
+          "max": "Max"
+        },
+        "code": {
+          "ok": "Ok",
+          "notfound": "Not found",
+          "servererror": "Server error"
+        }
+      }
+    },
+    "servicesstats": {
+      "title": "Services statistics (time in milliseconds)",
+      "table": {
+        "name": "Server name",
+        "count": "Total",
+        "mean": "Median",
+        "min": "Min",
+        "max": "Max",
+        "p50": "p50",
+        "p75": "p75",
+        "p95": "p95",
+        "p99": "p99"
+      }
+    },
+    "cache": {
+      "title": "Cache Statistics",
+      "cachename": "Cache name",
+      "hits": "Existing Data",
+      "misses": "Data not existing",
+      "gets": "Reads",
+      "puts": "Writes",
+      "removals": "Removals",
+      "evictions": "Evictions",
+      "hitPercent": "% existing data",
+      "missPercent": "% data not existing",
+      "averageGetTime": "Average Read Time (µs)",
+      "averagePutTime": "Average Write Time (µs)",
+      "averageRemoveTime": "Average Remove Time (µs)"
+    },
+    "datasource": {
+      "usage": "Connection Pool Usage",
+      "title": "Connection pool statistics (time in milliseconds)",
+      "name": "Pool Usage",
+      "count": "Total",
+      "mean": "Median",
+      "min": "Min",
+      "max": "Max",
+      "p50": "p50",
+      "p75": "p75",
+      "p95": "p95",
+      "p99": "p99"
+    }
+  }
+}

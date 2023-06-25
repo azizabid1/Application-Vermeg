@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "title": "User Profile [<strong>{{username}}</strong>]",
+    "form": {
+      "firstname": "First name",
+      "firstname.placeholder": "Your first name",
+      "lastname": "Name",
+      "lastname.placeholder": "Your name",
+      "language": "Language",
+      "button": "Save"
+    },
+    "messages": {
+      "error": {
+        "fail": "<strong>An error occurred!</strong> Your profile was not saved.",
+        "emailexists": "<strong>This email is already in use!</strong> Please choose another one."
+      },
+      "success": "<strong>Your profile has been saved!</strong>",
+      "validate": {
+        "firstname": {
+          "required": "Your first name is required.",
+          "minlength": "Your first name must be at least one character long.",
+          "maxlength": "Your first name must not be longer than 50 characters."
+        },
+        "lastname": {
+          "required": "Your name is required.",
+          "minlength": "Your name must be at least one character long.",
+          "maxlength": "Your name must be no longer than 50 characters."
+        }
+      }
+    }
+  }
+}

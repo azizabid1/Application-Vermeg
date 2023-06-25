@@ -1,0 +1,14 @@
+{
+  "error": {
+    "title": "Error Page!",
+    "http": {
+      "400": "Bad request.",
+      "403": "You do not have permission to access this page.",
+      "404": "The page does not exist.",
+      "405": "The HTTP verb you used is not recognized by this URL.",
+      "500": "Internal server error."
+    },
+    "concurrencyFailure": "Another user changed this data at the same time as you. Your changes were not saved.",
+    "validation": "Server-side validation error."
+  }
+}

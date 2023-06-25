@@ -1,0 +1,31 @@
+{
+  "vermegApp": {
+    "equipeUser": {
+      "users": {
+        "home": {
+          "title": "Teams",
+          "refreshListLabel": "Refresh List",
+          "createLabel": "Create a new Team",
+          "createOrEditLabel": "Create or edit a Team",
+          "notFound": "No Team found"
+        },
+        "created": "A new Team has been created with ID {{ param }}",
+        "updated": "The Team with id {{ param }} has been updated",
+        "deleted": "The team with id {{ param }} has been deleted",
+        "delete": {
+          "question": "Are you sure you want to delete Team {{ id }}?"
+        },
+        "detail": {
+          "title": "Team"
+        },
+        "id": "Id",
+        "nom": "Name",
+        "nombrePersonne": "Person Number",
+        "userUuid": "User Uuid",
+        "users": "Users",
+        "projet": "Project",
+        "vote": "Vote"
+      }
+    }
+  }
+}

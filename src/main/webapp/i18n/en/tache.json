@@ -1,0 +1,28 @@
+{
+  "vermegApp": {
+    "tache": {
+      "home": {
+        "title": "Stains",
+        "refreshListLabel": "Refresh List",
+        "createLabel": "Create a new Label",
+        "createOrEditLabel": "Create or edit a Label",
+        "notFound": "No Stains Found"
+      },
+      "created": "A new task has been created with id {{ param }}",
+      "updated": "The Task with id {{ param }} has been updated",
+      "deleted": "Task with id {{ param }} has been deleted",
+      "delete": {
+        "question": "Are you sure you want to delete Task {{ id }}?"
+      },
+      "detail": {
+        "title": "Stain"
+      },
+      "id": "Id",
+      "userUuid": "User Uuid",
+      "titre": "Titre",
+      "description": "Description",
+      "statusTache": "Status Task",
+      "projet": "Project"
+    }
+  }
+}

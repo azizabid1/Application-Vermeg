@@ -1,0 +1,26 @@
+{
+  "vermegApp": {
+    "vote": {
+      "home": {
+        "title": "Votes",
+        "refreshListLabel": "Refresh List",
+        "createLabel": "Create a new Vote",
+        "createOrEditLabel": "Create or edit a Vote",
+        "notFound": "No Votes Found"
+      },
+      "created": "A new Vote has been created with ID {{ param }}",
+      "updated": "The Vote with id {{ param }} has been updated",
+      "deleted": "The Vote with ID {{ param }} has been deleted",
+      "delete": {
+        "question": "Are you sure you want to delete Vote {{ id }}?"
+      },
+      "detail": {
+        "title": "Vote"
+      },
+      "id": "Id",
+      "userUuid": "User Uuid",
+      "typeVote": "Type Voting",
+      "equipes": "Teams"
+    }
+  }
+}

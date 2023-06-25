@@ -1,0 +1,29 @@
+{
+  "vermegApp": {
+    "devis": {
+      "home": {
+        "title": "Quote",
+        "refreshListLabel": "Refresh List",
+        "createLabel": "Create a new Quote",
+        "createOrEditLabel": "Create or edit a Quote",
+        "notFound": "No Quote Found"
+      },
+      "created": "A new Quote has been created with the identifier {{ param }}",
+      "updated": "The Quote with id {{ param }} has been updated",
+      "deleted": "The Quote with id {{ param }} has been deleted",
+      "delete": {
+        "question": "Are you sure you want to delete Quote {{ id }}?"
+      },
+      "detail": {
+        "title": "Quote"
+      },
+      "id": "Id",
+      "prixTotal": "Total Price",
+      "prixHT": "Price excl VAT",
+      "prixService": "ServicePrice",
+      "dureeProjet": "DurationProject",
+      "userUuid": "User Uuid",
+      "projet": "Project Name"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "vermegApp": {
+    "TypeDepartement": {
+      "null": "",
+      "RH": "RH",
+      "INFORMATIQUE": "INFORMATIQUE",
+      "MOA": "MOA",
+      "FINANCE": "FINANCE"
+    }
+  }
+}

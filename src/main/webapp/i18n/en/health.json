@@ -1,0 +1,31 @@
+{
+  "health": {
+    "title": "Diagnostics",
+    "refresh.button": "Refresh",
+    "stacktrace": "Stacktrace",
+    "details": {
+      "details": "Details",
+      "properties": "Properties",
+      "name": "Name",
+      "value": "Value",
+      "error": "Error"
+    },
+    "indicator": {
+      "diskSpace": "Disk Space",
+      "email": "Email",
+      "livenessState": "Liveness state",
+      "readinessState": "Readiness state",
+      "ping": "App",
+      "db": "Database"
+    },
+    "table": {
+      "service": "Service name",
+      "status": "State"
+    },
+    "status": {
+      "UNKNOWN": "UNKNOWN",
+      "UP": "AVAILABLE",
+      "DOWN": "OFF"
+    }
+  }
+}

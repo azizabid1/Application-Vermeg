@@ -1,0 +1,19 @@
+{
+  "login": {
+    "title": "Authentication",
+    "form": {
+      "password": "Password",
+      "password.placeholder": "Your password",
+      "rememberme": "Keep me logged in",
+      "button": "Login"
+    },
+    "posts": {
+      "error": {
+        "authentication": "<strong>Authentication error!</strong> Please verify your login credentials."
+      }
+    },
+    "password": {
+      "forgot": "Did you forget your password?"
+    }
+  }
+}

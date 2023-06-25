@@ -1,0 +1,26 @@
+{
+  "vermegApp": {
+    "departement": {
+      "home": {
+        "title": "Departments",
+        "refreshListLabel": "Refresh List",
+        "createLabel": "Create a new Department",
+        "createOrEditLabel": "Create or edit a Department",
+        "notFound": "No Department found"
+      },
+      "created": "A new Department has been created with id {{ param }}",
+      "updated": "The Department with id {{ param }} has been updated",
+      "deleted": "Department with id {{ param }} has been deleted",
+      "delete": {
+        "question": "Are you sure you want to delete Department {{ id }}?"
+      },
+      "detail": {
+        "title": "Department"
+      },
+      "id": "Id",
+      "nom": "Name",
+      "userUuid": "User Uuid",
+      "users": "Users"
+    }
+  }
+}

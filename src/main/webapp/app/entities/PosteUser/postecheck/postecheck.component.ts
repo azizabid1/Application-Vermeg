@@ -51,11 +51,9 @@ export class PostecheckComponent implements OnInit {
       if (this.poste.users.length > 0) {
         for (let i = 0; i < this.poste.users.length; i++) {
           this.poste.users[i]?.id === this.authServerProvider.getId();
-          console.log(i);
         }
       } else {
         this.poste.users[0]?.id === this.authServerProvider.getId();
-        console.log(this.poste.users[0]?.id);
       }
     }
 

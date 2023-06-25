@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": "User Account Creation",
+    "form": {
+      "button": "Registration"
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": "Your username is required.",
+          "minlength": "Your username must contain more than one character.",
+          "maxlength": "Your username cannot contain more than 50 characters.",
+          "pattern": "Your username is invalid."
+        }
+      },
+      "success": "<strong>Account registered!</strong> Please check your confirmation email.",
+      "error": {
+        "fail": "<strong>Account not created!</strong> Please try again later.",
+        "userexists": "<strong>This user account already exists!</strong> Please choose another one.",
+        "emailexists": "<strong>This email is already in use!</strong> Please choose another one."
+      }
+    }
+  }
+}

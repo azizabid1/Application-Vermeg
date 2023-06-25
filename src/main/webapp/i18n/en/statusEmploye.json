@@ -1,0 +1,29 @@
+{
+  "vermegApp": {
+    "statusEmploye": {
+      "home": {
+        "title": "StatusEmployees",
+        "refreshListLabel": "Refresh List",
+        "createLabel": "Create a new Employee Status",
+        "createOrEditLabel": "Create or edit an Employee Status",
+        "notFound": "No Employee Status found"
+      },
+      "created": "A new Status Employee has been created with the identifier {{ param }}",
+      "updated": "Employee Status with id {{ param }} has been updated",
+      "deleted": "Employee Status with id {{ param }} has been deleted",
+      "delete": {
+        "question": "Are you sure you want to delete the Status Employee {{ id }}?"
+      },
+      "detail": {
+        "title": "Status Employee"
+      },
+      "id": "Id",
+      "userUuid": "User Uuid",
+      "disponibilite": "Availablity",
+      "mission": "Assignment",
+      "debutConge": "Start of holiday",
+      "finConge": "End of Holiday",
+      "users": "Users"
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "global": {
+    "title": "VermegApp",
+    "browsehappy": "You are using an <strong>old</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">update your browser</a> for a better experience.",
+    "menu": {
+      "home": "Welcome",
+      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "entities": {
+        "main": "Entities",
+        "departement": "Department",
+        "departementUser": "My Department",
+        "checkPoste": "My Posts",
+        "devis": "Quote",
+        "equipe": "Team",
+        "equipeUser": "My Crew",
+        "poste": "Post",
+        "projet": "Project",
+        "projetUser": "My Project",
+        "statusEmploye": "Status Employee",
+        "tache": "Stain",
+        "vote": "Vote",
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+      },
+      "account": {
+        "main": "Account",
+        "settings": "Profile",
+        "password": "Password",
+        "sessions": "Sessions",
+        "login": "Authenticate",
+        "logout": "Logout",
+        "register": "Create an account"
+      },
+      "admin": {
+        "main": "Admin",
+        "userManagement": "User Management",
+        "tracker": "User Tracking",
+        "metrics": "Metrics",
+        "health": "Diagnostics",
+        "configuration": "configuration",
+        "logs": "Logs",
+        "apidocs": "API",
+        "database": "Database",
+        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+      },
+      "language": "language"
+    },
+    "form": {
+      "username.label": "Username",
+      "username.placeholder": "Your username",
+      "currentpassword.label": "Current Password",
+      "currentpassword.placeholder": "Current Password",
+      "newpassword.label": "New password",
+      "newpassword.placeholder": "New password",
+      "confirmpassword.label": "Confirm new password",
+      "confirmpassword.placeholder": "Confirm new password",
+      "email.label": "Email",
+      "email.placeholder": "Your email"
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": "If you want you ",
+          "link": "connect",
+          "suffix": ", you can use the default accounts: <br/> - Administrator (username=\"admin\" and password =\"admin\") <br/> - User (name username=\"user\" and password=\"user\")."
+        },
+        "register": {
+          "noaccount": "Don't have an account yet?",
+          "link": "Create Account"
+        }
+      },
+      "error": {
+        "dontmatch": "The new password and its confirmation are not equal!"
+      },
+      "validate": {
+        "newpassword": {
+          "required": "Your password is required.",
+          "minlength": "Your password must be at least 4 characters long.",
+          "maxlength": "Your password must not be longer than 50 characters.",
+          "strength": "Password strength:"
+        },
+        "confirmpassword": {
+          "required": "Your password confirmation is required.",
+          "minlength": "Your password confirmation must be at least 4 characters long.",
+          "maxlength": "Your password confirmation must be no longer than 50 characters."
+        },
+        "E-mail": {
+          "required": "Your email is required.",
+          "minlength": "Your email must be at least 5 characters long.",
+          "maxlength": "Your email must not be longer than 50 characters.",
+          "invalid": "Your email is invalid."
+        }
+      }
+    },
+    "field": {
+      "id": "ID"
+    },
+    "ribbon": {
+      "dev": "Development"
+    },
+    "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+  },
+  "entity": {
+    "action": {
+      "addblob": "Add blob",
+      "addimage": "Add image",
+      "back": "Back",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "open": "Open",
+      "save": "Save",
+      "view": "View",
+      "posteSave": "poste save"
+    },
+    "detail": {
+      "field": "Fields",
+      "value": "Value"
+    },
+    "delete": {
+      "title": "Delete Confirmation"
+    },
+    "validation": {
+      "required": "This field is required.",
+      "minlength": "This field must be at least {{min}} characters.",
+      "maxlength": "This field must be less than {{max}} characters.",
+      "min": "This field must be greater than {{min}}.",
+      "max": "This field must be less than {{max}}.",
+      "minbytes": "This field must be greater than {{min}} bytes.",
+      "maxbytes": "This field must be less than {{max}} bytes.",
+      "pattern": "This field must follow the regular expression {{pattern}}.",
+      "number": "This field must be a number.",
+      "datetimelocal": "This field must be a date and time.",
+      "patternLogin": "This field can only contain letters, numbers or email addresses."
+    }
+  },
+  "error": {
+    "internalServerError": "Internal server error",
+    "server.not.reachable": "Server not reachable",
+    "url.not.found": "Not found",
+    "NotNull": "Field {{fieldName}} cannot be empty!",
+    "Size": "The field {{fieldName}} does not meet the minimum and maximum criteria!",
+    "userexists": "Login already in use!",
+    "emailexists": "Email already in use!",
+    "idexists": "A new {{entityName}} entity cannot have an id!",
+    "idnull": "Invalid identifier",
+    "idinvalid": "Invalid Id",
+    "idnotfound": "ID cannot be found",
+    "file": {
+      "could.not.extract": "Could not extract file",
+      "not.image": "The file must be an image and not of type \"{{ fileType }}\""
+    }
+  },
+  "footer": "This is your footer"
+}

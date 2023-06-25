@@ -1,0 +1,28 @@
+{
+  "vermegApp": {
+    "poste": {
+      "home": {
+        "title": "Posts",
+        "refreshListLabel": "Refresh List",
+        "createLabel": "Create a new Post",
+        "createOrEditLabel": "Create or edit a Position",
+        "notFound": "No Positions Found",
+        "checkPost": "checkPost"
+      },
+      "created": "A new post has been created with id {{ param }}",
+      "updated": "Post with id {{ param }} has been updated",
+      "deleted": "Post with id {{ param }} has been deleted",
+      "delete": {
+        "question": "Are you sure you want to delete Post {{ id }}?"
+      },
+      "detail": {
+        "title": "Post"
+      },
+      "id": "Id",
+      "title": "Title",
+      "description": "Description",
+      "userUuid": "User Uuid",
+      "users": "Users"
+    }
+  }
+}
