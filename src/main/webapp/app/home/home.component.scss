@@ -3,21 +3,22 @@ Main page styles
 ========================================================================== */
 
 .hipster {
-  display: inline-block;
-  width: 347px;
-  height: 497px;
-  background: url('../../content/images/jhipster_family_member_1.svg') no-repeat center top;
-  background-size: contain;
+  width: 400px;
+  height: 400px;
+  border: 5px solid #333;
+  margin: 0px auto;
 }
-
+h1,
+h2 {
+  color: #e8e1e1;
+}
+#ima {
+  background-image: url('../../content/images/vermegApp.jpg');
+}
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
   only screen and (-moz-min-device-pixel-ratio: 2),
   only screen and (-o-min-device-pixel-ratio: 2/1),
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
-  .hipster {
-    background: url('../../content/images/jhipster_family_member_1.svg') no-repeat center top;
-    background-size: contain;
-  }
 }
