@@ -33,17 +33,9 @@
               "src/main/webapp/content",
               "src/main/webapp/favicon.ico",
               "src/main/webapp/manifest.webapp",
-              "src/main/webapp/robots.txt",
-              "src/main/webapp/app/assets",
-              "src/main/webapp/app/tpclient"
+              "src/main/webapp/robots.txt"
             ],
-            "styles": [
-              "src/main/webapp/content/scss/vendor.scss",
-              "src/main/webapp/content/scss/global.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
-              "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css"
-            ],
+            "styles": [],
             "scripts": []
           },
           "configurations": {
