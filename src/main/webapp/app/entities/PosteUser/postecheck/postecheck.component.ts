@@ -46,7 +46,6 @@ export class PostecheckComponent implements OnInit {
   }
 
   addChoixPoste(): void {
-    console.log(this.poste);
     if (this.poste && this.poste.users) {
       if (this.poste.users.length > 0) {
         for (let i = 0; i < this.poste.users.length; i++) {
