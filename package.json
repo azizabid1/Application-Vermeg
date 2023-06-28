@@ -92,7 +92,6 @@
     "dayjs": "1.11.0",
     "jspdf": "^2.5.1",
     "ngx-infinite-scroll": "13.0.1",
-    "ngx-owl-carousel-o": "^16.0.0",
     "ngx-webstorage": "9.0.0",
     "rxjs": "7.5.5",
     "tslib": "2.3.1",
